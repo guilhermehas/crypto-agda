@@ -33,6 +33,6 @@ addBlock {n} simpleBlock blockchain =
   let blockHash = hashBlock simpleBlock in
     if validBlock simpleBlock
       then
-        (let newBlock = {!block n blockHash simpleBlock refl!} in Either.right $ cons newBlock blockchain)
+        (let newBlock = block n blockHash simpleBlock refl in Either.right $ cons newBlock blockchain)
       else
         Either.left blockchain
