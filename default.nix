@@ -2,7 +2,7 @@ let
   nixpkgs = import <nixpkgs> {};
   nixos-15 = import <nixos-15> {};
 in
-nixpkgs.agda.mkDerivation (self: {
+nixos-15.agda.mkDerivation (self: {
   name = "cripto";
   src = ./.;
   everythingFile = " --js ./src/Everything.agda";
