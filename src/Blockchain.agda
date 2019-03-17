@@ -2,22 +2,7 @@ module Blockchain where
 
 open import Prelude
 open import Operators
-
-hash : Nat → Nat
-hash n = n
-
-record Transaction : Set where
-  field
-    sender : Nat
-    receiver : Nat
-    amount : Nat
-
-hashTransaction : Transaction → Nat
-hashTransaction trans = hash $ hash (Transaction.sender trans) + hash (Transaction.receiver trans) + hash (Transaction.amount trans)
-
-hashList : List Nat → Nat
-hashList [] = 0
-hashList (x ∷ xs) = hash $ hash x + hashList xs
+open import Transactions
 
 record SimpleBlock : Set where
   field
@@ -47,14 +32,3 @@ addBlock {n} simpleBlock blockchain =
         (let newBlock = block n blockHash simpleBlock refl in Either.right $ cons newBlock blockchain)
       else
         Either.left blockchain
-
-record AccountMoney : Set where
-  field
-    account : Nat
-    money : Nat
-
-validTransaction : List AccountMoney → Transaction → Bool
-validTransaction [] transaction = false
-validTransaction (acc ∷ xs) transaction =
-     Transaction.sender transaction ≣ AccountMoney.account acc
-  && Transaction.amount transaction <= AccountMoney.money acc
