@@ -1,7 +1,7 @@
-module blockchain where
+module Blockchain where
 
 open import Prelude
-import Data.AVL as AVL
+open import Operators
 
 hash : Nat → Nat
 hash n = n
@@ -52,19 +52,6 @@ record AccountMoney : Set where
   field
     account : Nat
     money : Nat
-
-_⟨_ : Nat → Nat → Bool
-_     ⟨ zero  = false
-zero  ⟨ suc _ = true
-suc n ⟨ suc m = n ⟨ m
-
-_≣_ : Nat → Nat → Bool
-zero  ≣ zero  = true
-suc n ≣ suc m = n ≣ m
-_     ≣ _     = false
-
-_<=_ : Nat → Nat → Bool
-_<=_ a b = (a ⟨ b) || (a ≣ b)
 
 validTransaction : List AccountMoney → Transaction → Bool
 validTransaction [] transaction = false
