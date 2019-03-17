@@ -2,11 +2,21 @@ module blockchain where
 
 open import Prelude
 
+hash : Nat → Nat
+hash n = n
+
 record Transaction : Set where
   field
     sender : Nat
     receiver : Nat
     amount : Nat
+
+hashTransaction : Transaction → Nat
+hashTransaction trans = hash $ hash (Transaction.sender trans) + hash (Transaction.receiver trans) + hash (Transaction.amount trans)
+
+hashList : List Nat → Nat
+hashList [] = 0
+hashList (x ∷ xs) = {!hash $ hash x + hashList xs!}
 
 record SimpleBlock : Set where
   field
