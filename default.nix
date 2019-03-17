@@ -1,5 +1,4 @@
 let
-  nixpkgs = import <nixpkgs> {};
   nixos-15 = import <nixos-15> {};
 in
 nixos-15.agda.mkDerivation (self: {
