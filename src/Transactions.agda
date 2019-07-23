@@ -2,59 +2,64 @@ module Transactions where
 
 open import Prelude
 open import Operators
-
-hash : Nat → Nat
-hash n = n
+open import Utils
 
 record Transaction : Set where
   field
-    sender : Nat
-    receiver : Nat
+    idTrans : Nat
+    sender : PubKey
+    n : Nat
+    receivers : Vec PubKey n
     amount : Nat
+    recAmounts : +Vec amount n
 
-hashTransaction : Transaction → Nat
-hashTransaction trans = hash $ hash (Transaction.sender trans) + hash (Transaction.receiver trans) + hash (Transaction.amount trans)
-
-hashList : List Nat → Nat
-hashList [] = 0
-hashList (x ∷ xs) = hash $ hash x + hashList xs
-
-record AccountMoney : Set where
+record RawTransaction : Set where
   field
-    account : Nat
-    money : Nat
+    idTrans : Nat
+    sender : PubKey
+    receivers : List PubKey
+    pubAmounts : List PubKey
+    amounts : List Nat
 
-getNewListAccount  : Transaction → List AccountMoney → List AccountMoney
-getNewListAccount trans [] = []
-getNewListAccount trans (account' ∷ laccount) = {!(updateSender $ updateReceiver account') ∷ getNewListAccount trans laccount!}
+data JoinedLists : Set where
+  joined : {n : Nat} → Vec PubKey n → Vec PubKey n → Vec Nat n → JoinedLists
+  nothing : JoinedLists
+
+toJoined : List PubKey → List PubKey → List Nat → JoinedLists
+toJoined [] [] (x ∷ v3) = nothing
+toJoined [] (x ∷ v2) v3 = nothing
+toJoined (x ∷ v1) [] v3 = nothing
+toJoined (x ∷ v1) (x₁ ∷ v2) [] = nothing
+toJoined [] [] [] = joined [] [] []
+toJoined (x ∷ v1) (y ∷ v2) (z ∷ v3) with toJoined v1 v2 v3
+... | joined va vb vc = joined (x ∷ va) (y ∷ vb) (z ∷ vc)
+... | nothing = nothing
+
+len : ∀ {a} {A : Set a} {n} → Vec A n → Nat
+len {n = n} _ = n
+
+toValidTransaction : RawTransaction → Maybe Transaction
+toValidTransaction trans = toTrans
   where
-  updateSender : AccountMoney → AccountMoney
-  updateSender account = 
-    if Transaction.sender trans ≣ AccountMoney.account account
-      then record account {money = AccountMoney.money account - Transaction.amount trans}
-      else account
-
-  updateReceiver : AccountMoney → AccountMoney
-  updateReceiver account =
-    if Transaction.receiver trans ≣ AccountMoney.account account
-      then record account {money = AccountMoney.money account + Transaction.amount trans}
-      else account
-
-inTheMoney : Transaction → List AccountMoney → Set
-inTheMoney trans [] = Transaction.amount trans ≡ 0
-inTheMoney trans (account ∷ laccount) =
-  if Transaction.sender trans ≣ AccountMoney.account account
-    then
-      Transaction.amount trans ≤ AccountMoney.money account
-    else
-      inTheMoney trans laccount
-
-data ListTransactions : List AccountMoney → Set where
-  emptyTrans : ListTransactions []
-  consTrans : {laccount : List AccountMoney} → ListTransactions laccount → (trans : Transaction) → inTheMoney trans laccount → ListTransactions (getNewListAccount trans laccount)
-
-validTransaction : List AccountMoney → Transaction → Bool
-validTransaction [] transaction = false
-validTransaction (acc ∷ xs) transaction =
-     Transaction.sender transaction ≣ AccountMoney.account acc
-  && Transaction.amount transaction <= AccountMoney.money acc
+    open RawTransaction trans
+    toTrans : Maybe Transaction
+    toTrans with toJoined receivers pubAmounts amounts
+    ... | joined [] [] [] = just (record
+                                      { idTrans = idTrans
+                                      ; sender = sender
+                                      ; n = 0
+                                      ; receivers = []
+                                      ; amount = 0
+                                      ; recAmounts = []
+                                      })
+    ... | joined (r ∷ rec) (pam ∷ pubAmounts) (am ∷ amounts) with Vec→+Vec (am ∷ amounts)
+    toTrans | joined (r ∷ rec) (pam ∷ pubAmounts) (am ∷ amounts) | +vec (_ ∷ vam) =
+      just (record
+              { idTrans =  idTrans
+              ; sender = sender
+              ; n = suc (len rec)
+              ; receivers = r ∷ rec
+              ; amount = am + +vecSum vam
+              ; recAmounts = am ∷ vam
+              })
+    toTrans | nothing = nothing
