@@ -13,6 +13,10 @@ mutual
   distinctElement f emptyDL el = ⊤
   distinctElement f (consDL lista el' _) el = ¬ (f el' el) ∧ distinctElement f lista el
 
+vmap : ∀ {a b} {A : Set a} {B : Set b} {n} → (A → B) → Vec A n → Vec B n
+vmap f []       = []
+vmap f (x ∷ xs) = f x ∷ vmap f xs
+
 data PubKey : Set where
   nat : (n : Nat) → PubKey
 
