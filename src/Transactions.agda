@@ -6,7 +6,8 @@ open import Utils
 
 record Transaction : Set where
   field
-    idTrans : Nat
+    idTrans : Id
+    prevId : Maybe Id
     sender : PubKey
     n : Nat
     receivers : Vec PubKey n
@@ -15,7 +16,8 @@ record Transaction : Set where
 
 record RawTransaction : Set where
   field
-    idTrans : Nat
+    idTrans : Id
+    prevId : Maybe Id
     sender : PubKey
     receivers : List PubKey
     pubAmounts : List PubKey
@@ -46,6 +48,7 @@ toValidTransaction trans = toTrans
     toTrans with toJoined receivers pubAmounts amounts
     ... | joined [] [] [] = just (record
                                       { idTrans = idTrans
+                                      ; prevId = prevId
                                       ; sender = sender
                                       ; n = 0
                                       ; receivers = []
@@ -56,6 +59,7 @@ toValidTransaction trans = toTrans
     toTrans | joined (r ∷ rec) (pam ∷ pubAmounts) (am ∷ amounts) | +vec (_ ∷ vam) =
       just (record
               { idTrans =  idTrans
+              ; prevId = prevId
               ; sender = sender
               ; n = suc (len rec)
               ; receivers = r ∷ rec
@@ -63,3 +67,4 @@ toValidTransaction trans = toTrans
               ; recAmounts = am ∷ vam
               })
     toTrans | nothing = nothing
+

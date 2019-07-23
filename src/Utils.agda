@@ -16,6 +16,9 @@ mutual
 data PubKey : Set where
   nat : (n : Nat) → PubKey
 
+data Id : Set where
+  nat : (n : Nat) → Id
+
 data +Vec : (s : Nat) (n : Nat) → Set where
   [] : +Vec 0 0
   _∷_ : {s : Nat} {n : Nat} → (el : Nat) → +Vec s n → +Vec (el + s) (suc n)
