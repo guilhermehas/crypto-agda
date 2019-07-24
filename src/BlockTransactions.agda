@@ -28,6 +28,10 @@ tx→blockTx : (tx : Transaction) → BlockTransaction
 tx→blockTx tx@(record { idTrans = idTrans ; prevId = nothing ; sender = sender ; n = n ; receivers = receivers ; amount = amount ; recAmounts = recAmounts }) = txCoinBase tx λ ()
 tx→blockTx tx@(record { idTrans = idTrans ; prevId = (just x) ; sender = sender ; n = n ; receivers = receivers ; amount = amount ; recAmounts = recAmounts }) = txNormal tx (reg idTrans x sender n receivers amount recAmounts)
 
+block→tx : (bt : BlockTransaction) → Transaction
+block→tx (txCoinBase tx x) = tx
+block→tx (txNormal tx x) = tx
+
 vtx→vblockTx : ∀ {n : Nat} → Vec Transaction n → Vec BlockTransaction n
 vtx→vblockTx v = vmap tx→blockTx v
 

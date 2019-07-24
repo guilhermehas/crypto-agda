@@ -17,6 +17,10 @@ vmap : ∀ {a b} {A : Set a} {B : Set b} {n} → (A → B) → Vec A n → Vec B
 vmap f []       = []
 vmap f (x ∷ xs) = f x ∷ vmap f xs
 
+++vec++ : ∀ {m n : Nat} {A : Set} → Vec (Vec A m) n → Vec A (n * m)
+++vec++ [] = []
+++vec++ (x ∷ xs) = x v++ ++vec++ xs
+
 data PubKey : Set where
   nat : (n : Nat) → PubKey
 

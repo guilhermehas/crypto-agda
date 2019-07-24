@@ -2,33 +2,27 @@ module Blockchain where
 
 open import Prelude
 open import Operators
+open import Utils
 open import Transactions
+open import BlockTransactions
 
 record SimpleBlock : Set where
   field
-    transactions : List Transaction
+    size : Fin 10
+    transactions : Vec BlockTransaction (finToNat size)
+    timestamp : Nat
 
-hashBlock : SimpleBlock → Nat
-hashBlock block = hash $ sum $ map hashTransaction $ SimpleBlock.transactions block
+lenBlock : SimpleBlock → Nat
+lenBlock sb = finToNat size
+  where open SimpleBlock sb
 
-data GenesisBlock : Nat → Set where
-  block : (n : Nat) → (sb : SimpleBlock) → n ≡ hashBlock sb → GenesisBlock n
+countCoinBase : ∀ {n : Nat} → Vec BlockTransaction n → Nat
+countCoinBase [] = 0
+countCoinBase (txCoinBase tx x ∷ vec) = suc $ countCoinBase vec
+countCoinBase (txNormal tx x ∷ vec) =  countCoinBase vec
 
-data Block : Nat → Nat → Set where
-  block : (n : Nat) → (m : Nat) → (sb : SimpleBlock) → m ≡ hashBlock sb → Block n m
+data Block : Set where
+  block : (block : SimpleBlock) → countCoinBase (SimpleBlock.transactions block) ≡ 1 → Block
 
-data Blockchain : Nat → Set where
-  gen : {n : Nat} → GenesisBlock n → Blockchain n
-  cons : {n m : Nat} → Block n m → Blockchain n → Blockchain m
-
-validBlock : {n : Nat} → Blockchain n → SimpleBlock → Bool
-validBlock _ _ = true
-
-addBlock : {n : Nat} → (sb : SimpleBlock) → Blockchain n → Either (Blockchain n) (Blockchain (hashBlock sb))
-addBlock {n} simpleBlock blockchain =
-  let blockHash = hashBlock simpleBlock in
-    if validBlock blockchain simpleBlock
-      then
-        (let newBlock = block n blockHash simpleBlock refl in Either.right $ cons newBlock blockchain)
-      else
-        Either.left blockchain
+data Blockchain : Set where
+  blocks : ∀ {n : Nat} → (vbt : Vec BlockTransaction n) → rightTxs vbt → Blockchain
