@@ -41,8 +41,12 @@ tx2Sign tx = All signedInput $ NonEmptyToList $ inputs tx
     signedInput : TXField → Set
     signedInput inp = SignedWithSigPbk (txInput2Msg inp (outputs tx)) (address inp)
 
-record TX : Set where
+record normalTXrec : Set where
   field
     tx : TXUnsigned
     in≥out : txFieldList2TotalAmount (inputs tx) ≥ txFieldList2TotalAmount (outputs tx)
     sig : tx2Sign tx
+
+data TX : Set where
+  normalTX : normalTXrec → TX
+  coinbase : TXField → TX

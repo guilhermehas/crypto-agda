@@ -4,30 +4,36 @@ open import Prelude
 open import Operators
 open import Utils
 open import Transactions
-open import BlockTransactions
 
-record SimpleBlock : Set where
+
+data SubList {A : Set} : List A → Set where
+  []   : SubList []
+  _¬∷_ : {xs : List A} → (x : A) → SubList xs → SubList (x ∷ xs)
+  _∷_  : {xs : List A} → (x : A) → SubList xs → SubList (x ∷ xs)
+
+sub→list : {A : Set} {xs : List A} → SubList xs → List A
+sub→list [] = []
+sub→list (x ¬∷ xs) = sub→list xs
+sub→list (x ∷ xs) = x ∷ sub→list xs
+
+list-sub : {A : Set} {xs : List A} → SubList xs → List A
+list-sub [] = []
+list-sub (x ¬∷ xs) = x ∷ list-sub xs
+list-sub (x ∷ xs) = list-sub xs
+
+record Block : Set where
   field
-    idb : Id
-    size : Fin 10
-    transactions : Vec BlockTransaction (finToNat size)
-    timestamp : Nat
+    coinbaseTX : TXUnsigned
+    TXs : List normalTXrec
 
-lenBlock : SimpleBlock → Nat
-lenBlock sb = finToNat size
-  where open SimpleBlock sb
+data TXOutputs : List TXField → Set where
+  [] : TXOutputs []
+  consCoinBase : {outs : List TXField} → (coinTX : TXField) → (txsOuts : TXOutputs outs)
+    → TXOutputs (coinTX ∷ outs)
+  consNormalTX : {outs : List TXField} → (inps : SubList outs) → (txsOuts : TXOutputs outs)
+    → TXOutputs (list-sub inps)
 
-countCoinBase : ∀ {n : Nat} → Vec BlockTransaction n → Nat
-countCoinBase [] = 0
-countCoinBase (txCoinBase tx x ∷ vec) = suc $ countCoinBase vec
-countCoinBase (txNormal tx x ∷ vec) =  countCoinBase vec
-
-blockId : SimpleBlock → Id
-blockId sb = hash $ finToNat size +msg nat timestamp
-  where open SimpleBlock sb
-
-data Block : Set where
-  block : (block : SimpleBlock) → countCoinBase (SimpleBlock.transactions block) ≡ 1 → Block
-
-data Blockchain : Set where
-  blocks : ∀ {n : Nat} → (vbt : Vec BlockTransaction n) → rightTxs vbt → Blockchain
+data Blockchain : (xs : List TXField) → TXOutputs xs → Set where
+  [] : Blockchain [] []
+  -- cons : {outs : List TXField} → (txsOuts : TXOutputs outs)
+  --   → (txs : normalTXrec) → (coinbase : TXField)
