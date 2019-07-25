@@ -4,15 +4,6 @@ open import Prelude
 open import Data.Unit using (⊤; tt)
 open import Operators
 
-mutual
-  data DistinctList (A : Set) : (A → A → Set) → Set where
-      emptyDL : {b : A → A → Set} → DistinctList A b
-      consDL : {b : A → A → Set} → (dl : DistinctList A b) → (el : A) → distinctElement b dl el → DistinctList A b
-
-  distinctElement : {A : Set} → (b : A → A → Set) → DistinctList A b → A → Set
-  distinctElement f emptyDL el = ⊤
-  distinctElement f (consDL lista el' _) el = ¬ (f el' el) ∧ distinctElement f lista el
-
 vmap : ∀ {a b} {A : Set a} {B : Set b} {n} → (A → B) → Vec A n → Vec B n
 vmap f []       = []
 vmap f (x ∷ xs) = f x ∷ vmap f xs
@@ -20,12 +11,6 @@ vmap f (x ∷ xs) = f x ∷ vmap f xs
 ++vec++ : ∀ {m n : Nat} {A : Set} → Vec (Vec A m) n → Vec A (n * m)
 ++vec++ [] = []
 ++vec++ (x ∷ xs) = x v++ ++vec++ xs
-
-data PubKey : Set where
-  nat : (n : Nat) → PubKey
-
-data Id : Set where
-  nat : (n : Nat) → Id
 
 data +Vec : (s : Nat) (n : Nat) → Set where
   [] : +Vec 0 0
@@ -42,30 +27,20 @@ Vec→+Vec [] = +vec []
 Vec→+Vec (x ∷ v) with Vec→+Vec v
 ... | +vec +v = +vec (x ∷ +v)
 
-data Msg : Set where
-  nat : (n : Nat) → Msg
-  _+msg_ : (n : Nat) → Msg
+Amount = Nat
 
-infixl 5 _⊕_
+NonNil : ∀ {A : Set} → List A → Set
+NonNil [] = ⊥
+NonNil (_ ∷ _) = ⊤
 
-_⊕_ : Nat → Nat → Nat
-n ⊕ m = ⊥-elim impossible
-  where postulate impossible : ⊥
+data All {A : Set} : (P : A → Set) → List A → Set where
+  [] : {P : A → Set} → All P []
+  _∷_ : {x : A} {xs : List A} {P : A → Set} → P x → All P xs → All P (x ∷ xs)
 
-hash : Nat → Nat
-hash n = n
+data NonEmptyList : Set → Set where
+  el : {A : Set} → A → NonEmptyList A
+  _∷_ : {A : Set} → A → NonEmptyList A → NonEmptyList A
 
-hash-inj : ∀ m n → hash n ≡ hash m → n ≡ m
-hash-inj n m = λ z → z
-
-postulate hash-sum-inj : ∀ m m' n n' → hash m ⊕ hash n ≡ hash m' ⊕  hash n' → m ≡ m' × n ≡ n'
-
-hashVec : {n : Nat} → Vec Nat n → Nat
-hashVec [] = hash 0
-hashVec (x ∷ vec) = hash x ⊕ hashVec vec
-
-hashPub : PubKey → Nat
-hashPub (nat n) = hash n
-
-hashVecPub : {n : Nat} → Vec PubKey n → Nat
-hashVecPub vec = hashVec (fmap (λ{ (nat n) → n}) vec)
+NonEmptyToList : {A : Set} → NonEmptyList A → List A
+NonEmptyToList (el x) = x ∷ []
+NonEmptyToList (x ∷ xs) = x ∷ NonEmptyToList xs
