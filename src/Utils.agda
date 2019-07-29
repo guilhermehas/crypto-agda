@@ -59,3 +59,9 @@ list-sub : {A : Set} {xs : List A} → SubList xs → List A
 list-sub [] = []
 list-sub (x ¬∷ xs) = x ∷ list-sub xs
 list-sub (x ∷ xs) = list-sub xs
+
+nonEmptySub : {A : Set} {xs : List A} → SubList xs → Set
+nonEmptySub [] = ⊥
+nonEmptySub (_ ¬∷ xs) = nonEmptySub xs
+nonEmptySub (_ ∷ _) = ⊤
+

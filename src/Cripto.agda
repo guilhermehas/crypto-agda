@@ -5,6 +5,11 @@ open import Prelude
 data Time : Set where
   nat : Nat → Time
 
+sucTime : Time → Time
+sucTime (nat time) = nat (suc time)
+
+ID = Nat
+
 data PublicKey : Set where
   nat : Nat → PublicKey
 
@@ -21,7 +26,6 @@ data Hashed : Set where
   nat : Nat → Hashed
 
 data Msg : Set where
-  ept : Msg
   nat : (n : Nat) → Msg
   _+msg_ : (m : Msg) (n : Msg) → Msg
 
