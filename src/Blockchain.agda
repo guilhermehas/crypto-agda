@@ -5,21 +5,18 @@ open import Operators
 open import Utils
 open import Transactions
 
+mutual
+  data TXTree : (time : Nat) (block : Nat) (outputs : List TXFieldWithId) → Set where
+    genesisTree : TXTree 0 0 []
+    txtree      : ∀ {time block : Nat} {inputs : List TXFieldWithId} {outputTX : ListOutput time}
+      → (tree : TXTree time block inputs) → (tx : TX {time} {block} {inputs} tree outputTX)
+      → TXTree (suc time) (suc block) []
 
-data SubList {A : Set} : List A → Set where
-  []   : SubList []
-  _¬∷_ : {xs : List A} → (x : A) → SubList xs → SubList (x ∷ xs)
-  _∷_  : {xs : List A} → (x : A) → SubList xs → SubList (x ∷ xs)
-
-sub→list : {A : Set} {xs : List A} → SubList xs → List A
-sub→list [] = []
-sub→list (x ¬∷ xs) = sub→list xs
-sub→list (x ∷ xs) = x ∷ sub→list xs
-
-list-sub : {A : Set} {xs : List A} → SubList xs → List A
-list-sub [] = []
-list-sub (x ¬∷ xs) = x ∷ list-sub xs
-list-sub (x ∷ xs) = list-sub xs
+  data TX {time : Nat} {block : Nat} {inputs : List TXFieldWithId}
+    : (tr : TXTree time block inputs) (outputs : ListOutput time) → Set where
+    normalTX : (tr : TXTree time block inputs) → (SubInputs : SubList inputs)
+      → (outputs : ListOutput time) → TX tr outputs
+    coinbase : (tr : TXTree time block inputs) → (outputs : ListOutput time) → TX tr outputs
 
 record Block : Set where
   field
@@ -28,10 +25,18 @@ record Block : Set where
 
 data TXOutputs : List TXField → Set where
   [] : TXOutputs []
-  consCoinBase : {outs : List TXField} → (coinTX : TXField) → (txsOuts : TXOutputs outs)
+  consCoinBase : {outs : List TXField} → (coinTX : TXField) → TXOutputs outs
     → TXOutputs (coinTX ∷ outs)
-  consNormalTX : {outs : List TXField} → (inps : SubList outs) → (txsOuts : TXOutputs outs)
-    → TXOutputs (list-sub inps)
+  consNormalTX : {outs : List TXField}
+    → (inps : SubList outs) → (newOuts : List TXField)
+    → TXOutputs outs
+    → tx2Sign (sub→list inps) outs
+    → TXOutputs (newOuts ++ (list-sub inps))
+
+countCoinBase : {txs : List TXField} → TXOutputs txs → Nat
+countCoinBase [] = zero
+countCoinBase (consCoinBase coinTX txs) = suc $ countCoinBase txs
+countCoinBase (consNormalTX inps newOuts txs x) = countCoinBase txs
 
 data Blockchain : (xs : List TXField) → TXOutputs xs → Set where
   [] : Blockchain [] []

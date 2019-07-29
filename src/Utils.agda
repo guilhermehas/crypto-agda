@@ -44,3 +44,18 @@ data NonEmptyList : Set → Set where
 NonEmptyToList : {A : Set} → NonEmptyList A → List A
 NonEmptyToList (el x) = x ∷ []
 NonEmptyToList (x ∷ xs) = x ∷ NonEmptyToList xs
+
+data SubList {A : Set} : List A → Set where
+  []   : SubList []
+  _¬∷_ : {xs : List A} → (x : A) → SubList xs → SubList (x ∷ xs)
+  _∷_  : {xs : List A} → (x : A) → SubList xs → SubList (x ∷ xs)
+
+sub→list : {A : Set} {xs : List A} → SubList xs → List A
+sub→list [] = []
+sub→list (x ¬∷ xs) = sub→list xs
+sub→list (x ∷ xs) = x ∷ sub→list xs
+
+list-sub : {A : Set} {xs : List A} → SubList xs → List A
+list-sub [] = []
+list-sub (x ¬∷ xs) = x ∷ list-sub xs
+list-sub (x ∷ xs) = list-sub xs

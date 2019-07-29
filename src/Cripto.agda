@@ -21,6 +21,7 @@ data Hashed : Set where
   nat : Nat → Hashed
 
 data Msg : Set where
+  ept : Msg
   nat : (n : Nat) → Msg
   _+msg_ : (m : Msg) (n : Msg) → Msg
 
