@@ -33,6 +33,11 @@ NonNil : ∀ {A : Set} → List A → Set
 NonNil [] = ⊥
 NonNil (_ ∷ _) = ⊤
 
+NonNil? : ∀ {A : Set} → (lista : List A) → Dec (NonNil lista)
+NonNil? [] = no (λ z → z)
+NonNil? (_ ∷ _) = yes unit
+
+
 data All {A : Set} : (P : A → Set) → List A → Set where
   [] : {P : A → Set} → All P []
   _∷_ : {x : A} {xs : List A} {P : A → Set} → P x → All P xs → All P (x ∷ xs)

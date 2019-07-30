@@ -15,7 +15,11 @@ record TXFieldWithId : Set where
       time     : Time
       position : Nat
       amount   : Amount
-      address  : Amount
+      address  : Address
+
+removeId : TXFieldWithId → TXField
+removeId record { time = time ; position = position ; amount = amount ; address = address }
+  = record { amount = amount ; address = address }
 
 sameIdList : (time : Time) → (txs : NonEmptyList TXFieldWithId) → Set
 sameIdList time (el tx)    =  TXFieldWithId.time tx ≡ time
@@ -33,60 +37,36 @@ data ListOutput : (time : Time) → Set where
 ListOutput→List : ∀ {time : Time} → (outs : ListOutput time) → List TXFieldWithId
 ListOutput→List (listOut _ outs _ _) =  NonEmptyToList outs
 
-record TXSigned (inputs : List TXFieldWithId) (output : List TXFieldWithId) : Set where
+
+TX→Msg : (tx : TXField) → Msg
+TX→Msg record { amount = amount ; address = (nat address) } = nat amount +msg nat address
+
+TXId→Msg : (tx : TXFieldWithId) → Msg
+TXId→Msg record { time = (nat time) ; position = position ; amount = amount ; address = (nat address) }
+  = nat time +msg nat position +msg nat amount +msg nat address
+
+txInput→Msg : (input : TXFieldWithId) → (outputs : List TXField)
+  → NonNil outputs → Msg
+txInput→Msg input [] ()
+txInput→Msg input (output ∷ outputs) _ with NonNil? outputs
+... | yes nonNil =  TXId→Msg input +msg TX→Msg output +msg txInput→Msg input outputs nonNil
+... | no nil = TXId→Msg input +msg TX→Msg output
+
+
+txEls→Msg : ∀ {inputs : List TXFieldWithId}
+  → (input : TXFieldWithId) → (outputs : List TXFieldWithId)
+  → NonNil inputs × NonNil outputs → Msg
+txEls→Msg input [] (_ , ())
+txEls→Msg input (output ∷ outputs) _ = txInput→Msg input (map removeId (output ∷ outputs)) unit
+
+txFieldList→TotalAmount : (txs : List TXFieldWithId) → Amount
+txFieldList→TotalAmount txs = sum $ map amount txs
+  where open TXFieldWithId
+
+record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : Set where
   field
-    val : Nat
-
-open TXField
-
-txFieldList2TotalAmount : (inp : NonEmptyList TXField) → Amount
-txFieldList2TotalAmount inp = sum $ map amount $ NonEmptyToList inp
-
-record TXUnsigned : Set where
-  field
-    inputs  : NonEmptyList TXField
-    outputs : NonEmptyList TXField
-
-open TXUnsigned
-
--- txField2Msg : (inp : TXField) → Msg
--- txField2Msg record { amount = amount ; address = (nat addr) } =
---   nat amount +msg nat addr
-
--- txFieldList2Msg : (inps : List TXField) → Msg
--- txFieldList2Msg [] = ept
--- txFieldList2Msg (inp ∷ inps) = txField2Msg inp +msg txFieldList2Msg inps
-
--- txFieldList2MsgN : (inps : NonEmptyList TXField) → Msg
--- txFieldList2MsgN (el record { amount = amount ; address = (nat addr) }) =
---   nat amount +msg nat addr
--- txFieldList2MsgN (record { amount = amount ; address = nat addr } ∷ inps) =
---   nat amount +msg nat addr +msg txFieldList2MsgN inps
-
--- txInput2Msg : (inp : TXField) (outp : List TXField) → Msg
--- txInput2Msg inp outp = txField2Msg inp +msg txFieldList2Msg outp
-
--- txInput2MsgN : (inp : TXField) (outp : NonEmptyList TXField) → Msg
--- txInput2MsgN inp outp = txField2Msg inp +msg txFieldList2MsgN outp
-
--- tx2Sign : List TXField → List TXField → Set
--- tx2Sign inputs outputs = All signedInput $ inputs
---   where
---     signedInput : TXField → Set
---     signedInput inp = SignedWithSigPbk (txInput2Msg inp outputs) (address inp)
-
--- tx2SignN : TXUnsigned → Set
--- tx2SignN tx = All signedInput $ NonEmptyToList $ inputs tx
---   where
---     signedInput : TXField → Set
---     signedInput inp = SignedWithSigPbk (txInput2MsgN inp (outputs tx)) (address inp)
-
--- record normalTXrec : Set where
---   field
---     tx : TXUnsigned
---     in≥out : txFieldList2TotalAmount (inputs tx) ≥ txFieldList2TotalAmount (outputs tx)
---     sig : tx2SignN tx
-
--- data TX : Set where
---   normalTX : normalTXrec → TX
---   coinbase : TXField → TX
+    nonEmpty : NonNil inputs × NonNil outputs
+    signed   : All
+      (λ input → SignedWithSigPbk (txEls→Msg input outputs nonEmpty) (TXFieldWithId.address input))
+       inputs
+    in≥out : txFieldList→TotalAmount inputs ≥ txFieldList→TotalAmount outputs

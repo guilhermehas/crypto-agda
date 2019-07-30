@@ -1,4 +1,4 @@
-module Blockchain where
+module TXTree where
 
 open import Prelude
 open import Operators
@@ -35,29 +35,3 @@ mutual
     → (tx : TX {time} {block} {inputs} tr outputs) → List TXFieldWithId
   inputsTX (normalTX _ SubInputs _ _) = list-sub SubInputs
   inputsTX {_} {_} {inputs} (coinbase _ _) = inputs
-
-
--- record Block : Set where
---   field
---     coinbaseTX : TXUnsigned
---     TXs : List normalTXrec
-
--- data TXOutputs : List TXField → Set where
---   [] : TXOutputs []
---   consCoinBase : {outs : List TXField} → (coinTX : TXField) → TXOutputs outs
---     → TXOutputs (coinTX ∷ outs)
---   consNormalTX : {outs : List TXField}
---     → (inps : SubList outs) → (newOuts : List TXField)
---     → TXOutputs outs
---     → tx2Sign (sub→list inps) outs
---     → TXOutputs (newOuts ++ (list-sub inps))
-
--- countCoinBase : {txs : List TXField} → TXOutputs txs → Nat
--- countCoinBase [] = zero
--- countCoinBase (consCoinBase coinTX txs) = suc $ countCoinBase txs
--- countCoinBase (consNormalTX inps newOuts txs x) = countCoinBase txs
-
--- data Blockchain : (xs : List TXField) → TXOutputs xs → Set where
---   [] : Blockchain [] []
-  -- cons : {outs : List TXField} → (txsOuts : TXOutputs outs)
-  --   → (txs : normalTXrec) → (coinbase : TXField)
