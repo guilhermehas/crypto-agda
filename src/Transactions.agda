@@ -21,6 +21,11 @@ removeId : TXFieldWithId → TXField
 removeId record { time = time ; position = position ; amount = amount ; address = address }
   = record { amount = amount ; address = address }
 
+addId : (position : Nat) (time : Time) (txs : List TXField) → List TXFieldWithId
+addId position time [] = []
+addId position time (record { amount = amount ; address = address } ∷ txs)
+  = record { time = time ; position = position ; amount = amount ; address = address } ∷ addId (suc position) time txs
+
 sameIdList : (time : Time) → (txs : NonEmptyList TXFieldWithId) → Set
 sameIdList time (el tx)    =  TXFieldWithId.time tx ≡ time
 sameIdList time (tx ∷ txs) = TXFieldWithId.time tx ≡ time × sameIdList time txs
@@ -69,4 +74,98 @@ record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : S
     signed   : All
       (λ input → SignedWithSigPbk (txEls→Msg input outputs nonEmpty) (TXFieldWithId.address input))
        inputs
-    in≥out : txFieldList→TotalAmount inputs ≥ txFieldList→TotalAmount outputs
+    in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
+
+record FlawTXSigned : Set where
+  field
+    inputs   : List TXFieldWithId
+    outputs  : List TXFieldWithId
+    tx       : TXSigned inputs outputs
+
+record FlawInput : Set where
+  field
+    time      : Time
+    position  : Nat
+    amount    : Amount
+    msg       : Msg
+    signature : Signature
+    publicKey : PublicKey
+
+record FlawTransaction : Set where
+  field
+    inputs   : List FlawInput
+    outputs  : List TXField
+
+sigInput : (input : FlawInput) → (outputs : List TXFieldWithId)
+  → Maybe $ SignedWithSigPbk (FlawInput.msg input) $ publicKey2Address $ FlawInput.publicKey input
+sigInput record { time = time ; position = position ; amount = amount ;
+  msg = msg ; signature = signature ; publicKey = publicKey }
+  outputs with Signed? msg publicKey signature
+... | yes signed = just $ record
+         { publicKey = publicKey ; pbkCorrect = refl ; signature = signature ; signed = signed }
+... | no _ = nothing
+
+flaw→TXField : (input : FlawInput) → TXFieldWithId
+flaw→TXField record { time = time ; position = position ; amount = amount ;
+  msg = msg ; signature = signature ; publicKey = publicKey }
+   = record { time = time ; position = position ; amount = amount ; address = publicKey2Address publicKey }
+
+flaw→TXSigned : ∀ (time : Time) → (ftx : FlawTransaction)
+  → Maybe FlawTXSigned
+flaw→TXSigned time record { inputs = inputs ; outputs = outputs } with NonNil? inputs
+... | no _ = nothing
+... | yes nonNilInp with NonNil? outputs
+...    | no _ = nothing
+...    | yes nonNilOut = ans
+  where
+    inpsField : List TXFieldWithId
+    inpsField = map flaw→TXField inputs
+
+    outsField : List TXFieldWithId
+    outsField = addId 0 time outputs
+
+    nonNilMap : ∀ {A B : Set} {f : A → B} → (lista : List A) → NonNil lista → NonNil (map f lista)
+    nonNilMap [] ()
+    nonNilMap (_ ∷ _) nla = unit
+
+    nonNilImpTX : NonNil inpsField
+    nonNilImpTX = nonNilMap inputs nonNilInp
+
+    nonNilAddId : {time : Time} (outputs : List TXField) (nonNilOut : NonNil outputs)
+      → NonNil (addId 0 time outputs)
+    nonNilAddId [] ()
+    nonNilAddId (_ ∷ outputs) nonNil = nonNil
+
+    nonNilOutTX : NonNil outsField
+    nonNilOutTX = nonNilAddId outputs nonNilOut
+
+    nonEmpty : NonNil inpsField × NonNil outsField
+    nonEmpty = nonNilImpTX , nonNilOutTX
+
+    All?Signed : (inputs : List FlawInput) →
+        Maybe (All (λ input → SignedWithSigPbk (txEls→Msg input outsField nonEmpty)
+        (TXFieldWithId.address input)) (map flaw→TXField inputs))
+    All?Signed [] = just []
+    All?Signed (input ∷ inputs)
+      with Signed? (txEls→Msg (flaw→TXField input) outsField nonEmpty)
+      (FlawInput.publicKey input) (FlawInput.signature input)
+    ... | no _ = nothing
+    ... | yes signed with All?Signed inputs
+    ...    | nothing = nothing
+    ...    | just allInputs = just $ (record
+                                        { publicKey = FlawInput.publicKey input
+                                        ; pbkCorrect = refl
+                                        ; signature = FlawInput.signature input
+                                        ; signed = signed
+                                        }) ∷ allInputs
+
+    in≥out : Dec $ txFieldList→TotalAmount inpsField ≥n txFieldList→TotalAmount outsField
+    in≥out =  txFieldList→TotalAmount inpsField ≥n? txFieldList→TotalAmount outsField
+
+    ans : Maybe FlawTXSigned
+    ans with All?Signed inputs
+    ... | nothing = nothing
+    ... | just signed with in≥out
+    ...    | no _       = nothing
+    ...    | yes in>out = just $ record { inputs = inpsField ; outputs = outsField ;
+      tx = record { nonEmpty = nonEmpty ; signed = signed ; in≥out = in>out } }

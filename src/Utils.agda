@@ -70,3 +70,21 @@ nonEmptySub [] = ⊥
 nonEmptySub (_ ¬∷ xs) = nonEmptySub xs
 nonEmptySub (_ ∷ _) = ⊤
 
+
+data _≥n_ : (a b : Nat) → Set where
+  z   : zero ≥n zero
+  s≥z : ∀ (m n : Nat) → suc m ≥n zero
+  s≥s : ∀ (m n : Nat) → m ≥n n → suc m ≥n suc n
+
+_≥n?_ : (a b : Nat) → Dec $ a ≥n b
+zero ≥n? zero = yes z
+zero ≥n? suc b = no (λ ())
+suc a ≥n? zero = yes (s≥z a a)
+suc a ≥n? suc b with a ≥n? b
+... | yes eq = yes (s≥s a b eq)
+... | no ¬eq = no $ ¬suc a b ¬eq
+  where
+    ¬suc : ∀ (a b : Nat) → ¬ (a ≥n b) → ¬ (suc a ≥n suc b)
+    ¬suc zero zero ineq eq = ineq z
+    ¬suc zero (suc b) ineq (s≥s .0 .(suc b) ())
+    ¬suc (suc a) b ineq (s≥s .(suc a) .b eq) = ineq eq

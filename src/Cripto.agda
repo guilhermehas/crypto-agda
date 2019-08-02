@@ -34,6 +34,7 @@ infixr 5 _+msg_
 postulate _priv≡pub_ : PrivateKey → PublicKey → Set
 postulate publicKey2Address : PublicKey → Address
 postulate Signed : Msg → PublicKey → Signature → Set
+postulate Signed? : (msg : Msg) → (pk : PublicKey) → (sig : Signature) → Dec $ Signed msg pk sig
 postulate hashMsg : Msg → Hashed
 postulate hash-inj : ∀ m n → hashMsg m ≡ hashMsg n → m ≡ n
 
