@@ -44,4 +44,4 @@ record RawTXTree : Set where
     txTree  : TXTree time block outputs
 
 addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
-addTransactionTree txTree tx = ?
+addTransactionTree txTree tx = {!!}

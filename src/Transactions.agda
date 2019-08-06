@@ -176,4 +176,4 @@ record RawTXCoinbase : Set where
 
 data RawTX : Set where
   coinbase : (tx : RawTXCoinbase) → RawTX
-  normalTX : (tx : RawTXSigned)  → RawTX
+  normalTX : (tx : RawTXSigned)   → RawTX
