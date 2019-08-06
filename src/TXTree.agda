@@ -35,3 +35,13 @@ mutual
     → (tx : TX {time} {block} {inputs} tr outputs) → List TXFieldWithId
   inputsTX (normalTX _ SubInputs _ _) = list-sub SubInputs
   inputsTX {_} {_} {inputs} (coinbase _ _) = inputs
+
+record RawTXTree : Set where
+  field
+    time    : Time
+    block   : Nat
+    outputs : List TXFieldWithId
+    txTree  : TXTree time block outputs
+
+addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
+addTransactionTree txTree tx = ?

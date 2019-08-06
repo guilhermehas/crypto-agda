@@ -169,3 +169,11 @@ raw→TXSigned time record { inputs = inputs ; outputs = outputs } with NonNil? 
     ...    | no _       = nothing
     ...    | yes in>out = just $ record { inputs = inpsField ; outputs = outsField ;
       tx = record { nonEmpty = nonEmpty ; signed = signed ; in≥out = in>out } }
+
+record RawTXCoinbase : Set where
+  field
+    outputs : List TXFieldWithId
+
+data RawTX : Set where
+  coinbase : (tx : RawTXCoinbase) → RawTX
+  normalTX : (tx : RawTXSigned)  → RawTX
