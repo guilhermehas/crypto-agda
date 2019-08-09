@@ -27,21 +27,31 @@ addId position time (record { amount = amount ; address = address } ∷ txs)
   = record { time = time ; position = position ; amount = amount ; address = address } ∷ addId (suc position) time txs
 
 sameIdList : (time : Time) → (txs : NonEmptyList TXFieldWithId) → Set
-sameIdList time (el tx)    =  TXFieldWithId.time tx ≡ time
+sameIdList time (el tx)    = TXFieldWithId.time tx ≡ time
 sameIdList time (tx ∷ txs) = TXFieldWithId.time tx ≡ time × sameIdList time txs
 
 incrementList : (order : Nat) → (txs : NonEmptyList TXFieldWithId) → Set
 incrementList order (el tx) =  TXFieldWithId.position tx ≡ order
 incrementList order (tx ∷ txs) =  TXFieldWithId.position tx ≡ order × incrementList (suc order) txs
 
-data ListOutput : (time : Time) → Set where
-  listOut : (time : Time) → (out : NonEmptyList TXFieldWithId)
-    → sameIdList time out → incrementList zero out
-    → ListOutput time
+data VectorOutput : (time : Time) (size : Nat) → Set where
+  el : ∀ {time : Time} → (tx : TXFieldWithId) → (sameId : TXFieldWithId.time tx ≡ time)
+    → (elStart : TXFieldWithId.position tx ≡ zero) → VectorOutput time 1
+  cons : ∀ {time : Time} {size : Nat} → (listOutput : VectorOutput time size) → (tx : TXFieldWithId)
+    → (sameId : TXFieldWithId.time tx ≡ time) → (elStart : TXFieldWithId.position tx ≡ (suc size))
+    → VectorOutput time (suc size)
 
-ListOutput→List : ∀ {time : Time} → (outs : ListOutput time) → List TXFieldWithId
-ListOutput→List (listOut _ outs _ _) =  NonEmptyToList outs
+VectorOutput→List : ∀ {time : Time} {size : Nat} → (outs : VectorOutput time size)
+  → List TXFieldWithId
+VectorOutput→List (el tx sameId elStart) = tx ∷ []
+VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
 
+addOutput : ∀ {time : Time} {size : Nat}
+  → (listOutput : VectorOutput time size) → (tx : TXField) → VectorOutput time (suc size)
+addOutput {time} {size} listOutput txOut = cons listOutput
+  (record { time = time ; position = suc size ; amount = amount ; address = address })
+  refl refl
+  where open TXField txOut
 
 TX→Msg : (tx : TXField) → Msg
 TX→Msg record { amount = amount ; address = (nat address) } = nat amount +msg nat address
