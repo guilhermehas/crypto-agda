@@ -46,6 +46,12 @@ VectorOutput→List : ∀ {time : Time} {size : Nat} → (outs : VectorOutput ti
 VectorOutput→List (el tx sameId elStart) = tx ∷ []
 VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
 
+addFirstOutput : (time : Time) (output : TXField) → VectorOutput time 1
+addFirstOutput time output =
+  el (record { time = time ; position = zero ; amount = amount ; address = address })
+  refl refl
+  where open TXField output
+
 addOutput : ∀ {time : Time} {size : Nat}
   → (listOutput : VectorOutput time size) → (tx : TXField) → VectorOutput time (suc size)
 addOutput {time} {size} listOutput txOut = cons listOutput
