@@ -24,7 +24,8 @@ removeId record { time = time ; position = position ; amount = amount ; address 
 addId : (position : Nat) (time : Time) (txs : List TXField) → List TXFieldWithId
 addId position time [] = []
 addId position time (record { amount = amount ; address = address } ∷ txs)
-  = record { time = time ; position = position ; amount = amount ; address = address } ∷ addId (suc position) time txs
+  = record { time = time ; position = position ; amount = amount ; address = address }
+  ∷ addId (suc position) time txs
 
 sameIdList : (time : Time) → (txs : NonEmptyList TXFieldWithId) → Set
 sameIdList time (el tx)    = TXFieldWithId.time tx ≡ time
@@ -92,6 +93,19 @@ record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : S
        inputs
     in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
 
+minerMoney : (block : Nat) → Amount
+minerMoney block = 1000
+
+verifyMineyMoneyCoinbase : (block : Nat) (miner : TXField) → Set
+verifyMineyMoneyCoinbase block miner = amount ≡ minerMoney block
+  where open TXField miner
+
+verifyMinerMoneyNormalTX : {inputs outputs : List TXFieldWithId} (block : Nat)
+  (txSigned : TXSigned inputs outputs) (miner : TXField) → Set
+verifyMinerMoneyNormalTX {inputs} {outputs} block _ miner = amount ≡
+  txFieldList→TotalAmount inputs - txFieldList→TotalAmount outputs
+  where open TXField miner
+
 record RawTXSigned : Set where
   field
     inputs   : List TXFieldWithId
@@ -148,7 +162,7 @@ raw→TXSigned time record { inputs = inputs ; outputs = outputs } with NonNil? 
     nonNilImpTX = nonNilMap inputs nonNilInp
 
     nonNilAddId : {time : Time} (outputs : List TXField) (nonNilOut : NonNil outputs)
-      → NonNil (addId 0 time outputs)
+      → NonNil (addId zero time outputs)
     nonNilAddId [] ()
     nonNilAddId (_ ∷ outputs) nonNil = nonNil
 
