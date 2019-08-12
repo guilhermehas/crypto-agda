@@ -24,7 +24,8 @@ removeId record { time = time ; position = position ; amount = amount ; address 
 addId : (position : Nat) (time : Time) (txs : List TXField) → List TXFieldWithId
 addId position time [] = []
 addId position time (record { amount = amount ; address = address } ∷ txs)
-  = record { time = time ; position = position ; amount = amount ; address = address } ∷ addId (suc position) time txs
+  = record { time = time ; position = position ; amount = amount ; address = address }
+  ∷ addId (suc position) time txs
 
 sameIdList : (time : Time) → (txs : NonEmptyList TXFieldWithId) → Set
 sameIdList time (el tx)    = TXFieldWithId.time tx ≡ time
@@ -45,6 +46,12 @@ VectorOutput→List : ∀ {time : Time} {size : Nat} → (outs : VectorOutput ti
   → List TXFieldWithId
 VectorOutput→List (el tx sameId elStart) = tx ∷ []
 VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
+
+addFirstOutput : (time : Time) (output : TXField) → VectorOutput time 1
+addFirstOutput time output =
+  el (record { time = time ; position = zero ; amount = amount ; address = address })
+  refl refl
+  where open TXField output
 
 addOutput : ∀ {time : Time} {size : Nat}
   → (listOutput : VectorOutput time size) → (tx : TXField) → VectorOutput time (suc size)
@@ -85,6 +92,19 @@ record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : S
       (λ input → SignedWithSigPbk (txEls→Msg input outputs nonEmpty) (TXFieldWithId.address input))
        inputs
     in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
+
+minerMoney : (block : Nat) → Amount
+minerMoney block = 1000
+
+verifyMineyMoneyCoinbase : (block : Nat) (miner : TXField) → Set
+verifyMineyMoneyCoinbase block miner = amount ≡ minerMoney block
+  where open TXField miner
+
+verifyMinerMoneyNormalTX : {inputs outputs : List TXFieldWithId} (block : Nat)
+  (txSigned : TXSigned inputs outputs) (miner : TXField) → Set
+verifyMinerMoneyNormalTX {inputs} {outputs} block _ miner = amount ≡
+  txFieldList→TotalAmount inputs - txFieldList→TotalAmount outputs
+  where open TXField miner
 
 record RawTXSigned : Set where
   field
