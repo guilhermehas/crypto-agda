@@ -132,7 +132,7 @@ raw→TXSigned time record { inputs = inputs ; outputs = outputs } with NonNil? 
     inpsField = map raw→TXField inputs
 
     outsField : List TXFieldWithId
-    outsField = addId 0 time outputs
+    outsField = addId zero time outputs
 
     nonNilMap : ∀ {A B : Set} {f : A → B} → (lista : List A) → NonNil lista → NonNil (map f lista)
     nonNilMap [] ()
@@ -142,7 +142,7 @@ raw→TXSigned time record { inputs = inputs ; outputs = outputs } with NonNil? 
     nonNilImpTX = nonNilMap inputs nonNilInp
 
     nonNilAddId : {time : Time} (outputs : List TXField) (nonNilOut : NonNil outputs)
-      → NonNil (addId 0 time outputs)
+      → NonNil (addId zero time outputs)
     nonNilAddId [] ()
     nonNilAddId (_ ∷ outputs) nonNil = nonNil
 
