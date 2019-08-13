@@ -1,6 +1,7 @@
 module Cripto where
 
 open import Prelude
+open import Utils
 
 data Time : Set where
   nat : Nat → Time
@@ -52,3 +53,8 @@ record SignedWithSigPbk (msg : Msg)(address : Address) : Set where
     pbkCorrect  :  publicKey2Address publicKey ≡ address
     signature   :  Signature
     signed      :  Signed msg publicKey signature
+
+_≟t_ : (a b : Time) → Dec $ a ≡ b
+nat a ≟t nat b with a ≟ b
+... | yes refl = yes refl
+... | no ¬p    = no λ{ refl → ¬p refl }

@@ -44,4 +44,5 @@ record RawTXTree : Set where
     txTree  : TXTree time block outputs
 
 addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
-addTransactionTree txTree tx = {!!}
+addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree } (coinbase tx) = {!!}
+addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree } (normalTX tx) = {!!}

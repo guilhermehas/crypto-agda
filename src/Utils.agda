@@ -88,3 +88,11 @@ suc a ≥n? suc b with a ≥n? b
     ¬suc zero zero ineq eq = ineq z
     ¬suc zero (suc b) ineq (s≥s .0 .(suc b) ())
     ¬suc (suc a) b ineq (s≥s .(suc a) .b eq) = ineq eq
+
+_≟_ : (a b : Nat) → Dec $ a ≡ b
+zero ≟ zero = yes refl
+zero ≟ suc b = no (λ ())
+suc a ≟ zero = no (λ ())
+suc a ≟ suc b with a ≟ b
+... | yes refl = yes refl
+... | no    ¬p = no λ{ refl → ¬p refl }

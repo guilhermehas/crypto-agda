@@ -187,3 +187,37 @@ record RawTXCoinbase : Set where
 data RawTX : Set where
   coinbase : (tx : RawTXCoinbase) → RawTX
   normalTX : (tx : RawTXSigned)   → RawTX
+
+record RawVecOutput : Set where
+  field
+    time    : Time
+    outSize : Nat
+    vecOut  : VectorOutput time outSize
+
+listTXField→VecOut : (txs : List TXFieldWithId) → Maybe RawVecOutput
+listTXField→VecOut [] = nothing
+listTXField→VecOut (tx ∷ txs) = foldr addMaybeVec (createVecOutsize tx) txs
+  where
+    addElementInVectorOut : {time : Time} {outSize : Nat} (tx : TXFieldWithId)
+      (vecOut : VectorOutput time outSize) → Maybe $ VectorOutput time $ suc outSize
+    addElementInVectorOut {time} {outSize} tx vecOut with TXFieldWithId.time tx ≟t time
+    ... | no  ¬p   = nothing
+    ... | yes refl with TXFieldWithId.position tx ≟ suc outSize
+    ...   | no    ¬p = nothing
+    ...   | yes refl = just $ cons vecOut tx refl refl
+
+    createVecOutsize : (tx : TXFieldWithId) → Maybe $ RawVecOutput
+    createVecOutsize tx with TXFieldWithId.position tx ≟ zero
+    ... | no ¬p    = nothing
+    ... | yes refl = just $
+      record { time = time ; outSize = suc zero ; vecOut = el tx refl refl }
+      where open TXFieldWithId tx
+
+    addElementRawVec : (tx : TXFieldWithId) (vecOut : RawVecOutput) → Maybe RawVecOutput
+    addElementRawVec tx record { time = time ; outSize = outSize ; vecOut = vecOut } with addElementInVectorOut tx vecOut
+    ... | nothing  = nothing
+    ... | just vec = just $ record { time = time ; outSize = suc outSize ; vecOut = vec }
+
+    addMaybeVec : (tx : TXFieldWithId) (vecOut : Maybe RawVecOutput) → Maybe RawVecOutput
+    addMaybeVec tx nothing = nothing
+    addMaybeVec tx (just vecOut) = addElementRawVec tx vecOut
