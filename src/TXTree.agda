@@ -51,7 +51,8 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ; tx
   with time ≟t timeOut
 ...   | no _     = nothing
 ...   | yes refl = just $
-  record { time = sucTime time ; block = suc block ; outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree tx }
+  record { time = sucTime time ; block = suc block ;
+  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree tx }
   where
     tx : TX txTree vecOut
     tx = coinbase txTree vecOut

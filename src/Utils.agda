@@ -96,3 +96,16 @@ suc a ≟ zero = no (λ ())
 suc a ≟ suc b with a ≟ b
 ... | yes refl = yes refl
 ... | no    ¬p = no λ{ refl → ¬p refl }
+
+list→sub : ∀ {A : Set} {_≟_ : A → A → Dec $ A ≡ A} (lista : List A) (sub : List A)
+  → Maybe $ SubList lista
+list→sub [] [] = just []
+list→sub [] (_ ∷ _) = nothing
+list→sub {A} {_≟_} (x ∷ lista) [] with list→sub {A} {_≟_} lista []
+... | nothing  = nothing
+... | just sub = just $ x ¬∷ sub
+list→sub {A} {_≟_} (x ∷ lista) (y ∷ maySub) with list→sub {A} {_≟_} lista maySub
+... | nothing  = nothing
+... | just sub with x ≟ y
+...    | yes refl = just $ x  ∷ sub
+...    | no  ¬p   = just $ x ¬∷ sub
