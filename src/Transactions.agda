@@ -90,7 +90,7 @@ record RawTXSigned : Set where
   field
     inputs   : List TXFieldWithId
     outputs  : List TXFieldWithId
-    tx       : TXSigned inputs outputs
+    txSig    : TXSigned inputs outputs
 
 record RawInput : Set where
   field
@@ -178,7 +178,7 @@ raw→TXSigned time record { inputs = inputs ; outputs = outputs } with NonNil? 
     ... | just signed with in≥out
     ...    | no _       = nothing
     ...    | yes in>out = just $ record { inputs = inpsField ; outputs = outsField ;
-      tx = record { nonEmpty = nonEmpty ; signed = signed ; in≥out = in>out } }
+      txSig = record { nonEmpty = nonEmpty ; signed = signed ; in≥out = in>out } }
 
 record RawTXCoinbase : Set where
   field
@@ -186,7 +186,7 @@ record RawTXCoinbase : Set where
 
 data RawTX : Set where
   coinbase : (tx : RawTXCoinbase) → RawTX
-  normalTX : (tx : RawTXSigned)   → RawTX
+  normalTX : (tx : RawTransaction)   → RawTX
 
 record RawVecOutput : Set where
   field
@@ -214,7 +214,8 @@ listTXField→VecOut (tx ∷ txs) = foldr addMaybeVec (createVecOutsize tx) txs
       where open TXFieldWithId tx
 
     addElementRawVec : (tx : TXFieldWithId) (vecOut : RawVecOutput) → Maybe RawVecOutput
-    addElementRawVec tx record { time = time ; outSize = outSize ; vecOut = vecOut } with addElementInVectorOut tx vecOut
+    addElementRawVec tx record { time = time ; outSize = outSize ; vecOut = vecOut }
+      with addElementInVectorOut tx vecOut
     ... | nothing  = nothing
     ... | just vec = just $ record { time = time ; outSize = suc outSize ; vecOut = vec }
 
