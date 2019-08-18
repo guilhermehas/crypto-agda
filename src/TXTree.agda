@@ -1,7 +1,6 @@
 module TXTree where
 
 open import Prelude
-open import Operators
 open import Utils
 open import Cripto
 open import Transactions
@@ -48,7 +47,7 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ; tx
   (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputs
 ... | nothing     = nothing
 ... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
-  with time ≟t timeOut
+  with time == timeOut
 ...   | no _     = nothing
 ...   | yes refl = just $
   record { time = sucTime time ; block = suc block ;

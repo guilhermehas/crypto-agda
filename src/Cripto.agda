@@ -17,14 +17,6 @@ data PublicKey : Set where
 data Address : Set where
   nat : Nat → Address
 
-_≡?addr_ : ∀ (a b : Address) → Dec $ a ≡ b
-nat zero ≡?addr nat zero = yes refl
-nat zero ≡?addr nat (suc b) = no (λ ())
-nat (suc a) ≡?addr nat zero = no (λ ())
-nat (suc a) ≡?addr nat (suc b) with nat a ≡?addr nat b
-... | no ¬p = no λ{ refl → ¬p refl }
-... | yes refl = yes refl
-
 data PrivateKey : Set where
   nat : Nat → PrivateKey
 
@@ -54,7 +46,24 @@ record SignedWithSigPbk (msg : Msg)(address : Address) : Set where
     signature   :  Signature
     signed      :  Signed msg publicKey signature
 
-_≟t_ : (a b : Time) → Dec $ a ≡ b
-nat a ≟t nat b with a ≟ b
-... | yes refl = yes refl
-... | no ¬p    = no λ{ refl → ¬p refl }
+
+private
+  _≡?addr_ : ∀ (a b : Address) → Dec $ a ≡ b
+  nat zero ≡?addr nat zero = yes refl
+  nat zero ≡?addr nat (suc b) = no (λ ())
+  nat (suc a) ≡?addr nat zero = no (λ ())
+  nat (suc a) ≡?addr nat (suc b) with nat a ≡?addr nat b
+  ... | no ¬p = no λ{ refl → ¬p refl }
+  ... | yes refl = yes refl
+
+  _≟t_ : (a b : Time) → Dec $ a ≡ b
+  nat a ≟t nat b with a == b
+  ... | yes refl = yes refl
+  ... | no ¬p    = no λ{ refl → ¬p refl }
+
+instance
+  eqTime : Eq Time
+  _==_ {{eqTime}} = _≟t_
+
+  eqAddress : Eq Address
+  _==_ {{eqAddress}} = _≡?addr_

@@ -1,7 +1,6 @@
 module Transactions where
 
 open import Prelude
-open import Operators
 open import Utils
 open import Cripto
 
@@ -200,14 +199,14 @@ listTXField→VecOut (tx ∷ txs) = foldr addMaybeVec (createVecOutsize tx) txs
   where
     addElementInVectorOut : {time : Time} {outSize : Nat} (tx : TXFieldWithId)
       (vecOut : VectorOutput time outSize) → Maybe $ VectorOutput time $ suc outSize
-    addElementInVectorOut {time} {outSize} tx vecOut with TXFieldWithId.time tx ≟t time
+    addElementInVectorOut {time} {outSize} tx vecOut with TXFieldWithId.time tx == time
     ... | no  ¬p   = nothing
-    ... | yes refl with TXFieldWithId.position tx ≟ suc outSize
+    ... | yes refl with TXFieldWithId.position tx == suc outSize
     ...   | no    ¬p = nothing
     ...   | yes refl = just $ cons vecOut tx refl refl
 
     createVecOutsize : (tx : TXFieldWithId) → Maybe $ RawVecOutput
-    createVecOutsize tx with TXFieldWithId.position tx ≟ zero
+    createVecOutsize tx with TXFieldWithId.position tx == zero
     ... | no ¬p    = nothing
     ... | yes refl = just $
       record { time = time ; outSize = suc zero ; vecOut = el tx refl refl }

@@ -2,7 +2,6 @@ module Utils where
 
 open import Prelude
 open import Data.Unit using (⊤; tt)
-open import Operators
 
 vmap : ∀ {a b} {A : Set a} {B : Set b} {n} → (A → B) → Vec A n → Vec B n
 vmap f []       = []
@@ -89,23 +88,15 @@ suc a ≥n? suc b with a ≥n? b
     ¬suc zero (suc b) ineq (s≥s .0 .(suc b) ())
     ¬suc (suc a) b ineq (s≥s .(suc a) .b eq) = ineq eq
 
-_≟_ : (a b : Nat) → Dec $ a ≡ b
-zero ≟ zero = yes refl
-zero ≟ suc b = no (λ ())
-suc a ≟ zero = no (λ ())
-suc a ≟ suc b with a ≟ b
-... | yes refl = yes refl
-... | no    ¬p = no λ{ refl → ¬p refl }
-
-list→sub : ∀ {A : Set} {_≟_ : A → A → Dec $ A ≡ A} (lista : List A) (sub : List A)
+list→sub : ∀ {A : Set} {{_ : Eq A}} (lista : List A) (sub : List A)
   → Maybe $ SubList lista
 list→sub [] [] = just []
 list→sub [] (_ ∷ _) = nothing
-list→sub {A} {_≟_} (x ∷ lista) [] with list→sub {A} {_≟_} lista []
+list→sub (x ∷ lista) [] with list→sub lista []
 ... | nothing  = nothing
 ... | just sub = just $ x ¬∷ sub
-list→sub {A} {_≟_} (x ∷ lista) (y ∷ maySub) with list→sub {A} {_≟_} lista maySub
+list→sub (x ∷ lista) (y ∷ maySub) with list→sub lista maySub
 ... | nothing  = nothing
-... | just sub with x ≟ y
+... | just sub with x == y
 ...    | yes refl = just $ x  ∷ sub
 ...    | no  ¬p   = just $ x ¬∷ sub
