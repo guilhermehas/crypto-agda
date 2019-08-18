@@ -16,6 +16,25 @@ record TXFieldWithId : Set where
       amount   : Amount
       address  : Address
 
+private
+  _≡txFieldWithId_ : (tx1 tx2 : TXFieldWithId) → Dec $ tx1 ≡ tx2
+  record { time = time1 ; position = position1 ; amount = amount1 ; address = address1 }
+    ≡txFieldWithId
+    record { time = time2 ; position = position2 ; amount = amount2 ; address = address2 }
+    with time1 == time2
+  ... | no ¬eq = no λ {refl  → ¬eq refl}
+  ... | yes refl with position1 == position2
+  ... | no ¬eq   = no λ{ refl → ¬eq refl}
+  ... | yes refl with amount1 == amount2
+  ... | no ¬eq   = no λ{ refl → ¬eq refl}
+  ... | yes refl with address1 == address2
+  ... | no ¬eq   = no λ{ refl → ¬eq refl}
+  ... | yes refl = yes refl
+
+instance
+  EqTXFieldWithId : Eq TXFieldWithId
+  EqTXFieldWithId = record { _==_ = _≡txFieldWithId_ }
+
 removeId : TXFieldWithId → TXField
 removeId record { time = time ; position = position ; amount = amount ; address = address }
   = record { amount = amount ; address = address }
