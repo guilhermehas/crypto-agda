@@ -207,17 +207,16 @@ data RawTX : Set where
   coinbase : (tx : RawTXCoinbase) → RawTX
   normalTX : (tx : RawTransaction)   → RawTX
 
-record RawVecOutput : Set where
+record RawVecOutput (outputs : List TXFieldWithId) : Set where
   field
     time    : Time
     outSize : Nat
-    outputs : List TXFieldWithId
     vecOut  : VectorOutput time outSize
     proof   : VectorOutput→List vecOut ≡ outputs
 
-listTXField→VecOut : (txs : List TXFieldWithId) → Maybe RawVecOutput
+listTXField→VecOut : (txs : List TXFieldWithId) → Maybe $ RawVecOutput txs
 listTXField→VecOut [] = nothing
-listTXField→VecOut (tx ∷ txs) = foldr addMaybeVec (createVecOutsize tx) txs
+listTXField→VecOut (tx ∷ txs) = {!!}
   where
     addElementInVectorOut : {time : Time} {outSize : Nat} (tx : TXFieldWithId)
       (vecOut : VectorOutput time outSize) → Maybe $ VectorOutput time $ suc outSize
@@ -227,31 +226,21 @@ listTXField→VecOut (tx ∷ txs) = foldr addMaybeVec (createVecOutsize tx) txs
     ...   | no    ¬p = nothing
     ...   | yes refl = just $ cons vecOut tx refl refl
 
-    createVecOutsize : (tx : TXFieldWithId) → Maybe $ RawVecOutput
+    createVecOutsize : (tx : TXFieldWithId) → Maybe $ RawVecOutput (tx ∷ [])
     createVecOutsize tx with TXFieldWithId.position tx == zero
     ... | no ¬p    = nothing
-    ... | yes refl = just $
-      record { time = time ; outSize = suc zero ; outputs = [
-                                                              record
-                                                              { time = time
-                                                              ; position = zero
-                                                              ; amount = amount
-                                                              ; address = address
-                                                              }
-                                                              ] ; vecOut = el tx refl refl ;
-        proof = refl }
+    ... | yes refl = just $ {!!}
       where open TXFieldWithId tx
 
-    addElementRawVec : (tx : TXFieldWithId) (vecOut : RawVecOutput) → Maybe RawVecOutput
-    addElementRawVec tx record { time = time ; outSize = outSize ; vecOut = vecOut }
+    addElementRawVec : (tx : TXFieldWithId) (outs : List TXFieldWithId) (vecOut : RawVecOutput outs) → Maybe $ RawVecOutput outs
+    addElementRawVec tx outs record { time = time ; outSize = outSize ; vecOut = vecOut }
       with addElementInVectorOut tx vecOut
     ... | nothing  = nothing
-    ... | just vec = just $ record { time = time ; outSize = suc outSize ;
-      outputs = VectorOutput→List vec ; vecOut = vec ; proof = refl }
+    ... | just vec = just $ {!!}
 
-    addMaybeVec : (tx : TXFieldWithId) (vecOut : Maybe RawVecOutput) → Maybe RawVecOutput
-    addMaybeVec tx nothing = nothing
-    addMaybeVec tx (just vecOut) = addElementRawVec tx vecOut
+    addMaybeVec : (tx : TXFieldWithId) (outs : List TXFieldWithId) (vecOut : Maybe $ RawVecOutput outs) → Maybe $ RawVecOutput outs
+    addMaybeVec tx outs nothing       = nothing
+    addMaybeVec tx outs (just vecOut) = {!!}
 
 record TXSigAll : Set where
   field
@@ -266,12 +255,21 @@ rawTXSigned→TXSigAll : (allInputs : List TXFieldWithId) (rawTXSigned : RawTXSi
 rawTXSigned→TXSigAll allInputs record { inputs = inputs ; outputs = outputs ; txSig = txSig }
   with listTXField→VecOut outputs
 ... | nothing     = nothing
-... | just record { time = time ; outSize = outSize ; outputs = outs ; vecOut = vecOut ;
-  proof = proof } = just $ record
-                             { time = time
-                             ; outSize = outSize
-                             ; inputs = {!!}
-                             ; sub = {!!}
-                             ; outputs = {!!}
-                             ; signed = {!!}
-                             }
+... | just record { time = time ; outSize = outSize ; vecOut = vecOut ;
+  proof = proofVecOut } with list→subProof allInputs inputs
+...   | nothing  = nothing
+...   | just record { sub = sub ; listSub = listSub ; proof = proofSub } = just $
+  record
+    { time = time
+    ; outSize = outSize
+    ; inputs = allInputs
+    ; sub = sub
+    ; outputs = vecOut
+    ; signed = txSigRes
+    }
+    where
+      txSigRes : TXSigned (sub→list sub) (VectorOutput→List vecOut)
+      txSigRes rewrite proofSub = txAux
+        where
+          txAux : TXSigned listSub (VectorOutput→List vecOut)
+          txAux rewrite proofVecOut = {!!}
