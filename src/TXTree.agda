@@ -27,7 +27,7 @@ mutual
     {tr : TXTree time block inputs} {outputs : VectorOutput time outSize}
     → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → Nat
   nextBlock {block} (normalTX _ _ _ _) = block
-  nextBlock {block} (coinbase _ _) = suc block
+  nextBlock {block} (coinbase _ _)     = suc block
 
   inputsTX : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId} {outSize : Nat}
     {tr : TXTree time block inputs} {outputs : VectorOutput time outSize}
@@ -64,11 +64,11 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ; tx
 ...    | nothing   = nothing
 ...    | just sub with listTXField→VecOut $ RawTXSigned.inputs txSig
 ...      | nothing     = nothing
-...      | just record { time = timeOut ; outSize = outSizeVec ; vecOut = vecOut }
+...      | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
   with timeOut == time
 ...         | no _     = nothing
 ...         | yes refl = just $ record { time = sucTime timeOut ; block = block ; outputs = {!!} ;
   txTree = {!!}  }
   where
-    tx : TX {time} {block} {outputs} {outSizeVec} txTree vecOut
-    tx = {!normalTX ? ? ?!}
+    tx : (vectorOut : VectorOutput time outSize) → TX txTree vectorOut
+    tx vectorOut = normalTX txTree sub vectorOut {!!}

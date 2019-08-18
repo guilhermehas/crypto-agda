@@ -88,6 +88,26 @@ suc a ≥n? suc b with a ≥n? b
     ¬suc zero (suc b) ineq (s≥s .0 .(suc b) ())
     ¬suc (suc a) b ineq (s≥s .(suc a) .b eq) = ineq eq
 
+record SubListProof {A : Set} (lista : List A) : Set where
+  field
+    sub     : SubList lista
+    listSub : List A
+    proof   : sub→list sub ≡ listSub
+
+list→subProof : ∀ {A : Set} {{_ : Eq A}} (lista : List A) (sub : List A)
+  → Maybe $ SubListProof lista
+list→subProof [] [] = just (record { sub = [] ; proof = refl })
+list→subProof [] (_ ∷ _) = nothing
+list→subProof (x ∷ lista) [] with list→subProof lista []
+... | nothing  = nothing
+... | just record { sub = sub ; proof = proof } = just $ record { sub = x ¬∷ sub ;
+  listSub = sub→list sub ; proof = refl }
+list→subProof (x ∷ lista) (y ∷ ys) with list→subProof lista ys
+... | nothing  = nothing
+... | just record { sub = sub ; proof = proof } with x == y
+...    | yes refl = just $ record { sub = x ∷ sub ; listSub = sub→list (x ∷ sub) ; proof = refl }
+...    | no  ¬p   = just $ record { sub = x ¬∷ sub ; listSub = sub→list sub ; proof = refl }
+
 list→sub : ∀ {A : Set} {{_ : Eq A}} (lista : List A) (sub : List A)
   → Maybe $ SubList lista
 list→sub [] [] = just []
