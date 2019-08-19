@@ -60,15 +60,17 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ; tx
   (normalTX record { inputs = inputsTX ; outputs = outputsTX })
   with raw→TXSigned time record { inputs = inputsTX ; outputs = outputsTX }
 ... | nothing    = nothing
-... | just txSig with list→sub outputs $ RawTXSigned.inputs txSig
-...    | nothing   = nothing
-...    | just sub with listTXField→VecOut $ RawTXSigned.inputs txSig
-...      | nothing     = nothing
-...      | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
-  with timeOut == time
-...         | no _     = nothing
-...         | yes refl = just $ record { time = sucTime timeOut ; block = block ; outputs = {!!} ;
-  txTree = {!!}  }
-  where
-    tx : (vectorOut : VectorOutput time outSize) → TX txTree vectorOut
-    tx vectorOut = normalTX txTree sub vectorOut {!!}
+... | just txSig with rawTXSigned→TXSigAll outputs txSig
+...   | nothing    = nothing
+...   | just record { time = time2 ; outSize = outSize ; inputs = inputs ; sub = sub ; outputs = outs ; signed = signed } = ?
+-- ...    | nothing   = nothing
+-- ...    | just sub with listTXField→VecOut $ RawTXSigned.inputs txSig
+-- ...      | nothing     = nothing
+-- ...      | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
+--   with timeOut == time
+-- ...         | no _     = nothing
+-- ...         | yes refl = just $ record { time = sucTime timeOut ; block = block ; outputs = {!!} ;
+--   txTree = {!!}  }
+--   where
+--     tx : (vectorOut : VectorOutput time outSize) → TX txTree vectorOut
+--     tx vectorOut = normalTX txTree sub vectorOut {!!}

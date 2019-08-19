@@ -247,31 +247,33 @@ listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
     ...     | yes refl = just $ record { time = time ; outSize = suc outSize
       ; vecOut = cons vecOut tx refl refl ; proof = cong (_∷_ tx) proof }
 
-record TXSigAll : Set where
+record TXSigAll (time : Time) (allInputs : List TXFieldWithId) (inputs : List TXFieldWithId) : Set where
   field
-    time     : Time
     outSize  : Nat
-    inputs   : List TXFieldWithId
-    sub      : SubList inputs
+    sub      : SubList allInputs
     outputs  : VectorOutput time outSize
     signed   : TXSigned (sub→list sub) (VectorOutput→List outputs)
 
-rawTXSigned→TXSigAll : (allInputs : List TXFieldWithId) (rawTXSigned : RawTXSigned) → Maybe TXSigAll
-rawTXSigned→TXSigAll allInputs record { inputs = inputs ; outputs = outputs ; txSig = txSig }
+txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId} (tx : TXSigned inputs outputs) → List TXFieldWithId
+txSigInput {inputs} _ = inputs
+
+vecOutTime : ∀ {time : Time} {size : Nat} → (vecOut : VectorOutput time size) → Time
+vecOutTime {time} _ = time
+
+rawTXSigned→TXSigAll : (time : Time) (inputs : List TXFieldWithId) (allInputs : List TXFieldWithId)
+  (rawTXSigned : RawTXSigned) → Maybe $ TXSigAll time allInputs inputs
+rawTXSigned→TXSigAll time inputs allInputs record { outputs = outputs ; txSig = txSig }
   with listTXField→VecOut outputs
 ... | nothing     = nothing
-... | just record { time = time ; outSize = outSize ; vecOut = vecOut ;
+... | just record { outSize = outSize ; vecOut = vecOut ;
   proof = proofVecOut } with list→subProof allInputs inputs
 ...   | nothing  = nothing
-...   | just record { sub = sub ; proof = proofSub } = just $
-  record
-    { time = time
-    ; outSize = outSize
-    ; inputs = allInputs
-    ; sub = sub
-    ; outputs = vecOut
-    ; signed = txSigRes
-    }
+...   | just record { sub = sub ; proof = proofSub } with txSigInput txSig == inputs
+...     | no  _    = nothing
+...     | yes refl with vecOutTime vecOut == time
+...       | no  _      = nothing
+...       | yes refl   = just $
+  record { outSize = outSize ; sub = sub ; outputs = vecOut ; signed = txSigRes }
     where
       txSigRes : TXSigned (sub→list sub) (VectorOutput→List vecOut)
       txSigRes rewrite proofSub = txAux
