@@ -60,9 +60,9 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ; tx
   (normalTX record { inputs = inputsTX ; outputs = outputsTX })
   with raw→TXSigned time record { inputs = inputsTX ; outputs = outputsTX }
 ... | nothing    = nothing
-... | just txSig with rawTXSigned→TXSigAll outputs txSig
+... | just txSig with rawTXSigned→TXSigAll time {!outputs!} {!!} txSig
 ...   | nothing    = nothing
-...   | just record { time = time2 ; outSize = outSize ; inputs = inputs ; sub = sub ; outputs = outs ; signed = signed } = ?
+...   | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } = {!!}
 -- ...    | nothing   = nothing
 -- ...    | just sub with listTXField→VecOut $ RawTXSigned.inputs txSig
 -- ...      | nothing     = nothing
