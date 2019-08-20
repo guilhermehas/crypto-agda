@@ -4,6 +4,7 @@ open import Prelude
 open import Utils
 open import Cripto
 open import Transactions
+open import RawTransactions
 open import TXTree
 
 ledgerOutNoId : ∀ (outputs : List TXField) (addr : Address)

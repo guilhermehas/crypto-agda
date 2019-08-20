@@ -4,6 +4,7 @@ open import Prelude
 open import Utils
 open import Cripto
 open import Transactions
+open import RawTransactions
 
 mutual
   data TXTree : (time : Time) (block : Nat) (outputs : List TXFieldWithId) → Set where
