@@ -42,7 +42,8 @@ removeId record { time = time ; position = position ; amount = amount ; address 
 addId : (position : Nat) (time : Time) (txs : List TXField) → List TXFieldWithId
 addId position time [] = []
 addId position time (record { amount = amount ; address = address } ∷ txs)
-  = record { time = time ; position = position ; amount = amount ; address = address } ∷ addId (suc position) time txs
+  = record { time = time ; position = position ; amount = amount ; address = address }
+  ∷ addId (suc position) time txs
 
 sameIdList : (time : Time) → (txs : NonEmptyList TXFieldWithId) → Set
 sameIdList time (el tx)    = TXFieldWithId.time tx ≡ time
@@ -59,10 +60,44 @@ data VectorOutput : (time : Time) (size : Nat) → Set where
     → (sameId : TXFieldWithId.time tx ≡ time) → (elStart : TXFieldWithId.position tx ≡ (suc size))
     → VectorOutput time (suc size)
 
+vecOutTime : ∀ {time : Time} {size : Nat} → (vecOut : VectorOutput time size) → Time
+vecOutTime {time} _ = time
+
 VectorOutput→List : ∀ {time : Time} {size : Nat} → (outs : VectorOutput time size)
   → List TXFieldWithId
 VectorOutput→List (el tx sameId elStart) = tx ∷ []
 VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
+
+vecOutDist : {time : Time} {size : Nat} (vecOut : VectorOutput time size)
+  → Distinct $ VectorOutput→List vecOut
+vecOutDist (el tx sameId elStart) = cons tx [] unit
+vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart) = cons tx (vecOutDist vecOut) (isDistSizeBelow size (diff! zero) vecOut)
+  where
+    zero≢sucSize : ¬ (_≡_ {lzero} {Nat} zero (suc size))
+    zero≢sucSize ()
+
+    removeSuc≡ : ∀ {a b : Nat} → _≡_ {lzero} {Nat} (suc a) (suc b) → a ≡ b
+    removeSuc≡ refl = refl
+
+    removeSuc< : ∀ {a b : Nat} → _<_ {lzero} {Nat} (suc a) (suc b) → a < b
+    removeSuc< (diff! k) = diff k {!!}
+
+    ineqAux : {a b : Nat} → _<_ {lzero} {Nat} (suc a) (suc b) → a < suc b
+    ineqAux {a} (diff! k) = diff (suc k) (cong suc {!!})
+
+    isDistSizeBelow : (lenVecOut : Nat) (lessThan : lenVecOut < suc size)
+      (vOut : VectorOutput time lenVecOut) → isDistinct tx (VectorOutput→List vOut)
+    isDistSizeBelow .1 lessThan (el txOut sameId elStart2) =
+      (λ { refl → zero≢sucSize (trans (sym elStart2) elStart)}) , unit
+    isDistSizeBelow (suc sizeVec) lessThan (cons vOut txOut sameId elStart2) =
+      (λ { refl → ineq≢eq (removeSuc≡ (trans (sym elStart2) elStart)) (removeSuc< lessThan)}) , isDistSizeBelow sizeVec (ineqAux lessThan) vOut
+      where
+        ineq≢eq : {a b : Nat} → (a ≡ b) → (a < b) → ⊥
+        ineq≢eq eq (diff! k) = {!!}
+          where
+            eqAux : {a b : Nat} → ¬ (a ≡ suc (b + a))
+            eqAux eq = {!eq!}
+
 
 addOutput : ∀ {time : Time} {size : Nat}
   → (listOutput : VectorOutput time size) → (tx : TXField) → VectorOutput time (suc size)
@@ -106,6 +141,3 @@ record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : S
 
 txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId} (tx : TXSigned inputs outputs) → List TXFieldWithId
 txSigInput {inputs} _ = inputs
-
-vecOutTime : ∀ {time : Time} {size : Nat} → (vecOut : VectorOutput time size) → Time
-vecOutTime {time} _ = time

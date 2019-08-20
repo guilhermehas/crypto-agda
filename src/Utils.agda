@@ -122,3 +122,13 @@ list→sub (x ∷ lista) (y ∷ maySub) with list→sub lista maySub
 ... | just sub with x == y
 ...    | yes refl = just $ x  ∷ sub
 ...    | no  ¬p   = just $ x ¬∷ sub
+
+mutual
+  data Distinct {A : Set} : (lista : List A) → Set where
+    []   : Distinct []
+    cons : {lista : List A} (el : A) (dist : Distinct lista) (isDist : isDistinct el lista)
+      → Distinct (el ∷ lista)
+
+  isDistinct : {A : Set} (el : A) (lista : List A) → Set
+  isDistinct _ [] = ⊤
+  isDistinct x (y ∷ lista) = (¬ (x ≡ y)) × isDistinct x lista
