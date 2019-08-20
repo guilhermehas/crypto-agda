@@ -1,6 +1,7 @@
 module Transactions where
 
 open import Prelude
+open import Prelude.Nat.Properties
 open import Utils
 open import Cripto
 
@@ -71,7 +72,8 @@ VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List o
 vecOutDist : {time : Time} {size : Nat} (vecOut : VectorOutput time size)
   → Distinct $ VectorOutput→List vecOut
 vecOutDist (el tx sameId elStart) = cons tx [] unit
-vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart) = cons tx (vecOutDist vecOut) (isDistSizeBelow size (diff! zero) vecOut)
+vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
+  = cons tx (vecOutDist vecOut) (isDistSizeBelow size (diff! zero) vecOut)
   where
     zero≢sucSize : ¬ (_≡_ {lzero} {Nat} zero (suc size))
     zero≢sucSize ()
@@ -80,23 +82,25 @@ vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart) = cons tx (vecOutDi
     removeSuc≡ refl = refl
 
     removeSuc< : ∀ {a b : Nat} → _<_ {lzero} {Nat} (suc a) (suc b) → a < b
-    removeSuc< (diff! k) = diff k {!!}
+    removeSuc< {a} (diff! k) = diff k (add-suc-r k a)
 
     ineqAux : {a b : Nat} → _<_ {lzero} {Nat} (suc a) (suc b) → a < suc b
-    ineqAux {a} (diff! k) = diff (suc k) (cong suc {!!})
+    ineqAux {a} (diff! k) = diff (suc k) (cong suc (add-suc-r k a))
 
     isDistSizeBelow : (lenVecOut : Nat) (lessThan : lenVecOut < suc size)
       (vOut : VectorOutput time lenVecOut) → isDistinct tx (VectorOutput→List vOut)
     isDistSizeBelow .1 lessThan (el txOut sameId elStart2) =
       (λ { refl → zero≢sucSize (trans (sym elStart2) elStart)}) , unit
     isDistSizeBelow (suc sizeVec) lessThan (cons vOut txOut sameId elStart2) =
-      (λ { refl → ineq≢eq (removeSuc≡ (trans (sym elStart2) elStart)) (removeSuc< lessThan)}) , isDistSizeBelow sizeVec (ineqAux lessThan) vOut
+      (λ { refl → ineq≢eq (removeSuc≡ (trans (sym elStart2) elStart)) (removeSuc< lessThan)}) ,
+      isDistSizeBelow sizeVec (ineqAux lessThan) vOut
       where
+        absurdEq : {a b : Nat} → ¬ (a ≡ suc (b + a))
+        absurdEq {zero} ()
+        absurdEq {suc a} {b} eq = absurdEq let neq = removeSuc≡ eq in trans neq (add-suc-r b a)
+
         ineq≢eq : {a b : Nat} → (a ≡ b) → (a < b) → ⊥
-        ineq≢eq eq (diff! k) = {!!}
-          where
-            eqAux : {a b : Nat} → ¬ (a ≡ suc (b + a))
-            eqAux eq = {!eq!}
+        ineq≢eq eq (diff! k) = absurdEq eq
 
 
 addOutput : ∀ {time : Time} {size : Nat}
