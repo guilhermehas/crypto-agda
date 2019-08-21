@@ -132,3 +132,24 @@ mutual
   isDistinct : {A : Set} (el : A) (lista : List A) → Set
   isDistinct _ [] = ⊤
   isDistinct x (y ∷ lista) = (¬ (x ≡ y)) × isDistinct x lista
+
+twoListDistinct : {A : Set} (la lb : List A) → Set
+twoListDistinct [] lb = ⊤
+twoListDistinct (x ∷ la) lb = isDistinct x lb × twoListDistinct la lb
+
+∷++≡ : {A : Set} (x : A) (xs ys : List A) →
+  _≡_ {_} {List A} ((x ∷ xs) ++ ys)  (x ∷ (xs ++ ys))
+∷++≡ x xs ys = refl
+
+isDistUnion : {A : Set} {la lb : List A} (x : A) (isDistLa : isDistinct x la)
+  (isDistLb : isDistinct x lb) → isDistinct x $ la ++ lb
+isDistUnion {_} {[]} {lb} y isDistLa isDistLb = isDistLb
+isDistUnion {_} {x ∷ la} {lb} y (x≢y , isDistLa) isDistLb
+  rewrite ∷++≡ x la lb = x≢y , isDistUnion y isDistLa isDistLb
+
+unionDistinct : {A : Set} {la lb : List A} (da : Distinct la) (db : Distinct lb)
+  (twoDist : twoListDistinct la lb) → Distinct $ la ++ lb
+unionDistinct {_} {[]} {lb} da db twoDist = db
+unionDistinct {_} {x ∷ la} {lb} (cons x da isDistXla) db (isDistXlb , distLaLb) =
+  cons x (unionDistinct da db distLaLb) (isDistUnion x isDistXla isDistXlb)
+
