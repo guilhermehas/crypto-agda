@@ -9,6 +9,12 @@ data Time : Set where
 sucTime : Time → Time
 sucTime (nat time) = nat (suc time)
 
+timeToNat : Time → Nat
+timeToNat (nat x) = x
+
+timeToNatSuc : {time : Time} → timeToNat (sucTime time) ≡ suc (timeToNat time)
+timeToNatSuc {nat x} = refl
+
 ID = Nat
 
 data PublicKey : Set where

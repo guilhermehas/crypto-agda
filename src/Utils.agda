@@ -69,6 +69,11 @@ nonEmptySub [] = ⊥
 nonEmptySub (_ ¬∷ xs) = nonEmptySub xs
 nonEmptySub (_ ∷ _) = ⊤
 
+allList→allSub : {A : Set} {f : A → Set} {lista : List A} (sub : SubList lista)
+  (allLista : All f lista) → All f $ list-sub sub
+allList→allSub [] allLista = allLista
+allList→allSub (_ ¬∷ sub) (y ∷ allLista) = y ∷ allList→allSub sub allLista
+allList→allSub (_ ∷ sub) (_ ∷ allLista) = allList→allSub sub allLista
 
 data _≥n_ : (a b : Nat) → Set where
   z   : zero ≥n zero
@@ -153,3 +158,12 @@ unionDistinct {_} {[]} {lb} da db twoDist = db
 unionDistinct {_} {x ∷ la} {lb} (cons x da isDistXla) db (isDistXlb , distLaLb) =
   cons x (unionDistinct da db distLaLb) (isDistUnion x isDistXla isDistXlb)
 
+allJoin : {A : Set} {f : A → Set} (xs ys : List A) (allXS : All f xs) (allYS : All f ys)
+  → All f $ xs ++ ys
+allJoin [] ys allXS allYS = allYS
+allJoin (x ∷ xs) ys (px ∷ allXS) allYS = px ∷ allJoin xs ys allXS allYS
+
+allProofFG : {A : Set} {f g : A → Set} {xs : List A} (proof : (x : A) (pf : f x) → g x)
+  (allFxs : All f xs) → All g xs
+allProofFG {_} {_} {_} {[]} proof allfxs = []
+allProofFG {_} {_} {_} {x ∷ xs} proof (px ∷ allfxs) = proof x px ∷ allProofFG proof allfxs
