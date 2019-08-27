@@ -1,6 +1,7 @@
 module proofsTXTree where
 
 open import Prelude
+open import Prelude.Nat.Properties
 open import Utils
 open import Cripto
 open import Transactions
@@ -56,6 +57,34 @@ inputsTXTimeLess {time} {_} {inputs} (normalTX tr SubInputs outputs txSigned) =
     allList→allSub SubInputs proofInput
 inputsTXTimeLess {time} {_} {inputs} (coinbase tr outputs) = inputsTimeLess $ coinbase tr outputs
 
+allVecOutSameTime : {time : Time} {size : Nat}
+  (vecOut : VectorOutput time size) →
+  All (λ tx → TXFieldWithId.time tx ≡ time) (VectorOutput→List vecOut)
+allVecOutSameTime (el tx sameId elStart) = sameId ∷ []
+allVecOutSameTime (cons vecOut tx sameId elStart) = sameId ∷ allVecOutSameTime vecOut
+
+allDistincts : {time : Time} {vec< vec≡ : List TXFieldWithId}
+  (all< : All (λ tx → tx out<time time) vec<)
+  (all≡ : All (λ tx → TXFieldWithId.time tx ≡ time) vec≡)
+  → twoListDistinct vec< vec≡
+allDistincts {time} {.[]} {vec≡} [] all≡ = unit
+allDistincts {time} {(x ∷ _)} {vec≡} (p< ∷ all<) all≡ = distinctLess all≡ , allDistincts all< all≡
+  where
+    sucRemove : ∀ {m n : Nat} (suc≡ : _≡_ {_} {Nat} (suc m) (suc n)) → m ≡ n
+    sucRemove refl = refl
+
+    ⊥-k+ : (k n : Nat) → ¬ (n ≡ suc k + n)
+    ⊥-k+ k zero ()
+    ⊥-k+ k (suc n) eqs = ⊥-k+ k n let eq = sucRemove eqs in trans eq (add-suc-r k n)
+
+    ⊥-< : {n : Nat} → ¬ (n < n)
+    ⊥-< {n} (diff k eq) = ⊥-k+ k n eq
+
+    distinctLess : {vec≡ : List TXFieldWithId}
+      (all≡ : All (λ tx → TXFieldWithId.time tx ≡ time) vec≡)
+      → isDistinct x vec≡
+    distinctLess [] = unit
+    distinctLess (refl ∷ all≡) = (λ{ refl → ⊥-< p<}) , (distinctLess all≡)
 
 uniqueOutputs : {time : Time} {block : Nat} {outputs : List TXFieldWithId}
   (txTree : TXTree time block outputs) → Distinct outputs
@@ -63,7 +92,8 @@ uniqueOutputs genesisTree = []
 uniqueOutputs (txtree {block} {time} {outSize} {inputs} {outVec} tree tx) = {!!}
   where
     distInputsOutVec : twoListDistinct (inputsTX tx) (VectorOutput→List outVec)
-    distInputsOutVec = let outLess = outputsTimeLess tree in {!!}
+    distInputsOutVec = let inputsTimeLess = inputsTXTimeLess tx in allDistincts inputsTimeLess $
+      allVecOutSameTime outVec
 
     distInputs : {time : Time} {block : Nat} {inputs : List TXFieldWithId} {outSize : Nat}
       {outVec : VectorOutput time outSize} {tree : TXTree time block inputs}
