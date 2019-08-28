@@ -167,3 +167,17 @@ allProofFG : {A : Set} {f g : A → Set} {xs : List A} (proof : (x : A) (pf : f 
   (allFxs : All f xs) → All g xs
 allProofFG {_} {_} {_} {[]} proof allfxs = []
 allProofFG {_} {_} {_} {x ∷ xs} proof (px ∷ allfxs) = proof x px ∷ allProofFG proof allfxs
+
+distList→distSub : {A : Set} {xs : List A} {subxs : SubList xs}
+  (dist : Distinct xs) → Distinct $ list-sub subxs
+distList→distSub {_} {[]} {[]} [] = []
+distList→distSub {A} {x ∷ xs} {.x ¬∷ subxs} (cons .x dist isDist) =
+  cons x (distList→distSub {_} {_} {subxs} dist) (distEl {_} {subxs} isDist)
+  where
+    distEl : {xs : List A} {subxs : SubList xs} (isDist : isDistinct x xs)
+      → isDistinct x (list-sub subxs)
+    distEl {[]} {[]} unit = unit
+    distEl {x ∷ xs} {.x ¬∷ subxs} (fst , snd) = fst , (distEl {_} {subxs} snd)
+    distEl {x ∷ xs} {.x ∷ subxs} (fst , snd) = distEl {_} {subxs} snd
+distList→distSub {_} {x ∷ xs} {.x ∷ subxs} (cons .x dist isDist) =
+  distList→distSub {_} {_} {subxs} dist

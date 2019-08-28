@@ -143,5 +143,6 @@ record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : S
        inputs
     in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
 
-txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId} (tx : TXSigned inputs outputs) → List TXFieldWithId
+txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId}
+  (tx : TXSigned inputs outputs) → List TXFieldWithId
 txSigInput {inputs} _ = inputs

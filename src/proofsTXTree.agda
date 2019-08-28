@@ -86,18 +86,25 @@ allDistincts {time} {(x ∷ _)} {vec≡} (p< ∷ all<) all≡ = distinctLess all
     distinctLess [] = unit
     distinctLess (refl ∷ all≡) = (λ{ refl → ⊥-< p<}) , (distinctLess all≡)
 
-uniqueOutputs : {time : Time} {block : Nat} {outputs : List TXFieldWithId}
-  (txTree : TXTree time block outputs) → Distinct outputs
-uniqueOutputs genesisTree = []
-uniqueOutputs (txtree {block} {time} {outSize} {inputs} {outVec} tree tx) = {!!}
-  where
-    distInputsOutVec : twoListDistinct (inputsTX tx) (VectorOutput→List outVec)
-    distInputsOutVec = let inputsTimeLess = inputsTXTimeLess tx in allDistincts inputsTimeLess $
-      allVecOutSameTime outVec
+mutual
+  uniqueOutputs : {time : Time} {block : Nat} {outputs : List TXFieldWithId}
+    (txTree : TXTree time block outputs) → Distinct outputs
+  uniqueOutputs genesisTree = []
+  uniqueOutputs (txtree {block} {time} {outSize} {inputs} {outVec} tree tx) = {!!}
+    where
+      distInputsOutVec : twoListDistinct (inputsTX tx) (VectorOutput→List outVec)
+      distInputsOutVec = let inputsTimeLess = inputsTXTimeLess tx in allDistincts inputsTimeLess $
+        allVecOutSameTime outVec
 
-    distInputs : {time : Time} {block : Nat} {inputs : List TXFieldWithId} {outSize : Nat}
-      {outVec : VectorOutput time outSize} {tree : TXTree time block inputs}
-      (tx : TX tree outVec) → Distinct $ inputsTX tx
-    distInputs (normalTX tr SubInputs outputs txSigned) = {!!}
-    distInputs (coinbase genesisTree outVec) = []
-    distInputs (coinbase (txtree tr tx) outVec) = {!distInputs tx!}
+  distInputs : {time : Time} {block : Nat} {inputs : List TXFieldWithId} {outSize : Nat}
+    {outVec : VectorOutput time outSize} {tree : TXTree time block inputs}
+    (tx : TX tree outVec) → Distinct $ inputsTX tx
+  distInputs (normalTX genesisTree [] outputs txSigned) = []
+  distInputs (normalTX (txtree {_} {_} {_} {_} {vecOut} tr tx) SubInputs outputs txSigned) =
+    distList→distSub {_} {_} {SubInputs} (unionDistinct {_} {inputsTX tx} {VectorOutput→List vecOut}
+    (distInputs tx) (vecOutDist vecOut)
+    (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut)))
+  distInputs (coinbase genesisTree outVec) = []
+  distInputs (coinbase (txtree {_} {_} {_} {_} {vecOut} tr tx) outVec) =
+    unionDistinct {_} {inputsTX tx} {VectorOutput→List vecOut} (distInputs tx)
+    (vecOutDist vecOut) (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut) )
