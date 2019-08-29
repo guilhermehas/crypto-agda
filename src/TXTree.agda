@@ -45,7 +45,7 @@ record RawTXTree : Set where
 
 addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
 addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
-  (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputs
+  (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
 ... | nothing     = nothing
 ... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
   with time == timeOut
@@ -68,3 +68,6 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ; tx
   outputs = list-sub sub ++ VectorOutput→List outs ;
   txTree = txtree txTree (normalTX txTree sub outs signed) }
 
+addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
+addMaybeTransTree nothing tx = nothing
+addMaybeTransTree (just tree) tx = addTransactionTree tree tx

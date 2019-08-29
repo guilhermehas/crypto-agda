@@ -116,10 +116,17 @@ record RawVecOutput (outputs : List TXFieldWithId) : Set where
     vecOut  : VectorOutput time outSize
     proof   : VectorOutput→List vecOut ≡ outputs
 
+
+createVecOutsize : (tx : TXFieldWithId) → Maybe $ RawVecOutput (tx ∷ [])
+createVecOutsize tx with TXFieldWithId.position tx == zero
+... | no ¬p    = nothing
+... | yes refl = just $ record { time = time ; outSize = 1 ;
+  vecOut = el tx refl refl ; proof = refl }
+  where open TXFieldWithId tx
+
 listTXField→VecOut : (txs : List TXFieldWithId) → Maybe $ RawVecOutput txs
 listTXField→VecOut [] = nothing
 listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
-... | nothing    = nothing
 ... | just vouts = addElementRawVec tx txs vouts
   where
     addElementInVectorOut : {time : Time} {outSize : Nat} (tx : TXFieldWithId)
@@ -129,13 +136,6 @@ listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
     ... | yes refl with TXFieldWithId.position tx == suc outSize
     ...   | no    ¬p = nothing
     ...   | yes refl = just $ cons vecOut tx refl refl
-
-    createVecOutsize : (tx : TXFieldWithId) → Maybe $ RawVecOutput (tx ∷ [])
-    createVecOutsize tx with TXFieldWithId.position tx == zero
-    ... | no ¬p    = nothing
-    ... | yes refl = just $ record { time = time ; outSize = 1 ;
-      vecOut = el tx refl refl ; proof = refl }
-      where open TXFieldWithId tx
 
     addElementRawVec : (tx : TXFieldWithId) (outs : List TXFieldWithId) (vecOut : RawVecOutput outs)
       → Maybe $ RawVecOutput (tx ∷ outs)
@@ -148,6 +148,9 @@ listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
     ...     | no _     = nothing
     ...     | yes refl = just $ record { time = time ; outSize = suc outSize
       ; vecOut = cons vecOut tx refl refl ; proof = cong (_∷_ tx) proof }
+... | nothing with txs == []
+...   | no  _ = nothing
+...   | yes p rewrite p = createVecOutsize tx
 
 record TXSigAll (time : Time) (allInputs : List TXFieldWithId) : Set where
   field

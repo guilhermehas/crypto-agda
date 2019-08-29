@@ -99,7 +99,6 @@ distInputs (coinbase (txtree {_} {_} {_} {_} {vecOut} tr tx) outVec) =
   unionDistinct {_} {inputsTX tx} {VectorOutput→List vecOut} (distInputs tx)
   (vecOutDist vecOut) (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut) )
 
-
 uniqueOutputs : {time : Time} {block : Nat} {outputs : List TXFieldWithId}
   (txTree : TXTree time block outputs) → Distinct outputs
 uniqueOutputs genesisTree = []

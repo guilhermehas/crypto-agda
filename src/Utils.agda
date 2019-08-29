@@ -3,6 +3,12 @@ module Utils where
 open import Prelude
 open import Data.Unit using (⊤; tt)
 
+data TypeEl {A : Set} : A → Set where
+  el : (element : A) → TypeEl element
+
+getElFromType : {A : Set} {el : A} (tel : TypeEl el) → A
+getElFromType (el element) = element
+
 vmap : ∀ {a b} {A : Set a} {B : Set b} {n} → (A → B) → Vec A n → Vec B n
 vmap f []       = []
 vmap f (x ∷ xs) = f x ∷ vmap f xs
