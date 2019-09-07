@@ -68,8 +68,8 @@
 		\end{flushright}
            
 	\end{minipage}\\[2 cm]
-	
-  \includegraphics[scale = 0.5]{FGV.png}
+
+  % \includegraphics[scale = 0.5]{FGV.png}
     
     
     
@@ -86,9 +86,10 @@
 \renewcommand{\thesection}{\arabic{section}}
 \section{Introdução}
 
-O bitcoin \cite{nakamoto2008bitcoin} foi a primeira criptomoeda criada em 2008 por Satoshi Nakamoto em sua publicação Bitcoin WhitePaper.
+O bitcoin %%\cite{nakamoto2008bitcoin}
+foi a primeira criptomoeda criada em 2008 por Satoshi Nakamoto em sua publicação Bitcoin WhitePaper.
 
-Desde Novembro de 2008, o valor de mercado mundial do bitcoin chegou a 330 bilhões de dólares (em 17 de dezembro de 2018). O preço do bitcoin chegou a ter seu recorde histórico por volta de 20 mil dólares. Outras cripto-moedas como Ethereum \cite{wood2014ethereum} e Monero \cite{noether2015ring} também foram criadas e elas também possuem um bom valor de mercado. Cripto-moedas se tornaram instrumentos financeiros e serão as principais moedas em um futuro próximo.
+Desde Novembro de 2008, o valor de mercado mundial do bitcoin chegou a 330 bilhões de dólares (em 17 de dezembro de 2018). O preço do bitcoin chegou a ter seu recorde histórico por volta de 20 mil dólares. Outras cripto-moedas como Ethereum e Monero também foram criadas e elas também possuem um bom valor de mercado. Cripto-moedas se tornaram instrumentos financeiros e serão as principais moedas em um futuro próximo.
 
 Cripto-moedas também são utilizadas por contratos inteligentes. Por exemplo, seria o comprador reservar uma parte do dinheiro para o vendedor na blockchain. Para o dinheiro ser liberado, o vendedor deve receber a assinatura do comprador. O comprador irá fornecer a assinatura se receber o produto. Se o produto não chegar a tempo, o comprador recebe seu dinheiro de volta. Contratos inteligentes são utilizados hoje em dia por grandes fundos, no qual as relações de contratos são integralmente governada por algoritmos (sem nenhuma interferência governamental).
 
@@ -123,7 +124,7 @@ Por isso, existe a necessidade de provas formais, que garantem sua corretude do 
 
 Para garantir a corretude de um programa, precisamos de demonstrações formais ou técnicas de model checking.
 Idealmente, deveria ser capazes de especificar e programar em uma mesma linguagem.
-Agda \cite{setzer2018modelling} é uma linguagem que permite isso.
+Agda  é uma linguagem que permite isso.
 
 Agda é um provador de teoremas baseado na teoria de tipos de Martin-Lof.
 Ele está muito relacionado ao provador de teoremas Coq.
@@ -135,44 +136,13 @@ Depois disso, ela foi aprimorada por sua comunidade.
 
 Para definir-se booleans em Agda:
 
-\ExecuteMetaData[latex/Code.tex]{bool}
-
-Para definir os números naturais de acordo com os axiomas de peano, usa-se:
-
-\ExecuteMetaData[latex/Code.tex]{nat}
-
-No caso dos naturais, exite uma função sucessor. Para cada número natural, essa função retorna outro número natural.
-
-Para definir-se soma, usa-se a definição recursiva
-
-\ExecuteMetaData[latex/Code.tex]{plus}
-
-Em uma lista, existem dois construtores.
-Um que fornece a lista vazia e outro, que dado um elemento e outra lista, ele fornece uma nova lista.
-
-\ExecuteMetaData[latex/Code.tex]{listdef}
-
-Para descobrir o tamanho da lista:
-
-\ExecuteMetaData[latex/Code.tex]{length}
-
-Um tipo é dependente se ele depende de algum valor. Um exemplo disso é um vetor indexado de seu tamanho:
-
-\ExecuteMetaData[latex/Code.tex]{vector}
-
-Nesse caso, Vec A n é um vetor de elementos do tipo A com n elementos.
-
-Uma vantagem de usar este tipo de vetor, é que é possível criar uma função que retorna o primeiro elemento desse vetor de forma segura.
-
-\ExecuteMetaData[latex/Code.tex]{vectorhead}
+\ExecuteMetaData[../src/latex/main.tex]{vectorhead}
 
 \subsection{UTXO Bitcoin}
 
 Uma das características que diferencia o Bitcoin de outras criptomoedas (como o Ethereum) e outros bancos é a sua estrutura de dados de transação. Em um banco, o saldo dessa conta é armazenado em uma linha do banco de dados. Para o bitcoin, isso não existe. O que está armazenado na blockchain são apenas as transações. No bitcoin, existe a transação não gasta, cujo termo é UTXO (unspent transaction output).
 
 No bitcoin, cada transação possui várias entradas e saídas. As entradas são todas as transações não gastas do usuário e a saída são todas as contas receberão a transação mais uma transação não gasta. Como pode ser visto nessa figura:
-
-\includegraphics[scale = 0.5]{utxo}
 
 Existem várias vantagens e desvantagens desse tipo de estrutura de dados. Uma das desvantagens é que é bastante custoso verificar o saldo da conta, pois é necessário calcular todas as transações vinculadas a conta. Outra desvantagem é que esse modelo é mais complexo que o modelo bancário.
 
@@ -186,8 +156,6 @@ A estrutura de dados blockchain significa cadeia de blocos. Existem dois tipos d
 Essa ligação é o hash (identificador único de algum elemento) do bloco anterior. Dessa forma, é possível sempre garantir a ordem dos blocos. Cada bloco armazena transações, o hash do bloco anterior, o nonce e o seu próprio hash. Cada bloco precisa ser minerado, ou seja, o minerador precisa calcular o valor do nonce (que necessita muito poder computacional).
 
 Dessa forma, no código de Agda, foi adicionada a especificação de que o bloco deve conter o hash do bloco anterior e a especificação do hash do bloco, usando tipos dependentes.
-
-\ExecuteMetaData[latex/Code.tex]{blockchain}
 
 \section{Metodologia}
 
