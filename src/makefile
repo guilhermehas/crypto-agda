@@ -5,7 +5,7 @@ pdf:
 	cp main.lagda build
 	# cp -r ../libraries/agda-prelude/src build
 	pwd
-	cd ./build && pwd && ls && agda --latex main.lagda
+	cd ./build && pwd && ls && agda --no-default-libraries --latex main.lagda
 
 install: pdf
 	mkdir -p $(out)/tex
