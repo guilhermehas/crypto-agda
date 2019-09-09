@@ -8,7 +8,7 @@ pdf:
 
 install:
 	mkdir -p $(out)/tex
-	mv build/latex/* $(out)/tex
+	mv build/latex/ $(out)/tex
 
 clean:
 	rm -rf build
