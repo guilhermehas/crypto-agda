@@ -4,7 +4,7 @@ let
   agdapkg = (import src/default.nix) {};
 in
 stdenv.mkDerivation {
-  name = "qualificacao-mestrado";
+  name = "master-thesis";
   src = ./.;
   buildInputs = [
     (texlive.combine {

@@ -1,11 +1,11 @@
 default: pdf
 
 pdf:
-	latexmk -f -pdf -use-make docs/main.tex
+	cd docs && latexmk -f -pdf -use-make main.tex
 
 install: pdf
 	mkdir -p $(out)
-	cp main.pdf $(out)/texto-qualificacao.pdf
+	cp docs/main.pdf $(out)/thesis.pdf
 
 clean:
 	rm *.pdf; \
