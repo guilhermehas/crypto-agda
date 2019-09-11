@@ -18,6 +18,7 @@
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
 
 \title{Programação de criptomoeda em linguagem Agda}								
+
 % Title
 \author{Guilherme H. A. Silva}						
 % Author
@@ -134,23 +135,20 @@ Esse hard fork violou o principio de que o dinheiro dos usuários em cripto-moed
 sem nenhuma interferência humana.
 Por isso, existe a necessidade de provas formais, que garantem sua corretude do software.
 
-\subsection{Introdução a Agda}
+\subsection{Agda Introduction}
 
-Para garantir a corretude de um programa, precisamos de demonstrações formais ou técnicas de model checking.
-Idealmente, deveria ser capazes de especificar e programar em uma mesma linguagem.
-Agda  é uma linguagem que permite isso.
+Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology as his PhD Thesis.
+The current version of Agda is Agda 2.
 
-Agda é um provador de teoremas baseado na teoria de tipos de Martin-Lof.
-Ele está muito relacionado ao provador de teoremas Coq.
-Além do mais, Agda é uma linguagem total, o que é garantido que ela sempre termina (não existe loop infinito).
-Sem isso, Agda seria uma linguagem inconsistente.
-Agda já está em sua segunda versão.
-Ela foi criada na tese de doutorado de Ulf Norell.
-Depois disso, ela foi aprimorada por sua comunidade.
+Agda is also a proof assistance based on intensional Martin-Löf type theory.
+It looks like CoQ, but does not have tatics.
+Agda is a total language, so it is garanteed that the code always terminal and coverage all inputs.
+Agda needs it to be a consistent language.
 
-Para definir-se booleans em Agda:
+Agda has inductive data types that are similar to algebric data types in non-depently typed programming language.
+The definition of Peano numbers in Agda:
 
-\ExecuteMetaData[latex/main.tex]{prel}
+\ExecuteMetaData[latex/agdaExamples.tex]{Nat}
 
 \subsection{UTXO Bitcoin}
 

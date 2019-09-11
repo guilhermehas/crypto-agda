@@ -2,9 +2,9 @@ default: pdf
 
 pdf:
 	mkdir build
-	cp main.lagda build
+	cp *.lagda build
 	cp -r libraries/agda-prelude/src/* build
-	cd ./build && pwd && ls && agda --no-default-libraries --latex main.lagda
+	cd ./build && pwd && ls && agda --no-default-libraries --latex agdaExamples.lagda
 
 install:
 	mkdir -p $(out)/tex
