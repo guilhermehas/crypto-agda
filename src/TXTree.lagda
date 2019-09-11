@@ -1,3 +1,4 @@
+\begin{code}
 module TXTree where
 
 open import Prelude
@@ -71,3 +72,4 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ; tx
 addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
 addMaybeTransTree nothing tx = nothing
 addMaybeTransTree (just tree) tx = addTransactionTree tree tx
+\end{code}

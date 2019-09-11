@@ -1,3 +1,4 @@
+\begin{code}
 module Cripto where
 
 open import Prelude
@@ -73,3 +74,4 @@ instance
 
   eqAddress : Eq Address
   _==_ {{eqAddress}} = _≡?addr_
+\end{code}

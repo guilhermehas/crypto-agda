@@ -1,3 +1,4 @@
+\begin{code}
 module Transactions where
 
 open import Prelude
@@ -146,3 +147,4 @@ record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : S
 txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId}
   (tx : TXSigned inputs outputs) → List TXFieldWithId
 txSigInput {inputs} _ = inputs
+\end{code}

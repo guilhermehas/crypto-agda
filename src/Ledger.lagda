@@ -1,3 +1,4 @@
+\begin{code}
 module Ledger where
 
 open import Prelude
@@ -34,3 +35,4 @@ deltaRawTX (normalTX record { inputs = (record { time = _ ; position = _ ; amoun
   with addr == publicKey2Address pk
 ... | yes _ = deltaRawTX (normalTX (record { inputs = inputs ; outputs = outputs })) addr - pos amount
 ... | no  _ = deltaRawTX (normalTX (record { inputs = inputs ; outputs = outputs })) addr
+\end{code}

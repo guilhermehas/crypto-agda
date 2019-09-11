@@ -1,3 +1,4 @@
+\begin{code}
 module RawTransactions where
 
 open import Prelude
@@ -178,3 +179,4 @@ rawTXSigned→TXSigAll time allInputs record { outputs = outputs ; txSig = txSig
         where
           txAux : TXSigned (txSigInput txSig) (VectorOutput→List vecOut)
           txAux rewrite proofVecOut = txSig
+\end{code}

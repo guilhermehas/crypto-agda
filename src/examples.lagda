@@ -1,3 +1,4 @@
+\begin{code}
 module examples where
 
 open import Prelude
@@ -110,3 +111,4 @@ txTree2El = el (
             { time = nat 1 ; position = 0 ; amount = 20 ; address = nat zero })
         refl refl))
   }))
+\end{code}

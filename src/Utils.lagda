@@ -1,3 +1,4 @@
+\begin{code}
 module Utils where
 
 open import Prelude
@@ -187,3 +188,4 @@ distList→distSub {A} {x ∷ xs} {.x ¬∷ subxs} (cons .x dist isDist) =
     distEl {x ∷ xs} {.x ∷ subxs} (fst , snd) = distEl {_} {subxs} snd
 distList→distSub {_} {x ∷ xs} {.x ∷ subxs} (cons .x dist isDist) =
   distList→distSub {_} {_} {subxs} dist
+\end{code}

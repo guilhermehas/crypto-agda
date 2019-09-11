@@ -1,3 +1,4 @@
+\begin{code}
 module proofsTXTree where
 
 open import Prelude
@@ -107,3 +108,4 @@ uniqueOutputs (txtree {block} {time} {outSize} {inputs} {vecOut} tree tx) =
   (distInputs tx) (vecOutDist vecOut)
   (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut)))
 
+\end{code}
