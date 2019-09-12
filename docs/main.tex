@@ -21,7 +21,7 @@
 \usepackage{vmargin}
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
 
-\title{Programação de criptomoeda em linguagem Agda}								
+\title{Programming a criptocurrency in Agda}								
 
 % Title
 \author{Guilherme H. A. Silva}						
@@ -66,18 +66,15 @@
 			\begin{minipage}{0.4\textwidth}
             
 			\begin{flushright} \large
-        \emph{Mestrando:} \\
+        \emph{Student:} \\
         Guilherme Horta Alvares da Silva \\
-        \emph{Orientador:} \\
-        Professor Doutor Flávio Codeço Coelho
+        \emph{Professor:} \\
+        Doctor Flávio Codeço Coelho
 		\end{flushright}
            
 	\end{minipage}\\[2 cm]
 
   % \includegraphics[scale = 0.5]{FGV.png}
-    
-    
-    
     
 	
 \end{titlepage}
@@ -89,9 +86,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand{\thesection}{\arabic{section}}
-\section{Introdução}
+\section{Introduction}
 
-The bitcoin % \cite{nakamoto2008bitcoin} was one of the first cripto currencies created in the world.
+The bitcoin \cite{nakamoto2008bitcoin} was one of the first cripto currencies created in the world.
 Satoshi Nakamoto created it in 2008 using many ideas from cypherpunk community.
 
 Before bitcoin, there were a lot of cryptograph cash ideas based on ecash protocol.
@@ -112,32 +109,32 @@ If the product does not come in time, the buyer receive his money back.
 Smart contracts are widely adopted today the big funds and
 these contracts are fully governed by algorithms.
 
-\subsection{O bitcoin}
+\subsection{The bitcoin}
 
-Já que cripto-moedas são governadas integralmente por algoritmos.
-Precisamos garantir que esses algoritmos estejam corretos, uma vez que em caso de falha,
-não existe nada que se possa fazer. Por exemplo, o bitcoin pode ficar preso em algum contrato e não seria possível usá-lo novamente.
-O único jeito de resolver problemas é criando um consenso entre usuários e mineradores,
-a partir de um soft fork (atualização retro compatível) ou um hard fork (atualização não retrocompatível).
-A possibilidade de erro é um dos maiores riscos às cripto-moedas.
-Por exemplo, no protocolo inicial do bitcoin, a unicidade dos IDs das transações não era garantida.
-Com isso, era possível que houvesse ataques de gasto duplo.
-Isso pôde ser evitado incluindo o número do bloco na transação (foi feito em um soft fork).
-Outro problema do bitcoin é que o tamanho do bloco do bitcoin não é suficiente para cobrir todas as transações.
-Para resolver isso, foi criada a Lightning Network, que é um protocolo de segunda camada do bitcoin.
+%% Já que cripto-moedas são governadas integralmente por algoritmos.
+%% Precisamos garantir que esses algoritmos estejam corretos, uma vez que em caso de falha,
+%% não existe nada que se possa fazer. Por exemplo, o bitcoin pode ficar preso em algum contrato e não seria possível usá-lo novamente.
+%% O único jeito de resolver problemas é criando um consenso entre usuários e mineradores,
+%% a partir de um soft fork (atualização retro compatível) ou um hard fork (atualização não retrocompatível).
+%% A possibilidade de erro é um dos maiores riscos às cripto-moedas.
+%% Por exemplo, no protocolo inicial do bitcoin, a unicidade dos IDs das transações não era garantida.
+%% Com isso, era possível que houvesse ataques de gasto duplo.
+%% Isso pôde ser evitado incluindo o número do bloco na transação (foi feito em um soft fork).
+%% Outro problema do bitcoin é que o tamanho do bloco do bitcoin não é suficiente para cobrir todas as transações.
+%% Para resolver isso, foi criada a Lightning Network, que é um protocolo de segunda camada do bitcoin.
 
-Por isso, é importante a verificação completa dos protocolos criptográficos.
-Um alto nível de verificação pode ser encontrado criando um método formal para cripto-moedas e provando que ele está correto. Métodos formais são análises matemáticas para verificar se o software comporta conforme o esperado.
-Ainda não foi criado nenhum método completamente formal para a formalização de alguma cripto-moeda.
+%% Por isso, é importante a verificação completa dos protocolos criptográficos.
+%% Um alto nível de verificação pode ser encontrado criando um método formal para cripto-moedas e provando que ele está correto. Métodos formais são análises matemáticas para verificar se o software comporta conforme o esperado.
+%% Ainda não foi criado nenhum método completamente formal para a formalização de alguma cripto-moeda.
 
-O crescimento de contratos inteligentes criou alguns problemas em relação a segurança de instrumentos financeiros.
-O maior incidente foi a falha do cripto-contrato DAO.
-Quando o DAO chegou a um valor de 150 milhões de dólares, um usuário usou uma vulnerabilidade para hackear o contrato.
-A perda do dinheiro dos investidores foi somente evitada por causa de um hard fork na rede ethereum,
-que apagou a maioria das transações investidas no DAO.
-Esse hard fork violou o principio de que o dinheiro dos usuários em cripto-moedas devem ser apenas governados por algoritmos,
-sem nenhuma interferência humana.
-Por isso, existe a necessidade de provas formais, que garantem sua corretude do software.
+%% O crescimento de contratos inteligentes criou alguns problemas em relação a segurança de instrumentos financeiros.
+%% O maior incidente foi a falha do cripto-contrato DAO.
+%% Quando o DAO chegou a um valor de 150 milhões de dólares, um usuário usou uma vulnerabilidade para hackear o contrato.
+%% A perda do dinheiro dos investidores foi somente evitada por causa de um hard fork na rede ethereum,
+%% que apagou a maioria das transações investidas no DAO.
+%% Esse hard fork violou o principio de que o dinheiro dos usuários em cripto-moedas devem ser apenas governados por algoritmos,
+%% sem nenhuma interferência humana.
+%% Por isso, existe a necessidade de provas formais, que garantem sua corretude do software.
 
 \subsection{Agda Introduction}
 
@@ -171,42 +168,42 @@ Another good example is that in sum of two matrices, they should have the same d
 
 \subsection{UTXO Bitcoin}
 
-Uma das características que diferencia o Bitcoin de outras criptomoedas (como o Ethereum) e outros bancos é a sua estrutura de dados de transação. Em um banco, o saldo dessa conta é armazenado em uma linha do banco de dados. Para o bitcoin, isso não existe. O que está armazenado na blockchain são apenas as transações. No bitcoin, existe a transação não gasta, cujo termo é UTXO (unspent transaction output).
+%% Uma das características que diferencia o Bitcoin de outras criptomoedas (como o Ethereum) e outros bancos é a sua estrutura de dados de transação. Em um banco, o saldo dessa conta é armazenado em uma linha do banco de dados. Para o bitcoin, isso não existe. O que está armazenado na blockchain são apenas as transações. No bitcoin, existe a transação não gasta, cujo termo é UTXO (unspent transaction output).
 
-No bitcoin, cada transação possui várias entradas e saídas. As entradas são todas as transações não gastas do usuário e a saída são todas as contas receberão a transação mais uma transação não gasta. Como pode ser visto nessa figura:
+%% No bitcoin, cada transação possui várias entradas e saídas. As entradas são todas as transações não gastas do usuário e a saída são todas as contas receberão a transação mais uma transação não gasta. Como pode ser visto nessa figura:
 
-Existem várias vantagens e desvantagens desse tipo de estrutura de dados. Uma das desvantagens é que é bastante custoso verificar o saldo da conta, pois é necessário calcular todas as transações vinculadas a conta. Outra desvantagem é que esse modelo é mais complexo que o modelo bancário.
+%% Existem várias vantagens e desvantagens desse tipo de estrutura de dados. Uma das desvantagens é que é bastante custoso verificar o saldo da conta, pois é necessário calcular todas as transações vinculadas a conta. Outra desvantagem é que esse modelo é mais complexo que o modelo bancário.
 
-Já suas vantagens são outras. Esse tipo de estrutura de dados permite escalabilidade, pois o paralelismo é permitido. Já que uma mesma conta pode por exemplo gastar várias transações não gastas ao mesmo tempo. Outra vantagem seria a privacidade, pois um mesmo usuário pode criar uma conta nova por transação.
+%% Já suas vantagens são outras. Esse tipo de estrutura de dados permite escalabilidade, pois o paralelismo é permitido. Já que uma mesma conta pode por exemplo gastar várias transações não gastas ao mesmo tempo. Outra vantagem seria a privacidade, pois um mesmo usuário pode criar uma conta nova por transação.
 
-No paper de Anton Setzer, a modelagem da estrutura de dados do UTXO está quase terminada.
+%% No paper de Anton Setzer, a modelagem da estrutura de dados do UTXO está quase terminada.
 
-\subsection{Blockchain em Agda}
+\subsection{TXTree in Agda}
 
-A estrutura de dados blockchain significa cadeia de blocos. Existem dois tipos de blocos, o primeiro bloco (genesis block) e os outros. Cada bloco, possui uma ligação para o bloco anterior (exceto o primeiro).
-Essa ligação é o hash (identificador único de algum elemento) do bloco anterior. Dessa forma, é possível sempre garantir a ordem dos blocos. Cada bloco armazena transações, o hash do bloco anterior, o nonce e o seu próprio hash. Cada bloco precisa ser minerado, ou seja, o minerador precisa calcular o valor do nonce (que necessita muito poder computacional).
+%% A estrutura de dados blockchain significa cadeia de blocos. Existem dois tipos de blocos, o primeiro bloco (genesis block) e os outros. Cada bloco, possui uma ligação para o bloco anterior (exceto o primeiro).
+%% Essa ligação é o hash (identificador único de algum elemento) do bloco anterior. Dessa forma, é possível sempre garantir a ordem dos blocos. Cada bloco armazena transações, o hash do bloco anterior, o nonce e o seu próprio hash. Cada bloco precisa ser minerado, ou seja, o minerador precisa calcular o valor do nonce (que necessita muito poder computacional).
 
-Dessa forma, no código de Agda, foi adicionada a especificação de que o bloco deve conter o hash do bloco anterior e a especificação do hash do bloco, usando tipos dependentes.
+%% Dessa forma, no código de Agda, foi adicionada a especificação de que o bloco deve conter o hash do bloco anterior e a especificação do hash do bloco, usando tipos dependentes.
 
-\section{Metodologia}
+\section{Methods}
 
-O trabalho está sendo programado na linguagem Agda, provador de teoremas. 
+%% O trabalho está sendo programado na linguagem Agda, provador de teoremas. 
 
-Para controle de versão, é utilizado o Git com Github.
-Com o Github, é possível fazer integração contínua com Travis CI ou Hydra.
-Ou seja, a cada novo commit, é instanciada uma máquina virtual para compilar o projeto todo.
+%% Para controle de versão, é utilizado o Git com Github.
+%% Com o Github, é possível fazer integração contínua com Travis CI ou Hydra.
+%% Ou seja, a cada novo commit, é instanciada uma máquina virtual para compilar o projeto todo.
 
-O gerenciador de pacotes utilizado é o Nix, que é um gerenciador de pacotes funcional. 
-Ou seja, é feito de forma descritiva como será compilado o projeto.
+%% O gerenciador de pacotes utilizado é o Nix, que é um gerenciador de pacotes funcional. 
+%% Ou seja, é feito de forma descritiva como será compilado o projeto.
 
-Para compilação dos slides e da dissertação é utilizado Latex e latexmk e todo o resto acima.
-Todo código colocado nos slides e na dissertação são compilados antes. Dessa forma, não existe perigo de haver algum código que não funcione.
+%% Para compilação dos slides e da dissertação é utilizado Latex e latexmk e todo o resto acima.
+%% Todo código colocado nos slides e na dissertação são compilados antes. Dessa forma, não existe perigo de haver algum código que não funcione.
 
-O trabalho será feito usando a metodologia do livro Type Driven Development. Ou seja, enquanto a criptomoeda for programada, o seu tipo será refinado conforme às necessidades. Caso algo ainda não seja provado com os tipos, uma prova formal será adicionada posteriormente.
+%% O trabalho será feito usando a metodologia do livro Type Driven Development. Ou seja, enquanto a criptomoeda for programada, o seu tipo será refinado conforme às necessidades. Caso algo ainda não seja provado com os tipos, uma prova formal será adicionada posteriormente.
 
-\section{Agradecimento}
+\section{Conclusion}
 
-Agradeço o professor Flávio por me auxiliar em todas as minhas dúvidas sobre bitcoin e me ajudar na escrita da minha dissertação. 
+%% Agradeço o professor Flávio por me auxiliar em todas as minhas dúvidas sobre bitcoin e me ajudar na escrita da minha dissertação. 
 
 \newpage
  
