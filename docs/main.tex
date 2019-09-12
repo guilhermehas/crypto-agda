@@ -6,7 +6,11 @@
 \usepackage{apacite}
 \usepackage{catchfilebetweentags}
 
-\usepackage[portuguese]{babel}
+\usepackage{ucs}
+\usepackage{amssymb}
+%% \usepackage{bbm}
+
+\usepackage[english]{babel}
 \usepackage{url}
 \usepackage[utf8x]{inputenc}
 \usepackage{amsmath}
@@ -149,6 +153,21 @@ Agda has inductive data types that are similar to algebric data types in non-dep
 The definition of Peano numbers in Agda:
 
 \ExecuteMetaData[latex/agdaExamples.tex]{Nat}
+
+Definitions in Agda are done using induction.
+For example, the sum of two numbers in Agda:
+
+\ExecuteMetaData[latex/agdaExamples.tex]{sum}
+
+In Agda, because of dependent types, it is possible to make some restrictions in types that is not possible in other language.
+For example, get the first element of a vector.
+For it, it is necessary to specify in the type that the vector should have at size greater or equal tha than one.
+
+\ExecuteMetaData[latex/agdaExamples.tex]{vecHead}
+
+Another good example is that in sum of two matrices, they should have the same dimentions.
+
+\ExecuteMetaData[latex/agdaExamples.tex]{matrixSum}
 
 \subsection{UTXO Bitcoin}
 
