@@ -143,6 +143,19 @@ Another good example is that in sum of two matrices, they should have the same d
 
 \subsection{UTXO Bitcoin}
 
+There are two kinds of data structures to modeling accounts records and savings states.
+The UTXO model used in Bitcoin and the account model used in Ethereum.
+
+In account model, it is saved the address and the balance of each address.
+For example, the data struct will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
+So the address 0xabc01 has 1.01 of balance and the address 0xabc02 has 2.02 of balance.
+In this way, it is possible to easily know how much of balance each address has,
+but it is not possible to know how they got in this state.
+
+In UTXO model, each transaction is saved in the transaction tree.
+Every transaction is composed of multiples inputs and multiples outputs.
+But all inputs have to never been spent before.
+
 \subsection{TXTree in Agda}
 
 \section{Methods}
