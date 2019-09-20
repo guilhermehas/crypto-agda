@@ -74,7 +74,7 @@
            
 	\end{minipage}\\[2 cm]
 
-  % \includegraphics[scale = 0.5]{FGV.png}
+  \includegraphics[scale = 0.5]{imgs/FGV.png}
     
 	
 \end{titlepage}
@@ -146,15 +146,34 @@ Another good example is that in sum of two matrices, they should have the same d
 There are two kinds of data structures to modeling accounts records and savings states.
 The UTXO model used in Bitcoin and the account model used in Ethereum.
 
+  \includegraphics[scale = 0.7]{imgs/account.jpeg}
+
 In account model, it is saved the address and the balance of each address.
 For example, the data struct will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
-So the address 0xabc01 has 1.01 of balance and the address 0xabc02 has 2.02 of balance.
+So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of balance.
 In this way, it is possible to easily know how much of balance each address has,
 but it is not possible to know how they got in this state.
+
+  \includegraphics[scale = 0.4]{imgs/utxo.png}
 
 In UTXO model, each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
 But all inputs have to never been spent before.
+
+Because of that, in UTXO model, it is easy to make a new transaction from previous one, but it is harder to know how much each one has.
+The wallet that calculate how much balance each address has.
+
+In account model, there could be one kind of vulnerability that is less probabable to happen in UTXO model.
+Because there is an undesirable intermediary state that there is some address without balance while another has not already received his money.
+
+For example: \\
+bobBalance -= 1 \\
+Intermediary State \\
+aliceBalance += 1
+
+In account model, it is straight foward to know how much balance each address has.
+In UTXO model, this calculation is made offchain. It can be a good thing,
+because each user has more privacy.
 
 \subsection{TXTree in Agda}
 
