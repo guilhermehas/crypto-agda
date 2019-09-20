@@ -90,26 +90,37 @@
 
 \subsection{Cryptocurrencies}
 
-The bitcoin \cite{nakamoto2008bitcoin} was one of the first cryptocurrencies created in the world.
-Satoshi Nakamoto created it in 2008 using many ideas from cypherpunk community.
+In 1983, David Chaum created ecash \cite{panurach1996money} , an anonymous cryptographic eletronic money.
+This cryptocurrency use RSA blind signatures \cite{chaum1983blind} to spend transactions.
+Later, in 1989, David Chaum found an eletronic money corporation called DigiCash Inc.
+It was declared bankruptcy in 1998.
 
-Before bitcoin, there were a lot of cryptograph cash ideas based on ecash protocol.
-Adam Back developed a proof-of-work scheme for spam control.
-Wei Dai propose b-money for the first proposal for distributed digital scarcity.
-And Hal Finney created a reusable proof of work for hashcash for its algorithm of proof of work.
+Adam Back developed a proof-of-work (PoW) scheme for spam control, Hashcash \cite{back2002hashcash}.
+To send an email, the hash of the content of this email plus a nounce has to have a numerically value smaller than a defined target.
+So, to create a valide email, the sender (miner) has to spend a considerable CPU resource on it.
+Because, hash functions produces pratically random values, so the miner has to guess a lot of nounce values before find some nounce that make the hash of the email less than the target value.
+This idea is the same that is used in Bitcoin proof of work, because each block has a nounce guessed by the miner and the hash of the block has to be less than the target value.
 
-Since 2008, the total market of Bitcoin came to 330 billions dollars in 17 of December of 2018
+Wei Dai propose b-money \cite{dai1998b} for the first proposal for distributed digital scarcity.
+And Hal Finney created Bit Gold, a reusable proof of work for hashcash for its algorithm of proof of work.
+
+In 31 October 2008, Satoshi Nakamoto registered the website ``bitcoin.org'' and put a link for his paper \cite{nakamoto2008bitcoin} in a cryptography mailing list.
+In January 2009, Nakamoto released the bitcoin software as open-source code.
+The identity of Satoshi Nakamoto is still unknown.
+Since that time, the total market of Bitcoin came to 330 billions dollars in 17 of December of 2018
 and his value has a historic record of 20 thousands dollars.
-Other cryptocurrencies like Ethereum and Monero were created and they both have a good market value.
-Crcypto currencies will be a great finance instrument for a near future.
 
-cryptocurrencies are used for smart contracts too.
-For example, it is possible to reserve some part of money to the seller in the blockchain.
-To unlock the money, it is necessary to get a signature of the buyer.
-If the buyer receive the product, he will sign the contract.
-If the product does not come in time, the buyer receive his money back.
-Smart contracts are widely adopted today the big funds and
-these contracts are fully governed by algorithms.
+Other cryptocurrencies like Ethereum \cite{wood2014ethereum}, Monero \cite{noether2015ring} and ZCash \cite{hopwood2016zcash} were created after Bitcoin,
+but Bitcoin is still the cryptocurrency with the biggest market value.
+
+Ethereum is a cryptocurrency that uses account model instead of UTXO used in bitcoin for its transaction data struct.
+It uses Solidity as its programming language for smart contracts, it looks like Java Script,
+so it is easier to programming in it than in stack machine programming language of Bitcoin.
+Ethereum is now changing from proof of work (used in Bitcoin) to proof of stake.
+
+Monero and ZCash are both cryptocurrency that focus on fungibility, privacy and descentralization.
+Monero uses obfuscated public ledger, so anyone can send transcations, but nobody can tell the source, amount or destination.
+Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which garantee privacy for its users.
 
 \subsection{Agda Introduction}
 
