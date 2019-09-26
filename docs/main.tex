@@ -123,11 +123,41 @@ Monero uses obfuscated public ledger, so anyone can send transcations, but nobod
 Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which garantee privacy for its users.
 
 \subsection{Agda Introduction}
-
 Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology as his PhD Thesis.
 The current version of Agda is Agda 2.
 
-Agda is also a proof assistance based on intensional Martin-Löf type theory.
+  \subsection{Martin-Löf type theory}
+  Agda is also a proof assistance based on intensional Martin-Löf type theory.
+
+    \subsection{Types}
+    In Martin-Löf type theory, there are 3 finites types and 5 types constructors.
+    The 0 type contain 0 terms, it is called empty type and it is written bot .
+
+    The 1 type is the type with just 1 canonical term and it represents existence.
+    It is called unit type and it is written top .
+
+    The 2 type contains 2 canonical terms. It represents a choice between two values.
+
+    \subsection{Types Constructors}
+    The sum-types contain an ordered pair.
+    The second type can depend on the first type.
+    For example, (n , Vec n).
+    So the second element is a vector of size n.
+
+    The pi-types contain functions.
+    So given an input type, it will return an output type.
+    For Example, Vec n is a type that is constructed by the function type vec.
+
+    In Inductive types, it is a self-referential type.
+    For example, linked list of natural numbers, trees, graphs.
+    Proofs in inductive types are made by induction.
+    For example:
+    N-elim : P(0) -> (prod P(n) -> P(S(n))) -> prod P(n)
+
+    Universe types are created to allow proofs written in all types.
+    For example, the type of Nat is U0.
+
+
 It looks like CoQ, but does not have tatics.
 Agda is a total language, so it is garanteed that the code always terminal and coverage all inputs.
 Agda needs it to be a consistent language.
