@@ -80,8 +80,8 @@ if b then tRes else fRes = Either-elim b (λ _ → tRes) λ _ → fRes
 <%piType>
 \begin{code}
 ∀-elim : ∀ {A : Set} {B : A → Set}
-  → (L : ∀ (x : A) → B x)
-  → (M : A)
+  (L : ∀ (x : A) → B x)
+  (M : A)
   -----------------
   → B M
 ∀-elim L M = L M
@@ -90,15 +90,15 @@ if b then tRes else fRes = Either-elim b (λ _ → tRes) λ _ → fRes
 
 %<*sumType>
 \begin{code}
-data Σ (A : Set) (B : A → Set) : Set where
-  ⟨_,_⟩ : (x : A) → B x → Σ A B
+data ∑ (A : Set) (B : A → Set) : Set where
+  ⟨_,_⟩ : (x : A) → B x → ∑ A B
 
-Σ-elim : ∀ {A : Set} {B : A → Set} {C : Set}
+∑-elim : ∀ {A : Set} {B : A → Set} {C : Set}
   → (∀ x → B x → C)
-  → Σ A B
+  → ∑ A B
   ---------------
   → C
-Σ-elim f ⟨ x , y ⟩ = f x y
+∑-elim f ⟨ x , y ⟩ = f x y
 \end{code}
 %</sumType>
 

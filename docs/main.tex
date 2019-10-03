@@ -5,10 +5,12 @@
 \usepackage{agda}
 \usepackage{apacite}
 \usepackage{catchfilebetweentags}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
 
 \usepackage{ucs}
 \usepackage{amssymb}
-%% \usepackage{bbm}
+\usepackage{bbm}
 
 \usepackage[english]{babel}
 \usepackage{url}
@@ -132,27 +134,38 @@ The current version of Agda is Agda 2.
     \subsection{Types}
     In Martin-Löf type theory, there are 3 finites types and 5 types constructors.
     The 0 type contain 0 terms, it is called empty type and it is written bot.
+    \ExecuteMetaData[latex/agdaExamples.tex]{botType}
 
     The 1 type is the type with just 1 canonical term and it represents existence.
     It is called unit type and it is written top .
+    \ExecuteMetaData[latex/agdaExamples.tex]{trivialType}
 
     The 2 type contains 2 canonical terms. It represents a choice between two values.
+    \ExecuteMetaData[latex/agdaExamples.tex]{eitherType}
+
+    The Boolean Type is defined using the Trivial type and the Either type
+    \ExecuteMetaData[latex/agdaExamples.tex]{boolType}
+
+    If statement is defined using booleans
+    \ExecuteMetaData[latex/agdaExamples.tex]{ifThenElse}
 
     \subsection{Types Constructors}
     The sum-types contain an ordered pair.
     The second type can depend on the first type.
-    For example, (n , Vec n).
-    So the second element is a vector of size n.
+    It has the same meaning of exist.
+    \ExecuteMetaData[latex/agdaExamples.tex]{sumType}
 
     The pi-types contain functions.
     So given an input type, it will return an output type.
-    For Example, Vec n is a type that is constructed by the function type vec.
+    It has the same meaning of a function
+    \ExecuteMetaData[latex/agdaExamples.tex]{piType}
 
     In Inductive types, it is a self-referential type.
-    For example, linked list of natural numbers, trees, graphs.
+    Naturals numbers are examples of that
+    \ExecuteMetaData[latex/agdaExamples.tex]{Nat}
+    Other data structs like linked list of natural numbers, trees, graphs are too.
     Proofs in inductive types are made by induction.
-    For example:
-    N-elim : P(0) -> (prod P(n) -> P(S(n))) -> prod P(n)
+    \ExecuteMetaData[latex/agdaExamples.tex]{NatElim}
 
     Universe types are created to allow proofs written in all types.
     For example, the type of Nat is U0.
