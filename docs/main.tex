@@ -121,6 +121,48 @@ Monero and ZCash are both cryptocurrency that focus on fungibility, privacy and 
 Monero uses obfuscated public ledger, so anyone can send transcations, but nobody can tell the source, amount or destination.
 Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which garantee privacy for its users.
 
+\subsection{Bitcoin}
+
+The bitcoin was made to be a peer to peer eletronic cash.
+It was made in one way that users can save and verify transactions without the need of a trust party.
+Because of that no authority or goverment can block the bitcoin.
+
+Transactions in bitcoins are one array of input of previous transactions and one array of outputs.
+The mining transaction does not need to have an input.
+For each input of the transaction, it is necessary a signature signed with a private key to prove the ownerchip of the bitcoins.
+
+Transactions are grouped in a block.
+Each block has in its header the timestamp that the block was created, the hash of the block,
+the previous hash and a nounce.
+A nounce is an arbitrary value that the miner has to choose to make the hash of the block respect some specific characteristics.
+
+Each block has a limit size of 1 MB.
+Because of that, bitcoin has a blockchain (one array of blocks).
+Each block should be created in an average of 10 minutes.
+This time was choosen because in 10 minutes, it is enough to propagate the block in all the world.
+To make it possible, there is a concept called proof of work in bitcoin.
+So the miner has choose a random value as nounce that makes the hash of the block less than a certain value.
+This value is choosen in a way that each block should be generated in 10 minutes in average.
+If the value is too low, miners will take more time to find a nounce that make the hash block less than the it.
+If it is too high, it will be easier to find a nounce and they will find it faster.
+
+When two blocks are mined in nearly the same time, there are two valid blockchains.
+It is because the last block in the both blockchains are valid but different.
+Because of this problem, in Bitcoin protocol, the largest chain is always the right chain.
+While two valid chains have the same size, it is not possible to know which chain is the right.
+This situation is called fork and when it happens, it is necessary to wait to see in which chain the new block will be.
+
+In Bitcoin, there is a possibility of 51% attack.
+It happens when some miner, with more power than all network, mine secretly the blocks.
+So if the main network has 50 blocks, the miner could produce hidden blocks from 46 to 55
+and he would have 10 hidden blocks from the network.
+When he shows their hidden blocks, his chain become the valid chain, because it is bigger.
+So all transactions from previous blockchain from 46 to 50 blocks become invalid.
+Because of that, when someone make a big transaction in the blockchain, it is a good idea to wait more time.
+So it is becoming harder and harder to make a 51% with more time.
+Bitcoin has the highest market value nowadays, so attacking the bitcoin network is very expensive.
+Nowadays, this kind of attack is more common in new altcoins.
+
 \subsection{Agda Introduction}
 Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology as his PhD Thesis.
 The current version of Agda is Agda 2.
