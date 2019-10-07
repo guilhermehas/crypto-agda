@@ -163,6 +163,28 @@ So it is becoming harder and harder to make a 51% with more time.
 Bitcoin has the highest market value nowadays, so attacking the bitcoin network is very expensive.
 Nowadays, this kind of attack is more common in new altcoins.
 
+\subsection{Ethereum}
+
+Ethereum differs from bitcoin in having an Ethereum Virtual Machine (EVM) to run script code.
+EVM is a stack machine and turing complete while Bitcoin Script is not
+(it is impossible to do loops and recursion in Bitcoin).
+
+Transactions in bitcoin are all stored in blockchain.
+In Ethereum, just the hash of it is stored in it.
+So it is saved in off chain database.
+Because of that, it is possible to save more information in Ethereum Blockchain.
+
+In Bitcoin, the creator of the contract as to pay the amount proportional to its size.
+But in Ethereum, every time the user run a contract that change some data,
+he has to pay some gas for it.
+Each instruction in EVM has a fixed amount of gas pre defined that is necessary to pay.
+The user must set how much ether he wants to pay per gas.
+So if the user stays without ether, the contract halt and stopped to being executed.
+
+Because Ethereum has its own EVM with more instructions than Bitcoin and it is Turing Complete,
+its considered less secure.
+Ethereum has its own high level programming language called Solidity that looks like JavaScript.
+
 \subsection{Agda Introduction}
 Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology as his PhD Thesis.
 The current version of Agda is Agda 2.
