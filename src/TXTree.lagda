@@ -7,8 +7,14 @@ open import Cripto
 open import Transactions
 open import RawTransactions
 
+totalQtSub1 : Nat
+totalQtSub1 = 9
+
+totalQt : Nat
+totalQt = suc totalQtSub1
+
 tQtTxs : Set
-tQtTxs = Fin 10
+tQtTxs = Fin $ totalQt
 
 mutual
   data TXTree : (time : Time) (block : Nat)
@@ -20,8 +26,9 @@ mutual
       {outputTX : VectorOutput time outSize}
       {totalFees : Nat} {qtTransactions : tQtTxs}
       (tree : TXTree time block inputs totalFees qtTransactions)
+      (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
       (tx : TX {time} {block} {inputs} {outSize} tree outputTX)
-      → TXTree (sucTime time) (nextBlock tx) (inputsTX tx ++ VectorOutput→List outputTX) zero qtTransactions
+      → TXTree (sucTime time) (nextBlock tx) (inputsTX tx ++ VectorOutput→List outputTX) (incFees tx) (incQtTx tx proofLessQtTX)
 
   data TX {time : Time} {block : Nat} {inputs : List TXFieldWithId} {outSize : Nat}
        {totalFees : Nat} {qtTransactions : tQtTxs}
@@ -51,41 +58,61 @@ mutual
   inputsTX (normalTX _ SubInputs _ _) = list-sub SubInputs
   inputsTX {_} {_} {inputs} (coinbase _ _) = inputs
 
-record RawTXTree : Set where
-  field
-    time    : Time
-    block   : Nat
-    outputs : List TXFieldWithId
-    totalFees : Nat
-    qtTransactions : tQtTxs
-    txTree  : TXTree time block outputs totalFees qtTransactions
+  incQtTx : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId} {outSize : Nat}
+    {totalFees : Nat} {qtTransactions : tQtTxs}
+    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize}
+    (tx : TX {time} {block} {inputs} {outSize} tr outputs)
+    (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
+    → tQtTxs
+  incQtTx {_} {_} {_} {_} {_} {qt} (normalTX _ _ _ _) pLess = natToFin (suc (finToNat qt)) {{pLess}}
+  incQtTx (coinbase _ _)  _   = zero
 
-addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
-addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
-  (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
-... | nothing     = nothing
-... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
-  with time == timeOut
-...   | no _     = nothing
-...   | yes refl = just $
-  record { time = sucTime time ; block = suc block ;
-  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree tx }
-  where
-    tx : TX txTree vecOut
-    tx = coinbase txTree vecOut
+  incFees : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId} {outSize : Nat}
+    {totalFees : Nat} {qtTransactions : tQtTxs}
+    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize}
+    (tx : TX {time} {block} {inputs} {outSize} tr outputs)
+    → Nat
+  incFees {_} {_} {_} {_} {totalFees} (normalTX tr SubInputs outputs _) =
+    txFieldList→TotalAmount (VectorOutput→List outputs)
+    - txFieldList→TotalAmount (sub→list SubInputs)
+    + totalFees
+  incFees (coinbase tr outputs) = zero
 
-addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
-  (normalTX record { inputs = inputsTX ; outputs = outputsTX })
-  with raw→TXSigned time record { inputs = inputsTX ; outputs = outputsTX }
-... | nothing    = nothing
-... | just txSig with rawTXSigned→TXSigAll time outputs txSig
-...   | nothing    = nothing
-...   | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
-  just $ record { time = sucTime time ; block = block ;
-  outputs = list-sub sub ++ VectorOutput→List outs ;
-  txTree = txtree txTree (normalTX txTree sub outs signed) }
 
-addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
-addMaybeTransTree nothing tx = nothing
-addMaybeTransTree (just tree) tx = addTransactionTree tree tx
+-- record RawTXTree : Set where
+--   field
+--     time    : Time
+--     block   : Nat
+--     outputs : List TXFieldWithId
+--     totalFees : Nat
+--     qtTransactions : tQtTxs
+--     txTree  : TXTree time block outputs totalFees qtTransactions
+
+-- addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
+-- addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
+--   (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
+-- ... | nothing     = nothing
+-- ... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
+--   with time == timeOut
+-- ...   | no _     = nothing
+-- ...   | yes refl = just $
+--   record { time = sucTime time ; block = suc block ;
+--   outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree tx }
+--   where
+--     tx : TX txTree vecOut
+--     tx = coinbase txTree vecOut
+
+-- addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
+--   (normalTX record { inputs = inputsTX ; outputs = outputsTX })
+--   with raw→TXSigned time record { inputs = inputsTX ; outputs = outputsTX }
+-- ... | nothing    = nothing
+-- ... | just txSig with rawTXSigned→TXSigAll time outputs txSig
+-- ...   | nothing    = nothing
+-- ...   | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
+--   just $ record { time = sucTime time ; block = block ;
+--   outputs = list-sub sub ++ VectorOutput→List outs ;
+--   txTree = txtree txTree (normalTX txTree sub outs signed) }
+
+-- addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
+-- addMaybeTransTree nothing tx = nothing
 \end{code}
