@@ -55,22 +55,29 @@ incrementList : (order : Nat) → (txs : NonEmptyList TXFieldWithId) → Set
 incrementList order (el tx) =  TXFieldWithId.position tx ≡ order
 incrementList order (tx ∷ txs) =  TXFieldWithId.position tx ≡ order × incrementList (suc order) txs
 
-data VectorOutput : (time : Time) (size : Nat) → Set where
+data VectorOutput : (time : Time) (size : Nat) (amount : Amount) → Set where
   el : ∀ {time : Time} → (tx : TXFieldWithId) → (sameId : TXFieldWithId.time tx ≡ time)
-    → (elStart : TXFieldWithId.position tx ≡ zero) → VectorOutput time 1
-  cons : ∀ {time : Time} {size : Nat} → (listOutput : VectorOutput time size) → (tx : TXFieldWithId)
-    → (sameId : TXFieldWithId.time tx ≡ time) → (elStart : TXFieldWithId.position tx ≡ (suc size))
-    → VectorOutput time (suc size)
+    → (elStart : TXFieldWithId.position tx ≡ zero) → VectorOutput time 1 (TXFieldWithId.amount tx)
+  cons : ∀ {time : Time} {size : Nat} {amount : Amount}
+    (listOutput : VectorOutput time size amount)
+    (tx : TXFieldWithId)
+    (sameId : TXFieldWithId.time tx ≡ time)
+    (elStart : TXFieldWithId.position tx ≡ (suc size))
+    → VectorOutput time (suc size) (TXFieldWithId.amount tx + amount)
 
-vecOutTime : ∀ {time : Time} {size : Nat} → (vecOut : VectorOutput time size) → Time
+vecOutTime : ∀ {time : Time} {size : Nat} {amount : Amount}
+  (vecOut : VectorOutput time size amount)
+  → Time
 vecOutTime {time} _ = time
 
-VectorOutput→List : ∀ {time : Time} {size : Nat} → (outs : VectorOutput time size)
+VectorOutput→List : ∀ {time : Time} {size : Nat} {amount : Amount}
+  (outs : VectorOutput time size amount)
   → List TXFieldWithId
 VectorOutput→List (el tx sameId elStart) = tx ∷ []
 VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
 
-vecOutDist : {time : Time} {size : Nat} (vecOut : VectorOutput time size)
+vecOutDist : {time : Time} {size : Nat} {amount : Amount}
+  (vecOut : VectorOutput time size amount)
   → Distinct $ VectorOutput→List vecOut
 vecOutDist (el tx sameId elStart) = cons tx [] unit
 vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
@@ -88,9 +95,12 @@ vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
     ineqAux : {a b : Nat} → _<_ {lzero} {Nat} (suc a) (suc b) → a < suc b
     ineqAux {a} (diff! k) = diff (suc k) (cong suc (add-suc-r k a))
 
-    isDistSizeBelow : (lenVecOut : Nat) (lessThan : lenVecOut < suc size)
-      (vOut : VectorOutput time lenVecOut) → isDistinct tx (VectorOutput→List vOut)
-    isDistSizeBelow .1 lessThan (el txOut sameId elStart2) =
+    isDistSizeBelow : {amount : Amount}
+      (lenVecOut : Nat)
+      (lessThan : lenVecOut < suc size)
+      (vOut : VectorOutput time lenVecOut amount)
+      → isDistinct tx (VectorOutput→List vOut)
+    isDistSizeBelow _ lessThan (el txOut sameId elStart2) =
       (λ { refl → zero≢sucSize (trans (sym elStart2) elStart)}) , unit
     isDistSizeBelow (suc sizeVec) lessThan (cons vOut txOut sameId elStart2) =
       (λ { refl → ineq≢eq (removeSuc≡ (trans (sym elStart2) elStart)) (removeSuc< lessThan)}) ,
@@ -104,9 +114,11 @@ vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
         ineq≢eq eq (diff! k) = absurdEq eq
 
 
-addOutput : ∀ {time : Time} {size : Nat}
-  → (listOutput : VectorOutput time size) → (tx : TXField) → VectorOutput time (suc size)
-addOutput {time} {size} listOutput txOut = cons listOutput
+addOutput : ∀ {time : Time} {size : Nat} {amountOut : Amount}
+  (listOutput : VectorOutput time size amountOut)
+  (tx : TXField)
+  → VectorOutput time (suc size) (TXField.amount tx + amountOut)
+addOutput {time} {size} {amountOut} listOutput txOut = cons listOutput
   (record { time = time ; position = suc size ; amount = amount ; address = address })
   refl refl
   where open TXField txOut
