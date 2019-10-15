@@ -16,6 +16,9 @@ totalQt = suc totalQtSub1
 tQtTxs : Set
 tQtTxs = Fin $ totalQt
 
+blockReward : Nat
+blockReward = 100
+
 mutual
   data TXTree : (time : Time) (block : Nat)
     (outputs : List TXFieldWithId) (totalFees : Amount) (qtTransactions : tQtTxs) → Set where
@@ -25,10 +28,11 @@ mutual
       {outSize : Nat} {amount : Amount}
       {inputs : List TXFieldWithId}
       {outputTX : VectorOutput time outSize amount}
-      {totalFees : Nat} {qtTransactions : tQtTxs}
+      {totalFees : Amount} {qtTransactions : tQtTxs}
       (tree : TXTree time block inputs totalFees qtTransactions)
       (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
       (tx : TX {time} {block} {inputs} {outSize} tree outputTX)
+      (pCoinBaseFee : coinbase≡TotalFee+Reward totalFees tx)
       → TXTree (sucTime time) (nextBlock tx) (inputsTX tx ++ VectorOutput→List outputTX)
         (incFees tx) (incQtTx tx proofLessQtTX)
 
@@ -76,15 +80,30 @@ mutual
 
   incFees : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
-    {totalFees : Nat} {qtTransactions : tQtTxs}
+    {totalFees : Amount} {qtTransactions : tQtTxs}
     {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
     → Amount
-  incFees {_} {_} {_} {_} {totalFees} (normalTX tr SubInputs outputs _) =
-    txFieldList→TotalAmount (VectorOutput→List outputs)
+  incFees {_} {_} {_} {_} {amount} {totalFees} (normalTX tr SubInputs outputs _) =
+      amount
     - txFieldList→TotalAmount (sub→list SubInputs)
     + totalFees
   incFees (coinbase tr outputs) = zero
+
+  coinbase≡TotalFee+Reward :
+    {amount : Amount}
+    {block : Nat} {time : Time}
+    {inputs : List TXFieldWithId}
+    {outSize : Nat}
+    {outputs : VectorOutput time outSize amount}
+    {qtTransactions : Fin totalQt}
+    {totalFees : Amount}
+    {tr : TXTree time block inputs totalFees qtTransactions}
+    (fees : Amount)
+    (tx : TX {time} {block} {inputs} {outSize} tr outputs)
+    → Set
+  coinbase≡TotalFee+Reward fees (normalTX tr SubInputs outputs txSigned) = ⊤
+  coinbase≡TotalFee+Reward {amount} fees (coinbase tr outputs) = amount ≡ fees + blockReward
 
 dec< : (m n : Nat) → Dec $ IsTrue $ lessNat m n
 dec< zero zero = no (λ ())
@@ -101,20 +120,29 @@ record RawTXTree : Set where
     qtTransactions : tQtTxs
     txTree         : TXTree time block outputs totalFees qtTransactions
 
+vecOut→Amount : {amount : Amount}
+  {timeOut : Time} {outSize : Nat}
+  (vecOut : VectorOutput timeOut outSize amount)
+  → Amount
+vecOut→Amount {amount} _ = amount
+
 addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
 addTransactionTree record { time = time ; block = block ; outputs = outputs ;
-  qtTransactions = qtTransactions ; txTree = txTree }
+  qtTransactions = qtTransactions ; totalFees = totalFees ; txTree = txTree }
   (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
 ... | nothing     = nothing
 ... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
   with dec< (finToNat qtTransactions) totalQtSub1
 ...   | no _  = nothing
 ...   | yes pLess
+  with vecOut→Amount vecOut == totalFees + blockReward
+...     | no _ = nothing
+...     | yes eqBlockReward
   with time == timeOut
 ...     | no _     = nothing
 ...     | yes refl = just $
   record { time = sucTime time ; block = suc block ;
-  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree pLess tx }
+  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree pLess tx eqBlockReward }
   where
     tx : TX txTree vecOut
     tx = coinbase txTree vecOut
@@ -132,7 +160,7 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ;
 ...     | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
   just $ record { time = sucTime time ; block = block ;
   outputs = list-sub sub ++ VectorOutput→List outs ;
-  txTree = txtree txTree pLess (normalTX txTree sub outs signed) }
+  txTree = txtree txTree pLess (normalTX txTree sub outs signed) unit }
 
 addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
 addMaybeTransTree nothing tx = nothing
