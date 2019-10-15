@@ -28,7 +28,8 @@ mutual
       (tree : TXTree time block inputs totalFees qtTransactions)
       (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
       (tx : TX {time} {block} {inputs} {outSize} tree outputTX)
-      → TXTree (sucTime time) (nextBlock tx) (inputsTX tx ++ VectorOutput→List outputTX) (incFees tx) (incQtTx tx proofLessQtTX)
+      → TXTree (sucTime time) (nextBlock tx) (inputsTX tx ++ VectorOutput→List outputTX)
+        (incFees tx) (incQtTx tx proofLessQtTX)
 
   data TX {time : Time} {block : Nat} {inputs : List TXFieldWithId} {outSize : Nat}
        {totalFees : Nat} {qtTransactions : tQtTxs}
@@ -79,40 +80,41 @@ mutual
   incFees (coinbase tr outputs) = zero
 
 
--- record RawTXTree : Set where
---   field
---     time    : Time
---     block   : Nat
---     outputs : List TXFieldWithId
---     totalFees : Nat
---     qtTransactions : tQtTxs
---     txTree  : TXTree time block outputs totalFees qtTransactions
+record RawTXTree : Set where
+  field
+    time    : Time
+    block   : Nat
+    outputs : List TXFieldWithId
+    totalFees : Nat
+    qtTransactions : tQtTxs
+    txTree  : TXTree time block outputs totalFees qtTransactions
 
--- addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
--- addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
---   (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
--- ... | nothing     = nothing
--- ... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
---   with time == timeOut
--- ...   | no _     = nothing
--- ...   | yes refl = just $
---   record { time = sucTime time ; block = suc block ;
---   outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree tx }
---   where
---     tx : TX txTree vecOut
---     tx = coinbase txTree vecOut
+addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
+addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
+  (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
+... | nothing     = nothing
+... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
+  with time == timeOut
+...   | no _     = nothing
+...   | yes refl = just $
+  record { time = sucTime time ; block = suc block ;
+  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree {!!} tx }
+  where
+    tx : TX txTree vecOut
+    tx = coinbase txTree vecOut
 
--- addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
---   (normalTX record { inputs = inputsTX ; outputs = outputsTX })
---   with raw→TXSigned time record { inputs = inputsTX ; outputs = outputsTX }
--- ... | nothing    = nothing
--- ... | just txSig with rawTXSigned→TXSigAll time outputs txSig
--- ...   | nothing    = nothing
--- ...   | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
---   just $ record { time = sucTime time ; block = block ;
---   outputs = list-sub sub ++ VectorOutput→List outs ;
---   txTree = txtree txTree (normalTX txTree sub outs signed) }
+addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
+  (normalTX record { inputs = inputsTX ; outputs = outputsTX })
+  with raw→TXSigned time record { inputs = inputsTX ; outputs = outputsTX }
+... | nothing    = nothing
+... | just txSig with rawTXSigned→TXSigAll time outputs txSig
+...   | nothing    = nothing
+...   | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
+  just $ record { time = sucTime time ; block = block ;
+  outputs = list-sub sub ++ VectorOutput→List outs ;
+  txTree = txtree txTree {!!} (normalTX txTree sub outs signed) }
 
--- addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
--- addMaybeTransTree nothing tx = nothing
+addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
+addMaybeTransTree nothing tx = nothing
+addMaybeTransTree (just tree) tx = addTransactionTree tree tx
 \end{code}
