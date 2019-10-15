@@ -79,6 +79,11 @@ mutual
     + totalFees
   incFees (coinbase tr outputs) = zero
 
+dec< : (m n : Nat) → Dec $ IsTrue $ lessNat m n
+dec< zero zero = no (λ ())
+dec< zero (suc n) = yes true
+dec< (suc m) zero = no (λ ())
+dec< (suc m) (suc n) = dec< m n
 
 record RawTXTree : Set where
   field
@@ -90,29 +95,37 @@ record RawTXTree : Set where
     txTree  : TXTree time block outputs totalFees qtTransactions
 
 addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
-addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
+addTransactionTree record { time = time ; block = block ; outputs = outputs ;
+  qtTransactions = qtTransactions ; txTree = txTree }
   (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
 ... | nothing     = nothing
 ... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
+  with dec< (finToNat qtTransactions) totalQtSub1
+...   | no _  = nothing
+...   | yes pLess
   with time == timeOut
-...   | no _     = nothing
-...   | yes refl = just $
+...     | no _     = nothing
+...     | yes refl = just $
   record { time = sucTime time ; block = suc block ;
-  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree {!!} tx }
+  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree pLess tx }
   where
     tx : TX txTree vecOut
     tx = coinbase txTree vecOut
 
-addTransactionTree record { time = time ; block = block ; outputs = outputs ; txTree = txTree }
+addTransactionTree record { time = time ; block = block ; outputs = outputs ;
+  qtTransactions = qtTransactions ; txTree = txTree }
   (normalTX record { inputs = inputsTX ; outputs = outputsTX })
+  with dec< (finToNat qtTransactions) totalQtSub1
+... | no _ = nothing
+... | yes pLess
   with raw→TXSigned time record { inputs = inputsTX ; outputs = outputsTX }
-... | nothing    = nothing
-... | just txSig with rawTXSigned→TXSigAll time outputs txSig
 ...   | nothing    = nothing
-...   | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
+...   | just txSig with rawTXSigned→TXSigAll time outputs txSig
+...     | nothing    = nothing
+...     | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
   just $ record { time = sucTime time ; block = block ;
   outputs = list-sub sub ++ VectorOutput→List outs ;
-  txTree = txtree txTree {!!} (normalTX txTree sub outs signed) }
+  txTree = txtree txTree pLess (normalTX txTree sub outs signed) }
 
 addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
 addMaybeTransTree nothing tx = nothing
