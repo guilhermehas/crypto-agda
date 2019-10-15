@@ -18,12 +18,13 @@ tQtTxs = Fin $ totalQt
 
 mutual
   data TXTree : (time : Time) (block : Nat)
-    (outputs : List TXFieldWithId) (totalFees : Nat) (qtTransactions : tQtTxs) → Set where
+    (outputs : List TXFieldWithId) (totalFees : Amount) (qtTransactions : tQtTxs) → Set where
     genesisTree : TXTree (nat zero) zero [] zero zero
     txtree      :
-      {block : Nat} {time : Time} {outSize : Nat}
+      {block : Nat} {time : Time}
+      {outSize : Nat} {amount : Amount}
       {inputs : List TXFieldWithId}
-      {outputTX : VectorOutput time outSize}
+      {outputTX : VectorOutput time outSize amount}
       {totalFees : Nat} {qtTransactions : tQtTxs}
       (tree : TXTree time block inputs totalFees qtTransactions)
       (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
@@ -31,48 +32,54 @@ mutual
       → TXTree (sucTime time) (nextBlock tx) (inputsTX tx ++ VectorOutput→List outputTX)
         (incFees tx) (incQtTx tx proofLessQtTX)
 
-  data TX {time : Time} {block : Nat} {inputs : List TXFieldWithId} {outSize : Nat}
+  data TX {time : Time} {block : Nat} {inputs : List TXFieldWithId}
+       {outSize : Nat} {outAmount : Amount}
        {totalFees : Nat} {qtTransactions : tQtTxs}
-    : (tr : TXTree time block inputs totalFees qtTransactions) (outputs : VectorOutput time outSize) → Set where
+    : (tr : TXTree time block inputs totalFees qtTransactions)
+      (outputs : VectorOutput time outSize outAmount) → Set where
     normalTX :
       (tr : TXTree time block inputs totalFees qtTransactions)
       (SubInputs : SubList inputs)
-      (outputs : VectorOutput time outSize)
+      (outputs : VectorOutput time outSize outAmount)
       (txSigned : TXSigned (sub→list SubInputs) (VectorOutput→List outputs))
       → TX tr outputs
     coinbase :
       (tr : TXTree time block inputs totalFees qtTransactions)
-      (outputs : VectorOutput time outSize)
+      (outputs : VectorOutput time outSize outAmount)
       → TX tr outputs
 
-  nextBlock : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId} {outSize : Nat}
+  nextBlock : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+    {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize}
+    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
     → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → Nat
   nextBlock {block} (normalTX _ _ _ _) = block
   nextBlock {block} (coinbase _ _)     = suc block
 
-  inputsTX : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId} {outSize : Nat}
+  inputsTX : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+    {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize}
+    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
     → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → List TXFieldWithId
   inputsTX (normalTX _ SubInputs _ _) = list-sub SubInputs
   inputsTX {_} {_} {inputs} (coinbase _ _) = inputs
 
-  incQtTx : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId} {outSize : Nat}
+  incQtTx : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+    {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize}
+    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
     (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
     → tQtTxs
-  incQtTx {_} {_} {_} {_} {_} {qt} (normalTX _ _ _ _) pLess = natToFin (suc (finToNat qt)) {{pLess}}
+  incQtTx {_} {_} {_} {_} {_} {_} {qt} (normalTX _ _ _ _) pLess = natToFin (suc (finToNat qt)) {{pLess}}
   incQtTx (coinbase _ _)  _   = zero
 
-  incFees : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId} {outSize : Nat}
+  incFees : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+    {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize}
+    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
-    → Nat
+    → Amount
   incFees {_} {_} {_} {_} {totalFees} (normalTX tr SubInputs outputs _) =
     txFieldList→TotalAmount (VectorOutput→List outputs)
     - txFieldList→TotalAmount (sub→list SubInputs)
@@ -87,12 +94,12 @@ dec< (suc m) (suc n) = dec< m n
 
 record RawTXTree : Set where
   field
-    time    : Time
-    block   : Nat
-    outputs : List TXFieldWithId
-    totalFees : Nat
+    time           : Time
+    block          : Nat
+    outputs        : List TXFieldWithId
+    totalFees      : Amount
     qtTransactions : tQtTxs
-    txTree  : TXTree time block outputs totalFees qtTransactions
+    txTree         : TXTree time block outputs totalFees qtTransactions
 
 addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
 addTransactionTree record { time = time ; block = block ; outputs = outputs ;
