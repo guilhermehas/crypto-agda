@@ -56,13 +56,17 @@ incrementList order (el tx) =  TXFieldWithId.position tx ≡ order
 incrementList order (tx ∷ txs) =  TXFieldWithId.position tx ≡ order × incrementList (suc order) txs
 
 data VectorOutput : (time : Time) (size : Nat) (amount : Amount) → Set where
-  el : ∀ {time : Time} → (tx : TXFieldWithId) → (sameId : TXFieldWithId.time tx ≡ time)
-    → (elStart : TXFieldWithId.position tx ≡ zero) → VectorOutput time 1 (TXFieldWithId.amount tx)
+  el : ∀ {time : Time}
+    (tx : TXFieldWithId)
+    (sameId : TXFieldWithId.time tx ≡ time)
+    (elStart : TXFieldWithId.position tx ≡ zero)
+    → VectorOutput time 1 (TXFieldWithId.amount tx)
+
   cons : ∀ {time : Time} {size : Nat} {amount : Amount}
     (listOutput : VectorOutput time size amount)
     (tx : TXFieldWithId)
     (sameId : TXFieldWithId.time tx ≡ time)
-    (elStart : TXFieldWithId.position tx ≡ (suc size))
+    (elStart : TXFieldWithId.position tx ≡ size)
     → VectorOutput time (suc size) (TXFieldWithId.amount tx + amount)
 
 vecOutTime : ∀ {time : Time} {size : Nat} {amount : Amount}
@@ -95,23 +99,23 @@ vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
     ineqAux : {a b : Nat} → _<_ {lzero} {Nat} (suc a) (suc b) → a < suc b
     ineqAux {a} (diff! k) = diff (suc k) (cong suc (add-suc-r k a))
 
+    absurdEq : {a b : Nat} → ¬ (a ≡ suc (b + a))
+    absurdEq {zero} ()
+    absurdEq {suc a} {b} eq = absurdEq let neq = removeSuc≡ eq in trans neq (add-suc-r b a)
+
+    ineq≢eq : {a b : Nat} → (a ≡ b) → (a < b) → ⊥
+    ineq≢eq eq (diff! k) = absurdEq eq
+
     isDistSizeBelow : {amount : Amount}
       (lenVecOut : Nat)
       (lessThan : lenVecOut < suc size)
       (vOut : VectorOutput time lenVecOut amount)
       → isDistinct tx (VectorOutput→List vOut)
     isDistSizeBelow _ lessThan (el txOut sameId elStart2) =
-      (λ { refl → zero≢sucSize (trans (sym elStart2) elStart)}) , unit
+      (λ { refl → ineq≢eq (trans (sym elStart2) elStart) (removeSuc< lessThan) }) , unit
     isDistSizeBelow (suc sizeVec) lessThan (cons vOut txOut sameId elStart2) =
-      (λ { refl → ineq≢eq (removeSuc≡ (trans (sym elStart2) elStart)) (removeSuc< lessThan)}) ,
+      (λ { refl → ineq≢eq (trans (sym elStart2) elStart) (removeSuc< lessThan)}) ,
       isDistSizeBelow sizeVec (ineqAux lessThan) vOut
-      where
-        absurdEq : {a b : Nat} → ¬ (a ≡ suc (b + a))
-        absurdEq {zero} ()
-        absurdEq {suc a} {b} eq = absurdEq let neq = removeSuc≡ eq in trans neq (add-suc-r b a)
-
-        ineq≢eq : {a b : Nat} → (a ≡ b) → (a < b) → ⊥
-        ineq≢eq eq (diff! k) = absurdEq eq
 
 
 addOutput : ∀ {time : Time} {size : Nat} {amountOut : Amount}
