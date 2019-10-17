@@ -5,10 +5,13 @@ open import Prelude
 open import Prelude.Nat.Properties
 open import Utils
 open import Cripto
+\end{code}
 
+%<*TXField>
+\begin{code}
 record TXField : Set where
   field
-    amount : Amount
+    amount  : Amount
     address : Address
 
 record TXFieldWithId : Set where
@@ -17,7 +20,10 @@ record TXFieldWithId : Set where
       position : Nat
       amount   : Amount
       address  : Address
+\end{code}
+%</TXField>
 
+\begin{code}
 private
   _≡txFieldWithId_ : (tx1 tx2 : TXFieldWithId) → Dec $ tx1 ≡ tx2
   record { time = time1 ; position = position1 ; amount = amount1 ; address = address1 }
@@ -54,23 +60,40 @@ sameIdList time (tx ∷ txs) = TXFieldWithId.time tx ≡ time × sameIdList time
 incrementList : (order : Nat) → (txs : NonEmptyList TXFieldWithId) → Set
 incrementList order (el tx) =  TXFieldWithId.position tx ≡ order
 incrementList order (tx ∷ txs) =  TXFieldWithId.position tx ≡ order × incrementList (suc order) txs
+\end{code}
 
-data VectorOutput : (time : Time) (size : Nat) → Set where
-  el : ∀ {time : Time} → (tx : TXFieldWithId) → (sameId : TXFieldWithId.time tx ≡ time)
-    → (elStart : TXFieldWithId.position tx ≡ zero) → VectorOutput time 1
-  cons : ∀ {time : Time} {size : Nat} → (listOutput : VectorOutput time size) → (tx : TXFieldWithId)
-    → (sameId : TXFieldWithId.time tx ≡ time) → (elStart : TXFieldWithId.position tx ≡ (suc size))
-    → VectorOutput time (suc size)
+%<*VectorOutput>
+\begin{code}
+data VectorOutput : (time : Time) (size : Nat) (amount : Amount) → Set where
+  el : ∀ {time : Time}
+    (tx : TXFieldWithId)
+    (sameId : TXFieldWithId.time tx ≡ time)
+    (elStart : TXFieldWithId.position tx ≡ zero)
+    → VectorOutput time 1 (TXFieldWithId.amount tx)
 
-vecOutTime : ∀ {time : Time} {size : Nat} → (vecOut : VectorOutput time size) → Time
+  cons : ∀ {time : Time} {size : Nat} {amount : Amount}
+    (listOutput : VectorOutput time size amount)
+    (tx : TXFieldWithId)
+    (sameId : TXFieldWithId.time tx ≡ time)
+    (elStart : TXFieldWithId.position tx ≡ size)
+    → VectorOutput time (suc size) (TXFieldWithId.amount tx + amount)
+\end{code}
+%</VectorOutput>
+
+\begin{code}
+vecOutTime : ∀ {time : Time} {size : Nat} {amount : Amount}
+  (vecOut : VectorOutput time size amount)
+  → Time
 vecOutTime {time} _ = time
 
-VectorOutput→List : ∀ {time : Time} {size : Nat} → (outs : VectorOutput time size)
+VectorOutput→List : ∀ {time : Time} {size : Nat} {amount : Amount}
+  (outs : VectorOutput time size amount)
   → List TXFieldWithId
 VectorOutput→List (el tx sameId elStart) = tx ∷ []
 VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
 
-vecOutDist : {time : Time} {size : Nat} (vecOut : VectorOutput time size)
+vecOutDist : {time : Time} {size : Nat} {amount : Amount}
+  (vecOut : VectorOutput time size amount)
   → Distinct $ VectorOutput→List vecOut
 vecOutDist (el tx sameId elStart) = cons tx [] unit
 vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
@@ -88,26 +111,31 @@ vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
     ineqAux : {a b : Nat} → _<_ {lzero} {Nat} (suc a) (suc b) → a < suc b
     ineqAux {a} (diff! k) = diff (suc k) (cong suc (add-suc-r k a))
 
-    isDistSizeBelow : (lenVecOut : Nat) (lessThan : lenVecOut < suc size)
-      (vOut : VectorOutput time lenVecOut) → isDistinct tx (VectorOutput→List vOut)
-    isDistSizeBelow .1 lessThan (el txOut sameId elStart2) =
-      (λ { refl → zero≢sucSize (trans (sym elStart2) elStart)}) , unit
+    absurdEq : {a b : Nat} → ¬ (a ≡ suc (b + a))
+    absurdEq {zero} ()
+    absurdEq {suc a} {b} eq = absurdEq let neq = removeSuc≡ eq in trans neq (add-suc-r b a)
+
+    ineq≢eq : {a b : Nat} → (a ≡ b) → (a < b) → ⊥
+    ineq≢eq eq (diff! k) = absurdEq eq
+
+    isDistSizeBelow : {amount : Amount}
+      (lenVecOut : Nat)
+      (lessThan : lenVecOut < suc size)
+      (vOut : VectorOutput time lenVecOut amount)
+      → isDistinct tx (VectorOutput→List vOut)
+    isDistSizeBelow _ lessThan (el txOut sameId elStart2) =
+      (λ { refl → ineq≢eq (trans (sym elStart2) elStart) (removeSuc< lessThan) }) , unit
     isDistSizeBelow (suc sizeVec) lessThan (cons vOut txOut sameId elStart2) =
-      (λ { refl → ineq≢eq (removeSuc≡ (trans (sym elStart2) elStart)) (removeSuc< lessThan)}) ,
+      (λ { refl → ineq≢eq (trans (sym elStart2) elStart) (removeSuc< lessThan)}) ,
       isDistSizeBelow sizeVec (ineqAux lessThan) vOut
-      where
-        absurdEq : {a b : Nat} → ¬ (a ≡ suc (b + a))
-        absurdEq {zero} ()
-        absurdEq {suc a} {b} eq = absurdEq let neq = removeSuc≡ eq in trans neq (add-suc-r b a)
-
-        ineq≢eq : {a b : Nat} → (a ≡ b) → (a < b) → ⊥
-        ineq≢eq eq (diff! k) = absurdEq eq
 
 
-addOutput : ∀ {time : Time} {size : Nat}
-  → (listOutput : VectorOutput time size) → (tx : TXField) → VectorOutput time (suc size)
-addOutput {time} {size} listOutput txOut = cons listOutput
-  (record { time = time ; position = suc size ; amount = amount ; address = address })
+addOutput : ∀ {time : Time} {size : Nat} {amountOut : Amount}
+  (listOutput : VectorOutput time size amountOut)
+  (tx : TXField)
+  → VectorOutput time (suc size) (TXField.amount tx + amountOut)
+addOutput {time} {size} {amountOut} listOutput txOut = cons listOutput
+  (record { time = time ; position = size ; amount = amount ; address = address })
   refl refl
   where open TXField txOut
 
@@ -135,16 +163,33 @@ txEls→Msg input (output ∷ outputs) _ = txInput→Msg input (map removeId (ou
 txFieldList→TotalAmount : (txs : List TXFieldWithId) → Amount
 txFieldList→TotalAmount txs = sum $ map amount txs
   where open TXFieldWithId
+\end{code}
 
-record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : Set where
+%<*TXSigned>
+\begin{code}
+record TXSigned
+  {time      : Time}
+  {outSize   : Nat}
+  {outAmount : Amount}
+  (inputs    : List TXFieldWithId)
+  (outputs   : VectorOutput time outSize outAmount) : Set where
   field
-    nonEmpty : NonNil inputs × NonNil outputs
+    nonEmpty : NonNil inputs × NonNil (VectorOutput→List outputs)
     signed   : All
-      (λ input → SignedWithSigPbk (txEls→Msg input outputs nonEmpty) (TXFieldWithId.address input))
-       inputs
-    in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
+      (λ input →
+      SignedWithSigPbk (txEls→Msg input (VectorOutput→List outputs) nonEmpty)
+                       (TXFieldWithId.address input))
+                       inputs
+    in≥out : txFieldList→TotalAmount inputs ≥n outAmount
+\end{code}
+%</TXSigned>
 
-txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId}
+\begin{code}
+txSigInput : ∀ {inputs : List TXFieldWithId}
+  {time      : Time}
+  {outSize   : Nat}
+  {outAmount : Amount}
+  {outputs   : VectorOutput time outSize outAmount}
   (tx : TXSigned inputs outputs) → List TXFieldWithId
 txSigInput {inputs} _ = inputs
 \end{code}

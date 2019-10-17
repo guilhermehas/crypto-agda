@@ -35,14 +35,18 @@ data Hashed : Set where
 
 data Msg : Set where
   nat : (n : Nat) → Msg
-  _+msg_ : (m : Msg) (n : Msg) → Msg
+  _+msg_ : (m n : Msg) → Msg
 
 infixr 5 _+msg_
+\end{code}
 
+%<*criptoPostulates>
+\begin{code}
 postulate _priv≡pub_ : PrivateKey → PublicKey → Set
 postulate publicKey2Address : PublicKey → Address
 postulate Signed : Msg → PublicKey → Signature → Set
-postulate Signed? : (msg : Msg) → (pk : PublicKey) → (sig : Signature) → Dec $ Signed msg pk sig
+postulate Signed? : (msg : Msg) (pk : PublicKey) (sig : Signature)
+           → Dec $ Signed msg pk sig
 postulate hashMsg : Msg → Hashed
 postulate hash-inj : ∀ m n → hashMsg m ≡ hashMsg n → m ≡ n
 
@@ -53,7 +57,10 @@ record SignedWithSigPbk (msg : Msg)(address : Address) : Set where
     signature   :  Signature
     signed      :  Signed msg publicKey signature
 
+\end{code}
+%</criptoPostulates>
 
+\begin{code}
 private
   _≡?addr_ : ∀ (a b : Address) → Dec $ a ≡ b
   nat zero ≡?addr nat zero = yes refl

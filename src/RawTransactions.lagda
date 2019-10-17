@@ -114,7 +114,8 @@ record RawVecOutput (outputs : List TXFieldWithId) : Set where
   field
     time    : Time
     outSize : Nat
-    vecOut  : VectorOutput time outSize
+    amount  : Amount
+    vecOut  : VectorOutput time outSize amount
     proof   : VectorOutput→List vecOut ≡ outputs
 
 
@@ -130,11 +131,13 @@ listTXField→VecOut [] = nothing
 listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
 ... | just vouts = addElementRawVec tx txs vouts
   where
-    addElementInVectorOut : {time : Time} {outSize : Nat} (tx : TXFieldWithId)
-      (vecOut : VectorOutput time outSize) → Maybe $ VectorOutput time $ suc outSize
+    addElementInVectorOut : {time : Time} {outSize : Nat} {amount : Amount}
+      (tx : TXFieldWithId)
+      (vecOut : VectorOutput time outSize amount)
+      → Maybe $ VectorOutput time (suc outSize) (TXFieldWithId.amount tx + amount)
     addElementInVectorOut {time} {outSize} tx vecOut with TXFieldWithId.time tx == time
     ... | no  ¬p   = nothing
-    ... | yes refl with TXFieldWithId.position tx == suc outSize
+    ... | yes refl with TXFieldWithId.position tx == outSize
     ...   | no    ¬p = nothing
     ...   | yes refl = just $ cons vecOut tx refl refl
 
@@ -145,7 +148,7 @@ listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
     ... | nothing  = nothing
     ... | just vec with TXFieldWithId.time tx == time
     ...   | no _     = nothing
-    ...   | yes refl with TXFieldWithId.position tx == suc outSize
+    ...   | yes refl with TXFieldWithId.position tx == outSize
     ...     | no _     = nothing
     ...     | yes refl = just $ record { time = time ; outSize = suc outSize
       ; vecOut = cons vecOut tx refl refl ; proof = cong (_∷_ tx) proof }
@@ -158,7 +161,8 @@ record TXSigAll (time : Time) (allInputs : List TXFieldWithId) : Set where
     inputs   : List TXFieldWithId
     outSize  : Nat
     sub      : SubList allInputs
-    outputs  : VectorOutput time outSize
+    amount   : Amount
+    outputs  : VectorOutput time outSize amount
     signed   : TXSigned (sub→list sub) (VectorOutput→List outputs)
 
 rawTXSigned→TXSigAll : (time : Time) (allInputs : List TXFieldWithId)

@@ -2,7 +2,6 @@
 module Utils where
 
 open import Prelude
-open import Data.Unit using (⊤; tt)
 
 data TypeEl {A : Set} : A → Set where
   el : (element : A) → TypeEl element
