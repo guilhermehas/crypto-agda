@@ -11,7 +11,7 @@ record RawTXSigned : Set where
   field
     inputs   : List TXFieldWithId
     outputs  : List TXFieldWithId
-    txSig    : TXSigned inputs outputs
+    txSig    : TXSignedRawOutput inputs outputs
 
 record RawInput : Set where
   field
@@ -163,7 +163,20 @@ record TXSigAll (time : Time) (allInputs : List TXFieldWithId) : Set where
     sub      : SubList allInputs
     amount   : Amount
     outputs  : VectorOutput time outSize amount
-    signed   : TXSigned (sub→list sub) (VectorOutput→List outputs)
+    signed   : TXSigned (sub→list sub) outputs
+
+TXRaw→TXSig : {inputs : List TXFieldWithId}
+  {outputs : List TXFieldWithId}
+  {time      : Time}
+  {outSize   : Nat}
+  {outAmount : Amount}
+  (vecOut    : VectorOutput time outSize outAmount)
+  (out≡vec   : VectorOutput→List vecOut ≡ outputs)
+  (txSig     : TXSignedRawOutput inputs outputs)
+  → TXSigned inputs vecOut
+TXRaw→TXSig vecOut out≡vec
+  record { nonEmpty = nonEmpty ; signed = signed ; in≥out = in≥out } =
+  record { nonEmpty = {!!} ; signed = {!!} ; in≥out = {!!} }
 
 rawTXSigned→TXSigAll : (time : Time) (allInputs : List TXFieldWithId)
   (rawTXSigned : RawTXSigned) → Maybe $ TXSigAll time allInputs
@@ -176,11 +189,12 @@ rawTXSigned→TXSigAll time allInputs record { outputs = outputs ; txSig = txSig
 ...   | just record { sub = sub ; proof = proofSub } with vecOutTime vecOut == time
 ...     | no  _    = nothing
 ...     | yes refl   = just $ record
-  { inputs = txSigInput txSig ; outSize = outSize ; sub = sub ; outputs = vecOut ; signed = txSigRes }
+  { inputs = txSigInput txSig ; outSize = outSize ; sub = sub ; outputs = vecOut ;
+  signed = txSigRes }
     where
-      txSigRes : TXSigned (sub→list sub) (VectorOutput→List vecOut)
+      txSigRes : TXSigned (sub→list sub) vecOut
       txSigRes rewrite proofSub = txAux
         where
-          txAux : TXSigned (txSigInput txSig) (VectorOutput→List vecOut)
-          txAux rewrite proofVecOut = txSig
+          txAux : TXSigned (txSigInput txSig) vecOut
+          txAux rewrite proofVecOut = TXRaw→TXSig vecOut proofVecOut txSig
 \end{code}

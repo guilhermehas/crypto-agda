@@ -150,15 +150,25 @@ txInput→Msg : (input : TXFieldWithId) → (outputs : List TXField)
   → NonNil outputs → Msg
 txInput→Msg input [] ()
 txInput→Msg input (output ∷ outputs) _ with NonNil? outputs
-... | yes nonNil =  TXId→Msg input +msg TX→Msg output +msg txInput→Msg input outputs nonNil
-... | no nil = TXId→Msg input +msg TX→Msg output
-
+... | yes nonNil = TX→Msg output +msg txInput→Msg input outputs nonNil
+... | no nil =  TX→Msg output +msg TXId→Msg input
 
 txEls→Msg : ∀ {inputs : List TXFieldWithId}
   → (input : TXFieldWithId) → (outputs : List TXFieldWithId)
   → NonNil inputs × NonNil outputs → Msg
 txEls→Msg input [] (_ , ())
 txEls→Msg input (output ∷ outputs) _ = txInput→Msg input (map removeId (output ∷ outputs)) unit
+
+txEls→MsgVecOut :
+  {time      : Time}
+  {outSize   : Nat}
+  {outAmount : Amount}
+  (input     : TXFieldWithId)
+  (outputs   : VectorOutput time outSize outAmount)
+   → Msg
+txEls→MsgVecOut input (el tx sameId elStart) = TX→Msg (removeId tx) +msg TXId→Msg input
+txEls→MsgVecOut input (cons outputs tx sameId elStart) =
+  TX→Msg (removeId tx) +msg txEls→MsgVecOut input outputs
 
 txFieldList→TotalAmount : (txs : List TXFieldWithId) → Amount
 txFieldList→TotalAmount txs = sum $ map amount txs
@@ -174,10 +184,10 @@ record TXSigned
   (inputs    : List TXFieldWithId)
   (outputs   : VectorOutput time outSize outAmount) : Set where
   field
-    nonEmpty : NonNil inputs × NonNil (VectorOutput→List outputs)
+    nonEmpty : NonNil inputs
     signed   : All
       (λ input →
-      SignedWithSigPbk (txEls→Msg input (VectorOutput→List outputs) nonEmpty)
+      SignedWithSigPbk (txEls→MsgVecOut input outputs)
                        (TXFieldWithId.address input))
                        inputs
     in≥out : txFieldList→TotalAmount inputs ≥n outAmount
@@ -185,11 +195,22 @@ record TXSigned
 %</TXSigned>
 
 \begin{code}
-txSigInput : ∀ {inputs : List TXFieldWithId}
-  {time      : Time}
-  {outSize   : Nat}
-  {outAmount : Amount}
-  {outputs   : VectorOutput time outSize outAmount}
-  (tx : TXSigned inputs outputs) → List TXFieldWithId
+
+record TXSignedRawOutput
+  (inputs : List TXFieldWithId)
+  (outputs : List TXFieldWithId) : Set where
+  field
+    nonEmpty : NonNil inputs × NonNil outputs
+    signed   : All
+      (λ input →
+      SignedWithSigPbk (txEls→Msg input outputs nonEmpty)
+                       (TXFieldWithId.address input))
+                       inputs
+    in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
+
+txSigInput : {inputs : List TXFieldWithId}
+  {outputs : List TXFieldWithId}
+  (tx : TXSignedRawOutput inputs outputs)
+  → List TXFieldWithId
 txSigInput {inputs} _ = inputs
 \end{code}
