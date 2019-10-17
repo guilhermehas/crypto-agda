@@ -123,7 +123,7 @@ addOutput : ∀ {time : Time} {size : Nat} {amountOut : Amount}
   (tx : TXField)
   → VectorOutput time (suc size) (TXField.amount tx + amountOut)
 addOutput {time} {size} {amountOut} listOutput txOut = cons listOutput
-  (record { time = time ; position = suc size ; amount = amount ; address = address })
+  (record { time = time ; position = size ; amount = amount ; address = address })
   refl refl
   where open TXField txOut
 
