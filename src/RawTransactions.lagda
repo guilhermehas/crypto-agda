@@ -137,7 +137,7 @@ listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
       → Maybe $ VectorOutput time (suc outSize) (TXFieldWithId.amount tx + amount)
     addElementInVectorOut {time} {outSize} tx vecOut with TXFieldWithId.time tx == time
     ... | no  ¬p   = nothing
-    ... | yes refl with TXFieldWithId.position tx == suc outSize
+    ... | yes refl with TXFieldWithId.position tx == outSize
     ...   | no    ¬p = nothing
     ...   | yes refl = just $ cons vecOut tx refl refl
 
@@ -148,7 +148,7 @@ listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
     ... | nothing  = nothing
     ... | just vec with TXFieldWithId.time tx == time
     ...   | no _     = nothing
-    ...   | yes refl with TXFieldWithId.position tx == suc outSize
+    ...   | yes refl with TXFieldWithId.position tx == outSize
     ...     | no _     = nothing
     ...     | yes refl = just $ record { time = time ; outSize = suc outSize
       ; vecOut = cons vecOut tx refl refl ; proof = cong (_∷_ tx) proof }
