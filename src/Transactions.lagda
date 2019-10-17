@@ -167,20 +167,29 @@ txFieldList→TotalAmount txs = sum $ map amount txs
 
 %<*TXSigned>
 \begin{code}
-record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : Set where
+record TXSigned
+  {time      : Time}
+  {outSize   : Nat}
+  {outAmount : Amount}
+  (inputs    : List TXFieldWithId)
+  (outputs   : VectorOutput time outSize outAmount) : Set where
   field
-    nonEmpty : NonNil inputs × NonNil outputs
+    nonEmpty : NonNil inputs × NonNil (VectorOutput→List outputs)
     signed   : All
       (λ input →
-      SignedWithSigPbk (txEls→Msg input outputs nonEmpty)
+      SignedWithSigPbk (txEls→Msg input (VectorOutput→List outputs) nonEmpty)
                        (TXFieldWithId.address input))
                        inputs
-    in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
+    in≥out : txFieldList→TotalAmount inputs ≥n outAmount
 \end{code}
 %</TXSigned>
 
 \begin{code}
-txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId}
+txSigInput : ∀ {inputs : List TXFieldWithId}
+  {time      : Time}
+  {outSize   : Nat}
+  {outAmount : Amount}
+  {outputs   : VectorOutput time outSize outAmount}
   (tx : TXSigned inputs outputs) → List TXFieldWithId
 txSigInput {inputs} _ = inputs
 \end{code}
