@@ -305,6 +305,32 @@ because each user has more privacy.
 
 \section{Methods}
 
+\subsection{Cripto Functions}
+The first thing that we define are the cripto functions that will be needed to make the cripto currency.
+Message can be defined in multiple ways, one array of bytes, one string or a natural number.
+Message in this context means some data.
+
+Private key is a number, a secret that someone has.
+In Bitcoin, the private key is a 256-bit number.
+Private key is used to signed messages.
+
+Public key is generated from private key.
+But getting private key from public key is impossible.
+To verify who signed a message with a private key, he has to show the public key.
+
+Hash is an injection function (the probability of collision is very low).
+The function is used from a big domain to a small domain.
+For example, a hash of big file (some GBs) is an integer of just some bytes.
+It is very usefull to prove for example that 2 files are equal.
+If the hash of two files are equal, so the files are equal.
+It is used in torrents clients, so it is safe to download a program to untrusted peers,
+just have to verify if the hash of the file is equal to the hash of the file wanted.
+
+These functions can be defined, but it is not the purpose of this theses.
+So they will be just postulates.
+
+\ExecuteMetaData[latex/Cripto.tex]{criptoPostulates}
+
 \section{Conclusion}
 
 \newpage
