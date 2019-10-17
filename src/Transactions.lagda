@@ -5,10 +5,13 @@ open import Prelude
 open import Prelude.Nat.Properties
 open import Utils
 open import Cripto
+\end{code}
 
+%<*TXField>
+\begin{code}
 record TXField : Set where
   field
-    amount : Amount
+    amount  : Amount
     address : Address
 
 record TXFieldWithId : Set where
@@ -17,7 +20,10 @@ record TXFieldWithId : Set where
       position : Nat
       amount   : Amount
       address  : Address
+\end{code}
+%</TXField>
 
+\begin{code}
 private
   _≡txFieldWithId_ : (tx1 tx2 : TXFieldWithId) → Dec $ tx1 ≡ tx2
   record { time = time1 ; position = position1 ; amount = amount1 ; address = address1 }
@@ -54,7 +60,10 @@ sameIdList time (tx ∷ txs) = TXFieldWithId.time tx ≡ time × sameIdList time
 incrementList : (order : Nat) → (txs : NonEmptyList TXFieldWithId) → Set
 incrementList order (el tx) =  TXFieldWithId.position tx ≡ order
 incrementList order (tx ∷ txs) =  TXFieldWithId.position tx ≡ order × incrementList (suc order) txs
+\end{code}
 
+%<*VectorOutput>
+\begin{code}
 data VectorOutput : (time : Time) (size : Nat) (amount : Amount) → Set where
   el : ∀ {time : Time}
     (tx : TXFieldWithId)
@@ -68,7 +77,10 @@ data VectorOutput : (time : Time) (size : Nat) (amount : Amount) → Set where
     (sameId : TXFieldWithId.time tx ≡ time)
     (elStart : TXFieldWithId.position tx ≡ size)
     → VectorOutput time (suc size) (TXFieldWithId.amount tx + amount)
+\end{code}
+%</VectorOutput>
 
+\begin{code}
 vecOutTime : ∀ {time : Time} {size : Nat} {amount : Amount}
   (vecOut : VectorOutput time size amount)
   → Time

@@ -49,10 +49,7 @@ postulate Signed? : (msg : Msg) (pk : PublicKey) (sig : Signature)
            → Dec $ Signed msg pk sig
 postulate hashMsg : Msg → Hashed
 postulate hash-inj : ∀ m n → hashMsg m ≡ hashMsg n → m ≡ n
-\end{code}
-%</criptoPostulates>
 
-\begin{code}
 record SignedWithSigPbk (msg : Msg)(address : Address) : Set where
   field
     publicKey   :  PublicKey
@@ -60,7 +57,10 @@ record SignedWithSigPbk (msg : Msg)(address : Address) : Set where
     signature   :  Signature
     signed      :  Signed msg publicKey signature
 
+\end{code}
+%</criptoPostulates>
 
+\begin{code}
 private
   _≡?addr_ : ∀ (a b : Address) → Dec $ a ≡ b
   nat zero ≡?addr nat zero = yes refl

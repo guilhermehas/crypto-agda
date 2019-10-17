@@ -6,7 +6,8 @@ pdf:
 	cp -r libraries/agda-prelude/src/* build
 	cd ./build && pwd && ls \
 	&& agda --no-default-libraries --latex agdaExamples.lagda \
-	&& agda --no-default-libraries --latex Cripto.lagda
+	&& agda --no-default-libraries --latex Cripto.lagda \
+	&& agda --no-default-libraries --latex Transactions.lagda
 
 install:
 	mkdir -p $(out)/tex

@@ -331,6 +331,25 @@ So they will be just postulates.
 
 \ExecuteMetaData[latex/Cripto.tex]{criptoPostulates}
 
+\subsection{Transactions}
+
+In Bitcoin, there are some transactions.
+In each transactions, there are multiple inputs and outputs.
+Each input is named TXFieldWithId.
+The input of one transaction is the ouput of another transaction.
+Firsts outputs are generated from coinbase transaction (there is just one of this transaction at each block).
+Coinbase transactions are the miner reward.
+
+\ExecuteMetaData[latex/Transactions.tex]{VectorOutput}
+
+Vector output is the vector of outputs transactions.
+It is a non empty vector.
+In its representation, it is possible to know in what time it was created (time is the position of they in all transactions),
+what is his size (quantity of outputs fields)
+and the total amount spend in this transaction,
+
+elStart is a proof
+
 \section{Conclusion}
 
 \newpage
