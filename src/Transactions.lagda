@@ -163,15 +163,23 @@ txEls→Msg input (output ∷ outputs) _ = txInput→Msg input (map removeId (ou
 txFieldList→TotalAmount : (txs : List TXFieldWithId) → Amount
 txFieldList→TotalAmount txs = sum $ map amount txs
   where open TXFieldWithId
+\end{code}
 
+%<*TXSigned>
+\begin{code}
 record TXSigned (inputs : List TXFieldWithId) (outputs : List TXFieldWithId) : Set where
   field
     nonEmpty : NonNil inputs × NonNil outputs
     signed   : All
-      (λ input → SignedWithSigPbk (txEls→Msg input outputs nonEmpty) (TXFieldWithId.address input))
-       inputs
+      (λ input →
+      SignedWithSigPbk (txEls→Msg input outputs nonEmpty)
+                       (TXFieldWithId.address input))
+                       inputs
     in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
+\end{code}
+%</TXSigned>
 
+\begin{code}
 txSigInput : ∀ {inputs : List TXFieldWithId} {outputs : List TXFieldWithId}
   (tx : TXSigned inputs outputs) → List TXFieldWithId
 txSigInput {inputs} _ = inputs

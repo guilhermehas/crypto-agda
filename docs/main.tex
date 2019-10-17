@@ -348,7 +348,16 @@ In its representation, it is possible to know in what time it was created (time 
 what is his size (quantity of outputs fields)
 and the total amount spend in this transaction,
 
-elStart is a proof
+elStart is a proof that the position of TXFieldWithId is the last one.
+It is used after to specify wich input is in the transaction.
+
+\ExecuteMetaData[latex/Transactions.tex]{TXSigned}
+
+A signed transaction is composed of a non empty list of inputs and outputs.
+For each input, there is a signature that confirms that he accepted every output in the list of outputs.
+And in the transaction, there is a proof that the total amount of money in all inputs are bigger than
+the total amount of outputs.
+The remainder will be used by the miner.
 
 \section{Conclusion}
 
