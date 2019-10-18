@@ -134,7 +134,7 @@ listTXField→VecOut (tx ∷ txs) with listTXField→VecOut txs
     addElementInVectorOut : {time : Time} {outSize : Nat} {amount : Amount}
       (tx : TXFieldWithId)
       (vecOut : VectorOutput time outSize amount)
-      → Maybe $ VectorOutput time (suc outSize) (TXFieldWithId.amount tx + amount)
+      → Maybe $ VectorOutput time (suc outSize) (amount + TXFieldWithId.amount tx)
     addElementInVectorOut {time} {outSize} tx vecOut with TXFieldWithId.time tx == time
     ... | no  ¬p   = nothing
     ... | yes refl with TXFieldWithId.position tx == outSize
@@ -174,9 +174,27 @@ TXRaw→TXSig : {inputs : List TXFieldWithId}
   (out≡vec   : VectorOutput→List vecOut ≡ outputs)
   (txSig     : TXSignedRawOutput inputs outputs)
   → TXSigned inputs vecOut
-TXRaw→TXSig vecOut out≡vec
-  record { nonEmpty = nonEmpty ; signed = signed ; in≥out = in≥out } =
-  record { nonEmpty = {!!} ; signed = {!!} ; in≥out = {!!} }
+TXRaw→TXSig {inputs} {outputs} {_} {_} {outAmount} vecOut out≡vec record { nonEmpty = (nonEmptyInp , _) ; signed = signed ; in≥out = in≥out } =
+  record { nonEmpty = nonEmptyInp ; signed = {!!} ; in≥out = in≥outProof }
+  where
+    vecOut≡ListAmount :
+      {outAmount : Amount}
+      {time      : Time}
+      {outSize   : Nat}
+      (outputs : List TXFieldWithId)
+      (vecOut    : VectorOutput time outSize outAmount)
+      (out≡vec   : VectorOutput→List vecOut ≡ outputs)
+      → outAmount ≡ txFieldList→TotalAmount outputs
+    vecOut≡ListAmount [] (el tx sameId elStart) ()
+    vecOut≡ListAmount [] (cons vecOut tx sameId elStart) ()
+    vecOut≡ListAmount (.(record { time = time ; position = position ; amount = 0 ; address = address }) ∷ .[]) (el record { time = time ; position = position ; amount = zero ; address = address } sameId elStart) refl = refl
+    vecOut≡ListAmount (.(record { time = time ; position = position ; amount = suc amount ; address = address }) ∷ .[]) (el record { time = time ; position = position ; amount = (suc amount) ; address = address } sameId elStart) refl = refl
+    vecOut≡ListAmount (.tx ∷ .(VectorOutput→List vecOut)) (cons vecOut tx sameId elStart) refl =
+      let vecProof = vecOut≡ListAmount (VectorOutput→List vecOut) vecOut refl in
+      cong (λ x → x + TXFieldWithId.amount tx) vecProof
+
+    in≥outProof : txFieldList→TotalAmount inputs ≥n outAmount
+    in≥outProof rewrite vecOut≡ListAmount outputs vecOut out≡vec = in≥out
 
 rawTXSigned→TXSigAll : (time : Time) (allInputs : List TXFieldWithId)
   (rawTXSigned : RawTXSigned) → Maybe $ TXSigAll time allInputs

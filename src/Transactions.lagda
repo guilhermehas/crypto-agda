@@ -76,7 +76,7 @@ data VectorOutput : (time : Time) (size : Nat) (amount : Amount) → Set where
     (tx : TXFieldWithId)
     (sameId : TXFieldWithId.time tx ≡ time)
     (elStart : TXFieldWithId.position tx ≡ size)
-    → VectorOutput time (suc size) (TXFieldWithId.amount tx + amount)
+    → VectorOutput time (suc size) (amount + TXFieldWithId.amount tx)
 \end{code}
 %</VectorOutput>
 
@@ -133,7 +133,7 @@ vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
 addOutput : ∀ {time : Time} {size : Nat} {amountOut : Amount}
   (listOutput : VectorOutput time size amountOut)
   (tx : TXField)
-  → VectorOutput time (suc size) (TXField.amount tx + amountOut)
+  → VectorOutput time (suc size) (amountOut + TXField.amount tx)
 addOutput {time} {size} {amountOut} listOutput txOut = cons listOutput
   (record { time = time ; position = size ; amount = amount ; address = address })
   refl refl
@@ -171,7 +171,8 @@ txEls→MsgVecOut input (cons outputs tx sameId elStart) =
   TX→Msg (removeId tx) +msg txEls→MsgVecOut input outputs
 
 txFieldList→TotalAmount : (txs : List TXFieldWithId) → Amount
-txFieldList→TotalAmount txs = sum $ map amount txs
+txFieldList→TotalAmount [] = zero
+txFieldList→TotalAmount (x ∷ txs) = txFieldList→TotalAmount txs + amount x
   where open TXFieldWithId
 \end{code}
 
