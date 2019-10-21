@@ -1,3 +1,8 @@
+\begin{code}
+open import Agda.Primitive as Prim
+open import Agda.Builtin.String
+\end{code}
+
 %<*Nat>
 \begin{code}
 data ℕ : Set where
@@ -48,11 +53,11 @@ data ⊥ : Set where
 
 <%eitherType>
 \begin{code}
-data Either (A : Set) (B : Set) : Set where
+data Either {l : Level} (A : Set l) (B : Set l) : Set l where
   left  : (l : A) → Either A B
   right : (r : B) → Either A B
 
-Either-elim : {A B : Set} {motive : (eab : Either A B) → Set}
+Either-elim : {l l2 : Level} {A B : Set l} {motive : (eab : Either A B) → Set l2}
   (target : Either A B)
   (on-left  : (l : A) → (motive (left  l)))
   (on-right : (r : B) → (motive (right r)))
@@ -72,7 +77,7 @@ Bool = Either ⊤ ⊤
 
 <%ifThenElse>
 \begin{code}
-if_then_else_ : {A : Set} (b : Bool) (tRes fRes : A) → A
+if_then_else_ : {l : Level} {A : Set l} (b : Bool) (tRes fRes : A) → A
 if b then tRes else fRes = Either-elim b (λ _ → tRes) λ _ → fRes
 \end{code}
 %</ifThenElse>
@@ -133,3 +138,53 @@ _+m_ : {m n : ℕ} (P Q : Matrix ℕ m n) → Matrix ℕ m n
 (vx :: P) +m (vy :: Q) = (vx +v vy) :: (P +m Q)
 \end{code}
 %</matrixSum>
+
+%<*funcType>
+\begin{code}
+bool→Set : (b : Bool) → Set
+bool→Set b = if b then ℕ else Bool
+\end{code}
+%</funcType>
+
+%<*dataConstructor>
+\begin{code}
+data Boolean : Set where
+  true  : Boolean
+  false : Boolean
+\end{code}
+%</dataConstructor>
+
+%<*patternMatch>
+\begin{code}
+boolean→Set : (b : Boolean) → Set
+boolean→Set true = ℕ
+boolean→Set false = Bool
+\end{code}
+%</patternMatch>
+
+%<*record>
+\begin{code}
+record Person : Set where
+  constructor person
+  field
+    name : String
+    age  : ℕ
+
+agePerson : (person : Person) → ℕ
+agePerson (person name age) = age
+\end{code}
+%</record>
+
+%<*id>
+\begin{code}
+id : {A : Set} (x : A) → A
+id x = x
+\end{code}
+%</id>
+
+%<*idNat>
+\begin{code}
+zeroℕ : ℕ
+zeroℕ = id zero
+\end{code}
+%</idNat>

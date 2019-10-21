@@ -101,7 +101,7 @@ Because, hash functions produces pratically random values, so the miner has to g
 This idea is the same that is used in Bitcoin proof of work, because each block has a nounce guessed by the miner and the hash of the block has to be less than the target value.
 
 Wei Dai propose b-money \cite{dai1998b} for the first proposal for distributed digital scarcity.
-And Hal Finney created Bit Gold, a reusable proof of work for hashcash for its algorithm of proof of work.
+And Hal Finney created Bit Gold \cite{wallace2011rise}, a reusable proof of work for hashcash for its algorithm of proof of work.
 
 In 31 October 2008, Satoshi Nakamoto registered the website ``bitcoin.org'' and put a link for his paper \cite{nakamoto2008bitcoin} in a cryptography mailing list.
 In January 2009, Nakamoto released the bitcoin software as open-source code.
@@ -127,14 +127,20 @@ The bitcoin was made to be a peer to peer eletronic cash.
 It was made in one way that users can save and verify transactions without the need of a trust party.
 Because of that no authority or goverment can block the bitcoin.
 
+\includegraphics[width=\columnwidth]{imgs/transactions1.png}
+
 Transactions in bitcoins are one array of input of previous transactions and one array of outputs.
 The mining transaction does not need to have an input.
 For each input of the transaction, it is necessary a signature signed with a private key to prove the ownerchip of the bitcoins.
+
+\includegraphics[width=\columnwidth]{imgs/transactions2.jpg}
 
 Transactions are grouped in a block.
 Each block has in its header the timestamp that the block was created, the hash of the block,
 the previous hash and a nounce.
 A nounce is an arbitrary value that the miner has to choose to make the hash of the block respect some specific characteristics.
+
+\includegraphics[width=\columnwidth]{imgs/blockchain.png}
 
 Each block has a limit size of 1 MB.
 Because of that, bitcoin has a blockchain (one array of blocks).
@@ -152,14 +158,14 @@ Because of this problem, in Bitcoin protocol, the largest chain is always the ri
 While two valid chains have the same size, it is not possible to know which chain is the right.
 This situation is called fork and when it happens, it is necessary to wait to see in which chain the new block will be.
 
-In Bitcoin, there is a possibility of 51% attack.
+In Bitcoin, there is a possibility of 51\% attack.
 It happens when some miner, with more power than all network, mine secretly the blocks.
 So if the main network has 50 blocks, the miner could produce hidden blocks from 46 to 55
 and he would have 10 hidden blocks from the network.
 When he shows their hidden blocks, his chain become the valid chain, because it is bigger.
 So all transactions from previous blockchain from 46 to 50 blocks become invalid.
 Because of that, when someone make a big transaction in the blockchain, it is a good idea to wait more time.
-So it is becoming harder and harder to make a 51% with more time.
+So it is becoming harder and harder to make a 51\% with more time.
 Bitcoin has the highest market value nowadays, so attacking the bitcoin network is very expensive.
 Nowadays, this kind of attack is more common in new altcoins.
 
@@ -175,11 +181,19 @@ So it is saved in off chain database.
 Because of that, it is possible to save more information in Ethereum Blockchain.
 
 In Bitcoin, the creator of the contract as to pay the amount proportional to its size.
-But in Ethereum, every time the user run a contract that change some data,
-he has to pay some gas for it.
-Each instruction in EVM has a fixed amount of gas pre defined that is necessary to pay.
-The user must set how much ether he wants to pay per gas.
-So if the user stays without ether, the contract halt and stopped to being executed.
+In Ethereum, it is different, there is a concept of gas.
+Each smart contract in Ethereum is made by a serie of instructions.
+Each instruction consume different computional effort.
+Because of that, in Ethereum, there is a concept of gas, that measure how much computional effort
+each instruction needs.
+So in each smart contract, it is well know how much computational effort will be necessary to run it
+and it is measured in gas.
+Because computional effort is a scarce resource, to execute the smart contract, it is necessary to
+pay an amount in Ether for each gas to the miner run it.
+Smart contracts that pay more ether per gas run first, because the miner will want to have the best
+profit and they will pick them.
+If the amount of ether per gas payed is not high enough, the contract will not be executed,
+because there are some other contracts that pay more that will be executed instead of this one.
 
 Because Ethereum has its own EVM with more instructions than Bitcoin and it is Turing Complete,
 its considered less secure.
@@ -188,7 +202,7 @@ Ethereum has its own high level programming language called Solidity that looks 
 \subsection{Introduction}
 
 Before my work, there were some research in this field.
-Antom Setzel already code the definitions of transactions and transactions tree of bitcoin.
+Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and transactions tree of bitcoin.
 Orestis Melkonian start to formalize Bitcoin Script.
 
 My work try to extend Antom Setzel model and make possible to use Bitcoin protocol
@@ -199,6 +213,40 @@ To use the Antom Setzel model, the user has to send the data and the proof that 
 \subsection{Agda Introduction}
 Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology as his PhD Thesis.
 The current version of Agda is Agda 2.
+
+  \subsection{Syntax}
+  In Agda, Set is equal to type.
+  In dependent type languages, it is possible to create a function that return a type.
+
+  \ExecuteMetaData[latex/agdaExamples.tex]{funcType}
+
+  Because of dependent types, it is possible to have a type that depend on the input
+
+  \ExecuteMetaData[latex/agdaExamples.tex]{dependentType}
+
+  It is possible in Agda to do pattern match.
+  So it breaks the input in their possible cases.
+
+  \ExecuteMetaData[latex/agdaExamples.tex]{patternMatch}
+
+  To create a new type with different pattern match, it is used data constructor.
+
+  \ExecuteMetaData[latex/agdaExamples.tex]{dataConstructor}
+
+  Records are data types with just one case of pattern match
+
+  \ExecuteMetaData[latex/agdaExamples.tex]{record}
+
+  Implicits terms are elements that the compiler is smart enough to deduce it.
+  So it is not necessary to put it in argument of the function.
+
+  \ExecuteMetaData[latex/agdaExamples.tex]{id}
+
+  Implicits arguments are inside {}.
+  In case of the function id, the type of the input can be deduced by the compiler.
+  For example, the only type that zero can be is Natural.
+
+  \ExecuteMetaData[latex/agdaExamples.tex]{idNat}
 
   \subsection{Martin-Löf type theory}
   Agda is also a proof assistance based on intensional Martin-Löf type theory.
@@ -220,6 +268,7 @@ The current version of Agda is Agda 2.
 
     If statement is defined using booleans
     \ExecuteMetaData[latex/agdaExamples.tex]{ifThenElse}
+
 
     \subsection{Types Constructors}
     The sum-types contain an ordered pair.
@@ -272,7 +321,7 @@ Another good example is that in sum of two matrices, they should have the same d
 There are two kinds of data structures to modeling accounts records and savings states.
 The UTXO model used in Bitcoin and the account model used in Ethereum.
 
-  \includegraphics[scale = 0.7]{imgs/account.jpeg}
+  \includegraphics[width=\columnwidth]{imgs/account.jpeg}
 
 In account model, it is saved the address and the balance of each address.
 For example, the data struct will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
@@ -280,7 +329,7 @@ So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of 
 In this way, it is possible to easily know how much of balance each address has,
 but it is not possible to know how they got in this state.
 
-  \includegraphics[scale = 0.4]{imgs/utxo.png}
+  \includegraphics[width=\columnwidth]{imgs/utxo.png}
 
 In UTXO model, each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
