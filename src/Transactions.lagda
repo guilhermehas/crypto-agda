@@ -92,6 +92,12 @@ VectorOutput→List : ∀ {time : Time} {size : Nat} {amount : Amount}
 VectorOutput→List (el tx sameId elStart) = tx ∷ []
 VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
 
+nonNilVecOut : {time : Time} {size : Nat} {amount : Amount}
+  (vecOut : VectorOutput time size amount)
+  → NonNil (VectorOutput→List vecOut)
+nonNilVecOut (el tx sameId elStart) = unit
+nonNilVecOut (cons vecOut tx sameId elStart) = unit
+
 vecOutDist : {time : Time} {size : Nat} {amount : Amount}
   (vecOut : VectorOutput time size amount)
   → Distinct $ VectorOutput→List vecOut
@@ -149,9 +155,8 @@ TXId→Msg record { time = (nat time) ; position = position ; amount = amount ; 
 txInput→Msg : (input : TXFieldWithId) → (outputs : List TXField)
   → NonNil outputs → Msg
 txInput→Msg input [] ()
-txInput→Msg input (output ∷ outputs) _ with NonNil? outputs
-... | yes nonNil = TX→Msg output +msg txInput→Msg input outputs nonNil
-... | no nil =  TX→Msg output +msg TXId→Msg input
+txInput→Msg input [ output ] _ = TX→Msg output +msg TXId→Msg input
+txInput→Msg input (output ∷ out2 ∷ outputs) _ = TX→Msg output +msg txInput→Msg input (out2 ∷ outputs) unit
 
 txEls→Msg : ∀ {inputs : List TXFieldWithId}
   → (input : TXFieldWithId) → (outputs : List TXFieldWithId)

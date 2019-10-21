@@ -174,8 +174,9 @@ TXRaw→TXSig : {inputs : List TXFieldWithId}
   (out≡vec   : VectorOutput→List vecOut ≡ outputs)
   (txSig     : TXSignedRawOutput inputs outputs)
   → TXSigned inputs vecOut
-TXRaw→TXSig {inputs} {outputs} {_} {_} {outAmount} vecOut out≡vec record { nonEmpty = (nonEmptyInp , _) ; signed = signed ; in≥out = in≥out } =
-  record { nonEmpty = nonEmptyInp ; signed = {!!} ; in≥out = in≥outProof }
+TXRaw→TXSig {inputs} {outputs} {_} {_} {outAmount} vecOut out≡vec
+  record { nonEmpty = (nonEmptyInp , nonNilOutputs) ; signed = signed ; in≥out = in≥out } =
+  record { nonEmpty = nonEmptyInp ; signed = allSigned signed ; in≥out = in≥outProof }
   where
     vecOut≡ListAmount :
       {outAmount : Amount}
@@ -187,14 +188,56 @@ TXRaw→TXSig {inputs} {outputs} {_} {_} {outAmount} vecOut out≡vec record { n
       → outAmount ≡ txFieldList→TotalAmount outputs
     vecOut≡ListAmount [] (el tx sameId elStart) ()
     vecOut≡ListAmount [] (cons vecOut tx sameId elStart) ()
-    vecOut≡ListAmount (.(record { time = time ; position = position ; amount = 0 ; address = address }) ∷ .[]) (el record { time = time ; position = position ; amount = zero ; address = address } sameId elStart) refl = refl
-    vecOut≡ListAmount (.(record { time = time ; position = position ; amount = suc amount ; address = address }) ∷ .[]) (el record { time = time ; position = position ; amount = (suc amount) ; address = address } sameId elStart) refl = refl
-    vecOut≡ListAmount (.tx ∷ .(VectorOutput→List vecOut)) (cons vecOut tx sameId elStart) refl =
+    vecOut≡ListAmount _
+      (el record { time = time ; position = position ; amount = zero ;
+      address = address } sameId elStart) refl = refl
+    vecOut≡ListAmount _ (el record { time = time ; position = position ; amount = (suc amount) ;
+      address = address } sameId elStart) refl = refl
+    vecOut≡ListAmount _ (cons vecOut tx sameId elStart) refl =
       let vecProof = vecOut≡ListAmount (VectorOutput→List vecOut) vecOut refl in
       cong (λ x → x + TXFieldWithId.amount tx) vecProof
 
     in≥outProof : txFieldList→TotalAmount inputs ≥n outAmount
     in≥outProof rewrite vecOut≡ListAmount outputs vecOut out≡vec = in≥out
+
+    sameMessage :
+      {outAmount : Amount}
+      {time      : Time}
+      {outSize   : Nat}
+      (outputs   : List TXFieldWithId)
+      (input     : TXFieldWithId)
+      (nonNilOut : NonNil outputs)
+      (vecOut    : VectorOutput time outSize outAmount)
+      (out≡vec   : VectorOutput→List vecOut ≡ outputs)
+      → txEls→Msg input outputs (nonEmptyInp , nonNilOut) ≡ txEls→MsgVecOut input vecOut
+    sameMessage _ _ outNotNil (el tx sameId elStart) refl = refl
+    sameMessage _ _ outNotNil (cons (el tx₁ sameId₁ elStart₁) tx sameId elStart) refl = refl
+    sameMessage _ input unit (cons (cons vecOut tx₂ sameId₂ elStart₂) tx₁ sameId₁ elStart₁) refl =
+      let msgRest = sameMessage _ input unit (cons vecOut tx₂ sameId₂ elStart₂) refl in
+      cong (λ x → TX→Msg (removeId tx₁) +msg x) msgRest
+
+    sigPub : {input : TXFieldWithId}
+      (sign : SignedWithSigPbk
+        (txEls→Msg input outputs (nonEmptyInp , nonNilOutputs))
+        (TXFieldWithId.address input))
+      → SignedWithSigPbk (txEls→MsgVecOut input vecOut) (TXFieldWithId.address input)
+    sigPub {input} sign =
+      let msgEq = sameMessage outputs input nonNilOutputs vecOut out≡vec
+      in transport (λ msg → SignedWithSigPbk msg (TXFieldWithId.address input)) msgEq sign
+
+    allSigned : {inputs : List TXFieldWithId}
+      (allSig : All
+        (λ input →
+          SignedWithSigPbk
+            (txEls→Msg input outputs (nonEmptyInp , nonNilOutputs))
+            (TXFieldWithId.address input)) inputs)
+      → All
+        (λ input →
+          SignedWithSigPbk (txEls→MsgVecOut input vecOut)
+          (TXFieldWithId.address input))
+          inputs
+    allSigned {[]} allSig = []
+    allSigned {input ∷ inputs} (sig ∷ allSig) = (sigPub sig) ∷ (allSigned allSig)
 
 rawTXSigned→TXSigAll : (time : Time) (allInputs : List TXFieldWithId)
   (rawTXSigned : RawTXSigned) → Maybe $ TXSigAll time allInputs
