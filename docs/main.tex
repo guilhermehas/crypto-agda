@@ -408,6 +408,30 @@ And in the transaction, there is a proof that the total amount of money in all i
 the total amount of outputs.
 The remainder will be used by the miner.
 
+\subsection{Transaction Tree}
+
+Transaction tree is one of most important data structs in bitcoin.
+In the transaction tree, there are all unspent transaction outputs (UTXO).
+In every new transaction, the UTXOs used as input is removed from transaction tree.
+
+\ExecuteMetaData[latex/TXTree.tex]{TXTree}
+
+In this implementation, time is the number of the transactions in TXTree.
+Block is related in which block the transaction tree is.
+After every new coinbase transaction (the miner transaction), the block size increment in one quantity.
+Total fees are how much the miner will have in fee of transactions if he makes a block with these transactions.
+Quantity of transactions is how many transactions there are in the current block.
+The type is tQtTxs instead of a natural number, because in this implementation, each block can has a number maximum of transactions.
+In bitcoin, it is different, each block has a limit size in space of 1 MB.
+
+Genesis tree is the first case.
+It is when the crypto currency was created.
+txtree is created from another tree.
+proofLessQtTX is a proof that the last transaction tree has its block size less than the maximum block size minus one or it is a coinbase transaction.
+It is because, it is necessary to verify the size of the last txtree so it will not have the size greater than the maximum.
+The last verification, pCoinBaseFee, is a proof that if the transaction is a coinbase transaction,
+so all miner output will be the total fee of previous transaction plus the miner reward.
+
 \section{Conclusion}
 
 \newpage

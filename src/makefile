@@ -7,7 +7,8 @@ pdf:
 	cd ./build && pwd && ls \
 	&& agda --no-default-libraries --latex agdaExamples.lagda \
 	&& agda --no-default-libraries --latex Cripto.lagda \
-	&& agda --no-default-libraries --latex Transactions.lagda
+	&& agda --no-default-libraries --latex Transactions.lagda \
+	&& agda --no-default-libraries --latex TXTree.lagda
 
 install:
 	mkdir -p $(out)/tex

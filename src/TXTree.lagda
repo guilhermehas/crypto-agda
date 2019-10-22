@@ -17,10 +17,16 @@ tQtTxs = Fin $ totalQt
 
 blockReward : Nat
 blockReward = 100
+\end{code}
 
+%<*TXTree>
+\begin{code}
 mutual
   data TXTree : (time : Time) (block : Nat)
-    (outputs : List TXFieldWithId) (totalFees : Amount) (qtTransactions : tQtTxs) → Set where
+    (outputs : List TXFieldWithId)
+    (totalFees : Amount)
+    (qtTransactions : tQtTxs) → Set where
+
     genesisTree : TXTree (nat zero) zero [] zero zero
     txtree      :
       {block : Nat} {time : Time}
@@ -29,11 +35,20 @@ mutual
       {outputTX : VectorOutput time outSize amount}
       {totalFees : Amount} {qtTransactions : tQtTxs}
       (tree : TXTree time block inputs totalFees qtTransactions)
-      (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
       (tx : TX {time} {block} {inputs} {outSize} tree outputTX)
+      (proofLessQtTX :
+        Either
+          (IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
+          (isCoinbase tx))
       (pCoinBaseFee : coinbase≡TotalFee+Reward totalFees tx)
-      → TXTree (sucTime time) (nextBlock tx) (inputsTX tx ++ VectorOutput→List outputTX)
+      → TXTree (sucTime time)
+        (nextBlock tx)
+        (inputsTX tx ++ VectorOutput→List outputTX)
         (incFees tx) (incQtTx tx proofLessQtTX)
+\end{code}
+%</TXTree>
+
+\begin{code}
 
   data TX {time : Time} {block : Nat} {inputs : List TXFieldWithId}
        {outSize : Nat} {outAmount : Amount}
@@ -51,6 +66,14 @@ mutual
       (outputs : VectorOutput time outSize outAmount)
       → TX tr outputs
 
+  isCoinbase : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+    {outSize : Nat} {amount : Amount}
+    {totalFees : Nat} {qtTransactions : tQtTxs}
+    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
+    → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → Set
+  isCoinbase (normalTX _ _ _ _) = ⊥
+  isCoinbase (coinbase _ _)     = ⊤
+
   nextBlock : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
@@ -67,14 +90,16 @@ mutual
   inputsTX (normalTX _ SubInputs _ _) = list-sub SubInputs
   inputsTX {_} {_} {inputs} (coinbase _ _) = inputs
 
-  incQtTx : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+  incQtTx : ∀ {qtTransactions : tQtTxs} {block : Nat} {time : Time} {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
-    {totalFees : Nat} {qtTransactions : tQtTxs}
+    {totalFees : Nat}
     {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
-    (proofLessQtTX : IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
+    (proofLessQtTX : Either (IsTrue (lessNat (finToNat qtTransactions) totalQtSub1)) (isCoinbase tx))
     → tQtTxs
-  incQtTx {_} {_} {_} {_} {_} {_} {qt} (normalTX _ _ _ _) pLess = natToFin (suc (finToNat qt)) {{pLess}}
+  incQtTx {qt} (normalTX _ _ _ _) (left pLess) =
+    natToFin (suc (finToNat qt)) {{pLess}}
+  incQtTx {qt} (normalTX _ _ _ _) (right ())
   incQtTx (coinbase _ _)  _   = zero
 
   incFees : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
