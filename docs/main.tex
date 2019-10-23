@@ -429,8 +429,51 @@ It is when the crypto currency was created.
 txtree is created from another tree.
 proofLessQtTX is a proof that the last transaction tree has its block size less than the maximum block size minus one or it is a coinbase transaction.
 It is because, it is necessary to verify the size of the last txtree so it will not have the size greater than the maximum.
-The last verification, pCoinBaseFee, is a proof that if the transaction is a coinbase transaction,
-so all miner output will be the total fee of previous transaction plus the miner reward.
+
+\ExecuteMetaData[latex/TXTree.tex]{TX}
+
+TX is related to the transaction done in the cripto currency.
+There are two kinds of transaction.
+Coinbase transaction is the transaction done by the miner.
+In coinbase, they have just outputs and do not have any input.
+pAmountFee is a proof that the output of coinbase transaction is equal to the total fees plus
+a block reward.
+
+Another kind of transaction is the normalTX, a regular transaction.
+SubInputs are a sub list of all unspent transaction outputs of the previous transaction tree.
+Outputs are the new unspent transaction from this transaction.
+So who receive amount from this transaction can spend it after.
+TxSigned is the signature that proves that every owner of each input approve this transaction.
+In TxSigned, there is a proof that the output amount is greather than the input amount too.
+
+\ExecuteMetaData[latex/TXTree.tex]{isCoinBase}
+
+This function just return trivial type if coinbase and bot type if not.
+
+\ExecuteMetaData[latex/TXTree.tex]{nextBlock}
+
+If it is a normal transaction, the block continue the same.
+If it is a coinbase transaction, the next transaction will be in a new block.
+
+\ExecuteMetaData[latex/TXTree.tex]{incQtTx}
+
+This function is to increment the quantity of transaction in the block.
+It has to receive a proof that the quantity of transaction that was before this new transaction was
+less than then maximum quantity of transaction allowed.
+So it is garantee that the quantity of transactions will never be greater than the maximum allowed.
+If it is a coinbase transaction, it will be a new block.
+So the quantity of transactions start being zero.
+
+\ExecuteMetaData[latex/TXTree.tex]{incFees}
+
+IncFee is a function that increment how much fee the miner will receive.
+If it is a coinbase transaction, the fee will be receive by the miner, so the new miner will not receive
+this previous fee.
+Because of that, the new fee will start from zero.
+If it is a normal transaction, the newest fee will be the amount of input of the transaction minus
+the output of this trasaction plus the last fee of previous transactions.
+
+\ExecuteMetaData[latex/TXTree.tex]{outFee}
 
 \section{Conclusion}
 

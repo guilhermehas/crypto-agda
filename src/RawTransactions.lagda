@@ -91,8 +91,8 @@ raw→TXSigned time record { inputs = inputs ; outputs = outputs } with NonNil? 
                                         ; signed = signed
                                         }) ∷ allInputs
 
-    in≥out : Dec $ txFieldList→TotalAmount inpsField ≥n txFieldList→TotalAmount outsField
-    in≥out =  txFieldList→TotalAmount inpsField ≥n? txFieldList→TotalAmount outsField
+    in≥out : Dec $ txFieldList→TotalAmount inpsField ≥ txFieldList→TotalAmount outsField
+    in≥out =  txFieldList→TotalAmount inpsField ≥?p txFieldList→TotalAmount outsField
 
     ans : Maybe RawTXSigned
     ans with All?Signed inputs
@@ -197,7 +197,7 @@ TXRaw→TXSig {inputs} {outputs} {_} {_} {outAmount} vecOut out≡vec
       let vecProof = vecOut≡ListAmount (VectorOutput→List vecOut) vecOut refl in
       cong (λ x → x + TXFieldWithId.amount tx) vecProof
 
-    in≥outProof : txFieldList→TotalAmount inputs ≥n outAmount
+    in≥outProof : txFieldList→TotalAmount inputs ≥ outAmount
     in≥outProof rewrite vecOut≡ListAmount outputs vecOut out≡vec = in≥out
 
     sameMessage :

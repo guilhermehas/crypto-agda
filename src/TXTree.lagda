@@ -15,8 +15,8 @@ totalQt = suc totalQtSub1
 tQtTxs : Set
 tQtTxs = Fin $ totalQt
 
-blockReward : Nat
-blockReward = 100
+blockReward : Nat → Nat
+blockReward _ = 100
 \end{code}
 
 %<*TXTree>
@@ -40,7 +40,6 @@ mutual
         Either
           (IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
           (isCoinbase tx))
-      (pCoinBaseFee : coinbase≡TotalFee+Reward totalFees tx)
       → TXTree (sucTime time)
         (nextBlock tx)
         (inputsTX tx ++ VectorOutput→List outputTX)
@@ -48,8 +47,8 @@ mutual
 \end{code}
 %</TXTree>
 
+%<*TX>
 \begin{code}
-
   data TX {time : Time} {block : Nat} {inputs : List TXFieldWithId}
        {outSize : Nat} {outAmount : Amount}
        {totalFees : Nat} {qtTransactions : tQtTxs}
@@ -64,68 +63,101 @@ mutual
     coinbase :
       (tr : TXTree time block inputs totalFees qtTransactions)
       (outputs : VectorOutput time outSize outAmount)
+      (pAmountFee : outAmount out≡Fee totalFees +RewardBlock block)
       → TX tr outputs
+\end{code}
+%</TX>
 
-  isCoinbase : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+%<*isCoinBase>
+\begin{code}
+  isCoinbase : ∀ {block : Nat} {time : Time}
+    {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
+    {tr : TXTree time block inputs totalFees qtTransactions}
+    {outputs : VectorOutput time outSize amount}
     → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → Set
   isCoinbase (normalTX _ _ _ _) = ⊥
-  isCoinbase (coinbase _ _)     = ⊤
+  isCoinbase (coinbase _ _ _)     = ⊤
+\end{code}
+%</isCoinBase>
 
-  nextBlock : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+%<*nextBlock>
+\begin{code}
+  nextBlock : ∀ {block : Nat} {time : Time}
+    {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
-    → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → Nat
+    {tr : TXTree time block inputs totalFees qtTransactions}
+    {outputs : VectorOutput time outSize amount}
+    (tx : TX {time} {block} {inputs} {outSize} tr outputs)
+    → Nat
   nextBlock {block} (normalTX _ _ _ _) = block
-  nextBlock {block} (coinbase _ _)     = suc block
+  nextBlock {block} (coinbase _ _ _)     = suc block
+\end{code}
+%</nextBlock>
 
-  inputsTX : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+%<*inputsTX>
+\begin{code}
+  inputsTX : ∀ {block : Nat} {time : Time}
+    {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
     {totalFees : Nat} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
-    → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → List TXFieldWithId
+    {tr : TXTree time block inputs totalFees qtTransactions}
+    {outputs : VectorOutput time outSize amount}
+    (tx : TX {time} {block} {inputs} {outSize} tr outputs)
+    → List TXFieldWithId
   inputsTX (normalTX _ SubInputs _ _) = list-sub SubInputs
-  inputsTX {_} {_} {inputs} (coinbase _ _) = inputs
+  inputsTX {_} {_} {inputs} (coinbase _ _ _) = inputs
+\end{code}
+%</inputsTX>
 
-  incQtTx : ∀ {qtTransactions : tQtTxs} {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+%<*incQtTx>
+\begin{code}
+  incQtTx : ∀ {qtTransactions : tQtTxs}
+    {block : Nat} {time : Time}
+    {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
     {totalFees : Nat}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
+    {tr : TXTree time block inputs totalFees qtTransactions}
+    {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
-    (proofLessQtTX : Either (IsTrue (lessNat (finToNat qtTransactions) totalQtSub1)) (isCoinbase tx))
+    (proofLessQtTX :
+      Either
+        (IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
+        (isCoinbase tx))
     → tQtTxs
   incQtTx {qt} (normalTX _ _ _ _) (left pLess) =
     natToFin (suc (finToNat qt)) {{pLess}}
   incQtTx {qt} (normalTX _ _ _ _) (right ())
-  incQtTx (coinbase _ _)  _   = zero
+  incQtTx (coinbase _ _ _)  _   = zero
+\end{code}
+%</incQtTx>
 
-  incFees : ∀ {block : Nat} {time : Time} {inputs : List TXFieldWithId}
+%<*incFees>
+\begin{code}
+  incFees : ∀ {block : Nat} {time : Time}
+    {inputs : List TXFieldWithId}
     {outSize : Nat} {amount : Amount}
     {totalFees : Amount} {qtTransactions : tQtTxs}
-    {tr : TXTree time block inputs totalFees qtTransactions} {outputs : VectorOutput time outSize amount}
+    {tr : TXTree time block inputs totalFees qtTransactions}
+    {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
     → Amount
-  incFees {_} {_} {_} {_} {amount} {totalFees} (normalTX tr SubInputs outputs _) =
-      amount
-    - txFieldList→TotalAmount (sub→list SubInputs)
+  incFees {_} {_} {_} {_} {amount} {totalFees} (normalTX _ SubInputs _ (txsig _ _ in≥out)) =
+    txFieldList→TotalAmount (sub→list SubInputs)
+    - amount p≥ in≥out
     + totalFees
-  incFees (coinbase tr outputs) = zero
-
-  coinbase≡TotalFee+Reward :
-    {amount : Amount}
-    {block : Nat} {time : Time}
-    {inputs : List TXFieldWithId}
-    {outSize : Nat}
-    {outputs : VectorOutput time outSize amount}
-    {qtTransactions : Fin totalQt}
-    {totalFees : Amount}
-    {tr : TXTree time block inputs totalFees qtTransactions}
-    (fees : Amount)
-    (tx : TX {time} {block} {inputs} {outSize} tr outputs)
-    → Set
-  coinbase≡TotalFee+Reward fees (normalTX tr SubInputs outputs txSigned) = ⊤
-  coinbase≡TotalFee+Reward {amount} fees (coinbase tr outputs) = amount ≡ fees + blockReward
+  incFees (coinbase tr outputs _) = zero
 \end{code}
+%</incFees>
+
+%<*outFee>
+\begin{code}
+  _out≡Fee_+RewardBlock_ : (amount : Amount)
+    (totalFees : Amount)
+    (block : Nat) → Set
+  amount out≡Fee totalFees +RewardBlock block =
+    amount ≡ totalFees + blockReward block
+\end{code}
+%</outFee>

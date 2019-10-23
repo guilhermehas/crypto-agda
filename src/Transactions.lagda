@@ -189,6 +189,7 @@ record TXSigned
   {outAmount : Amount}
   (inputs    : List TXFieldWithId)
   (outputs   : VectorOutput time outSize outAmount) : Set where
+  constructor txsig
   field
     nonEmpty : NonNil inputs
     signed   : All
@@ -196,7 +197,7 @@ record TXSigned
       SignedWithSigPbk (txEls→MsgVecOut input outputs)
                        (TXFieldWithId.address input))
                        inputs
-    in≥out : txFieldList→TotalAmount inputs ≥n outAmount
+    in≥out : txFieldList→TotalAmount inputs ≥ outAmount
 \end{code}
 %</TXSigned>
 
@@ -212,7 +213,7 @@ record TXSignedRawOutput
       SignedWithSigPbk (txEls→Msg input outputs nonEmpty)
                        (TXFieldWithId.address input))
                        inputs
-    in≥out : txFieldList→TotalAmount inputs ≥n txFieldList→TotalAmount outputs
+    in≥out : txFieldList→TotalAmount inputs ≥ txFieldList→TotalAmount outputs
 
 txSigInput : {inputs : List TXFieldWithId}
   {outputs : List TXFieldWithId}

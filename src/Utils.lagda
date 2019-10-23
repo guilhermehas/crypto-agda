@@ -2,6 +2,7 @@
 module Utils where
 
 open import Prelude
+open import Prelude.Nat.Properties
 
 data TypeEl {A : Set} : A → Set where
   el : (element : A) → TypeEl element
@@ -81,23 +82,25 @@ allList→allSub [] allLista = allLista
 allList→allSub (_ ¬∷ sub) (y ∷ allLista) = y ∷ allList→allSub sub allLista
 allList→allSub (_ ∷ sub) (_ ∷ allLista) = allList→allSub sub allLista
 
-data _≥n_ : (a b : Nat) → Set where
-  z   : zero ≥n zero
-  s≥z : ∀ (m n : Nat) → suc m ≥n zero
-  s≥s : ∀ (m n : Nat) → m ≥n n → suc m ≥n suc n
+rem≡Suc : (a b : Nat) (psuc : _≡_ {_} {Nat} (suc a) (suc b)) → a ≡ b
+rem≡Suc a .a refl = refl
 
-_≥n?_ : (a b : Nat) → Dec $ a ≥n b
-zero ≥n? zero = yes z
-zero ≥n? suc b = no (λ ())
-suc a ≥n? zero = yes (s≥z a a)
-suc a ≥n? suc b with a ≥n? b
-... | yes eq = yes (s≥s a b eq)
-... | no ¬eq = no $ ¬suc a b ¬eq
+remSuc≥ : (a b : Nat) (≥suc : _≥_ {_} {Nat} (suc a) (suc b)) → a ≥ b
+remSuc≥ a b (diff k eq) =
+  diff k let sucRem = (rem≡Suc (suc a) (k + suc b) eq) in
+  trans sucRem (add-suc-r k b)
+
+_≥?p_ : (a b : Nat) → Dec $ a ≥ b
+zero ≥?p zero = yes (diff! zero)
+zero ≥?p suc b = no λ{ (diff k eq) → let eqRem = rem≡Suc zero (k + suc b) eq in ⊥≡ eqRem}
   where
-    ¬suc : ∀ (a b : Nat) → ¬ (a ≥n b) → ¬ (suc a ≥n suc b)
-    ¬suc zero zero ineq eq = ineq z
-    ¬suc zero (suc b) ineq (s≥s .0 .(suc b) ())
-    ¬suc (suc a) b ineq (s≥s .(suc a) .b eq) = ineq eq
+    ⊥≡ : {k b : Nat} (eq : zero ≡ k + suc b) → ⊥
+    ⊥≡ {zero} ()
+    ⊥≡ {suc k} ()
+suc a ≥?p zero = yes (diff (suc a) (cong (λ x → suc (suc x)) (add-commute zero a)))
+suc a ≥?p suc b with a ≥?p b
+... | no ¬p = no λ { p → ¬p (remSuc≥ a b p) }
+... | yes (diff k eq) = yes (diff k (cong suc (trans eq (sym (add-suc-r k b )))))
 
 record SubListProof {A : Set} (lista : List A) (listSub : List A) : Set where
   field
@@ -187,4 +190,11 @@ distList→distSub {A} {x ∷ xs} {.x ¬∷ subxs} (cons .x dist isDist) =
     distEl {x ∷ xs} {.x ∷ subxs} (fst , snd) = distEl {_} {subxs} snd
 distList→distSub {_} {x ∷ xs} {.x ∷ subxs} (cons .x dist isDist) =
   distList→distSub {_} {_} {subxs} dist
+
+_-_p≥_ : (a b : Nat) (p : a ≥ b) → Nat
+zero - zero p≥ p = zero
+zero - suc b p≥ diff zero ()
+zero - suc b p≥ diff (suc k) ()
+suc a - zero p≥ p = suc a
+suc a - suc b p≥ p = a - b p≥ remSuc≥ a b p
 \end{code}
