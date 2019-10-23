@@ -442,7 +442,7 @@ a block reward.
 Another kind of transaction is the normalTX, a regular transaction.
 SubInputs are a sub list of all unspent transaction outputs of the previous transaction tree.
 Outputs are the new unspent transaction from this transaction.
-So who receive amount from this transaction can spend it after.
+So who receive the amount from this transaction can spend it after.
 TxSigned is the signature that proves that every owner of each input approve this transaction.
 In TxSigned, there is a proof that the output amount is greather than the input amount too.
 
@@ -467,13 +467,17 @@ So the quantity of transactions start being zero.
 \ExecuteMetaData[latex/TXTree.tex]{incFees}
 
 IncFee is a function that increment how much fee the miner will receive.
-If it is a coinbase transaction, the fee will be receive by the miner, so the new miner will not receive
+If it is a coinbase transaction, the fee will be received by the miner, so the next miner will not receive
 this previous fee.
 Because of that, the new fee will start from zero.
 If it is a normal transaction, the newest fee will be the amount of input of the transaction minus
 the output of this trasaction plus the last fee of previous transactions.
 
 \ExecuteMetaData[latex/TXTree.tex]{outFee}
+
+outFee+RewardBlock is a proof that the amount of output transactions is equal to total fees of
+others transactions plus the block reward.
+
 
 \section{Conclusion}
 

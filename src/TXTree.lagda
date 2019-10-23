@@ -76,7 +76,8 @@ mutual
     {totalFees : Nat} {qtTransactions : tQtTxs}
     {tr : TXTree time block inputs totalFees qtTransactions}
     {outputs : VectorOutput time outSize amount}
-    → (tx : TX {time} {block} {inputs} {outSize} tr outputs) → Set
+    (tx : TX {time} {block} {inputs} {outSize} tr outputs)
+    → Set
   isCoinbase (normalTX _ _ _ _) = ⊥
   isCoinbase (coinbase _ _ _)     = ⊤
 \end{code}
@@ -144,7 +145,8 @@ mutual
     {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
     → Amount
-  incFees {_} {_} {_} {_} {amount} {totalFees} (normalTX _ SubInputs _ (txsig _ _ in≥out)) =
+  incFees {_} {_} {_} {_} {amount} {totalFees}
+    (normalTX _ SubInputs _ (txsig _ _ in≥out)) =
     txFieldList→TotalAmount (sub→list SubInputs)
     - amount p≥ in≥out
     + totalFees
