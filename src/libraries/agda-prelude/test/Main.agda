@@ -9,6 +9,7 @@ open import Text.Parse
 open import Text.Lex
 open import Text.Printf
 open import Control.Monad.State
+open import Control.Monad.Transformer
 open import Control.WellFounded
 open import Builtin.Size
 open import Builtin.Coinduction
@@ -33,7 +34,7 @@ open import Numeric.Nat.Pow
 
 open import MonoidTactic
 
-open import DeriveEqTest
+-- open import DeriveEqTest
 
 Hello = printf "%c%s" 'H' "ello"
 World = printf "%-7s(%.6f)" "World" π

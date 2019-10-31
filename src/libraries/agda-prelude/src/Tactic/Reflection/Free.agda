@@ -2,6 +2,7 @@
 module Tactic.Reflection.Free where
 
 open import Prelude
+open import Prelude.Variables
 open import Builtin.Reflection
 open import Tactic.Reflection.DeBruijn
 
@@ -11,10 +12,11 @@ private
   _∪_ : VarSet → VarSet → VarSet
   []       ∪ ys = ys
   xs       ∪ [] = xs
-  (x ∷ xs) ∪ (y ∷ ys) with compare x y
-  ... | (less    _) = x ∷ (xs ∪ (y ∷ ys))
-  ... | (equal   _) = x ∷ (xs ∪ ys)
-  ... | (greater _) = y ∷ ((x ∷ xs) ∪ ys)
+  (x ∷ xs) ∪ (y ∷ ys) =
+    case-cmp compare x y
+      less    _ => x ∷ (xs ∪ (y ∷ ys))
+      equal   _ => x ∷ (xs ∪ ys)
+      greater _ => y ∷ ((x ∷ xs) ∪ ys)
 
   ∅ : VarSet
   ∅ = []
@@ -70,8 +72,8 @@ instance
   FreeSort : FreeVars Sort
   freeVars {{FreeSort}} = freeSort 0
 
-  FreeArg : ∀ {A} {{_ : FreeVars A}} → FreeVars (Arg A)
+  FreeArg : {{_ : FreeVars A}} → FreeVars (Arg A)
   freeVars {{FreeArg}} (arg _ x) = freeVars x
 
-  FreeList : ∀ {a} {A : Set a} {{_ : FreeVars A}} → FreeVars (List A)
+  FreeList : {{_ : FreeVars A}} → FreeVars (List A)
   freeVars {{FreeList}} = foldr (λ x → freeVars x ∪_) ∅
