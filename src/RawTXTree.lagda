@@ -35,20 +35,17 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ;
   (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
 ... | nothing     = nothing
 ... | just record { time = timeOut ; outSize = outSize ; vecOut = vecOut }
-  with dec< (finToNat qtTransactions) totalQtSub1
-...   | no _  = nothing
-...   | yes pLess
-  with vecOut→Amount vecOut == totalFees + blockReward
-...     | no _ = nothing
-...     | yes eqBlockReward
+  with vecOut→Amount vecOut == totalFees + blockReward block
+...   | no _ = nothing
+...   | yes eqBlockReward
   with time == timeOut
 ...     | no _     = nothing
 ...     | yes refl = just $
   record { time = sucTime time ; block = suc block ;
-  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree pLess tx eqBlockReward }
+  outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree tx (right unit) }
   where
     tx : TX txTree vecOut
-    tx = coinbase txTree vecOut
+    tx = coinbase txTree vecOut eqBlockReward
 
 addTransactionTree record { time = time ; block = block ; outputs = outputs ;
   qtTransactions = qtTransactions ; txTree = txTree }
@@ -63,7 +60,7 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ;
 ...     | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
   just $ record { time = sucTime time ; block = block ;
   outputs = list-sub sub ++ VectorOutput→List outs ;
-  txTree = txtree txTree pLess (normalTX txTree sub outs signed) unit }
+  txTree = txtree txTree (normalTX txTree sub outs signed) (left pLess) }
 
 addMaybeTransTree : (txTree : Maybe RawTXTree) → (tx : RawTX) → Maybe RawTXTree
 addMaybeTransTree nothing tx = nothing
