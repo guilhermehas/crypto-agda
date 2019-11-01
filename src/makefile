@@ -1,6 +1,7 @@
 default: pdf
 
 pdf:
+	rm -rf build
 	mkdir build
 	cp *.lagda build
 	cp -r libraries/agda-prelude/src/* build

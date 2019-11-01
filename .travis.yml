@@ -1,7 +1,7 @@
 language: nix
 
 before_install:
-  - nix-channel --add https://nixos.org/channels/nixos-19.09 nixpkgs
+  - nix-channel --add https://nixos.org/channels/nixos-19.09 nixos-19
   - nix-channel --update
 
 deploy:

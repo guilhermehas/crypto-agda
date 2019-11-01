@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }: with pkgs;
+{ pkgs ? import <nixos-19> {} }: with pkgs;
 
 let
   agdapkg = (import src/default.nix) {};
