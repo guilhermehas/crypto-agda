@@ -4,6 +4,7 @@ before_install:
   - nix-channel --add https://nixos.org/channels/nixos-19.09 nixos-19
   - nix-channel --update
 
+script: nix-build -I nixos-19=https://github.com/NixOS/nixpkgs-channels/archive/nixos-19.09.tar.gz
 deploy:
   provider: pages
   skip_cleanup: true
