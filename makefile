@@ -6,6 +6,7 @@ pdf:
 
 install:
 	mkdir -p $(out)
+	cp -r src/result $(out)
 	cp docs/res/main.pdf $(out)/thesis.pdf
 
 clean:
