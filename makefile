@@ -5,8 +5,8 @@ pdf:
 	cd docs && latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=res main.tex
 
 install:
-	mkdir -p $(out)
-	cp -r src/result $(out)
+	mkdir -p $(out)/tex/latex
+	bash copylatexout.bash $(out)/tex/latex $(out)/tex
 	cp docs/res/main.pdf $(out)/thesis.pdf
 
 clean:
