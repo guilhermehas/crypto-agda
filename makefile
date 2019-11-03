@@ -11,6 +11,8 @@ install:
 
 clean:
 	rm docs/main.pdf; \
+	rm -rf docs/latex; \
+	rm docs/agda.sty \
 	rm -rf docs/res; \
 	rm docs/*.log; \
 	rm docs/*.aux; \

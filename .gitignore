@@ -9,6 +9,8 @@
 *.bbl
 *.blg
 *.dvi
+docs/tex
+docs/agda.sty
 
 *ignoregit*
 *.#*

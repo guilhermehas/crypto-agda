@@ -15,6 +15,13 @@ Install nix and run this command:
 $ nix-build
 ```
 
+# Latex File
+Some latex files (agda.sty and .tex) are compiled in gh-pages.
+Execute this command to get them
+```bash
+$ bash copy-latex-ghpages.bash
+```
+
 License
 ----
 MIT
