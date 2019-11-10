@@ -10,6 +10,7 @@
 *.blg
 *.dvi
 docs/tex
+docs/latex
 docs/agda.sty
 
 *ignoregit*

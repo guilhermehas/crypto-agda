@@ -60,97 +60,98 @@ outputsTimeLess {_} {_} {_} {totalFees} {qtTransactions} (txtree {block} {time} 
     inputs≤→inputsTX {input ∷ inputs} (coinbase tr outVec _) (pt ∷ allInps) = ≤timeSuc {input} {time} pt
       ∷ allProofFG (λ y pf → ≤timeSuc {y} {time} pf) allInps
 
--- inputsTimeLess : {time : Time}
---   {block : Nat}
---   {inputs : List TXFieldWithId}
---   {outSize : Nat}
---   {totalFees : Amount}
---   {qtTransactions : tQtTxs}
---   {outAmount : Amount}
---   {tr : TXTree time block inputs totalFees qtTransactions}
---   {outputs : VectorOutput time outSize outAmount}
---   (tx : TX tr outputs)
---   → All (λ tx → tx out<time time) $ inputs
--- inputsTimeLess (normalTX tr SubInputs outputs txSigned) = outputsTimeLess tr
--- inputsTimeLess (coinbase tr outputs pAmountFee) = outputsTimeLess tr
+inputsTimeLess : {time : Time}
+  {block : Nat}
+  {inputs : List TXFieldWithId}
+  {outSize : Nat}
+  {totalFees : Amount}
+  {qtTransactions : tQtTxs}
+  {outAmount : Amount}
+  {tr : TXTree time block inputs totalFees qtTransactions}
+  {outputs : VectorOutput time outSize outAmount}
+  (tx : TX tr outputs)
+  → All (λ tx → tx out<time time) $ inputs
+inputsTimeLess (normalTX tr SubInputs outputs txSigned) = outputsTimeLess tr
+inputsTimeLess (coinbase tr outputs pAmountFee) = outputsTimeLess tr
 
--- inputsTXTimeLess : {time : Time}
---   {block : Nat}
---   {inputs : List TXFieldWithId}
---   {outSize : Nat}
---   {totalFees : Amount}
---   {qtTransactions : tQtTxs}
---   {outAmount : Amount}
---   {tr : TXTree time block inputs totalFees qtTransactions}
---   {outputs : VectorOutput time outSize outAmount}
---   (tx : TX tr outputs)
---   → All (λ tx → tx out<time time) $ inputsTX tx
--- inputsTXTimeLess {time} {_} {inputs} (normalTX tr SubInputs outputs txSigned) =
---   let proofInput = inputsTimeLess (normalTX tr SubInputs outputs txSigned) in
---     allList→allSub SubInputs proofInput
--- inputsTXTimeLess {time} {_} {inputs} (coinbase tr outputs pAmountFee) = inputsTimeLess $ coinbase tr outputs {!!}
+inputsTXTimeLess : {time : Time}
+  {block : Nat}
+  {inputs : List TXFieldWithId}
+  {outSize : Nat}
+  {totalFees : Amount}
+  {qtTransactions : tQtTxs}
+  {outAmount : Amount}
+  {tr : TXTree time block inputs totalFees qtTransactions}
+  {outputs : VectorOutput time outSize outAmount}
+  (tx : TX tr outputs)
+  → All (λ tx → tx out<time time) $ inputsTX tx
+inputsTXTimeLess {time} {_} {inputs} (normalTX tr SubInputs outputs txSigned) =
+  let proofInput = inputsTimeLess (normalTX tr SubInputs outputs txSigned) in
+    allList→allSub SubInputs proofInput
+inputsTXTimeLess {time} {_} {inputs} (coinbase tr outputs pAmountFee) = inputsTimeLess $ coinbase tr outputs pAmountFee
 
--- allVecOutSameTime : {time : Time} {size : Nat}
---   (vecOut : VectorOutput time size {!!}) →
---   All (λ tx → TXFieldWithId.time tx ≡ time) (VectorOutput→List vecOut)
--- allVecOutSameTime (el tx sameId elStart) = sameId ∷ []
--- allVecOutSameTime (cons vecOut tx sameId elStart) = sameId ∷ allVecOutSameTime vecOut
+allVecOutSameTime : {time : Time}
+  {size : Nat}
+  {outAmount : Amount}
+  (vecOut : VectorOutput time size outAmount) →
+  All (λ tx → TXFieldWithId.time tx ≡ time) (VectorOutput→List vecOut)
+allVecOutSameTime (el tx sameId elStart) = sameId ∷ []
+allVecOutSameTime (cons vecOut tx sameId elStart) = sameId ∷ allVecOutSameTime vecOut
 
--- allDistincts : {time : Time} {vec< vec≡ : List TXFieldWithId}
---   (all< : All (λ tx → tx out<time time) vec<)
---   (all≡ : All (λ tx → TXFieldWithId.time tx ≡ time) vec≡)
---   → twoListDistinct vec< vec≡
--- allDistincts {time} {.[]} {vec≡} [] all≡ = unit
--- allDistincts {time} {(x ∷ _)} {vec≡} (p< ∷ all<) all≡ = distinctLess all≡ , allDistincts all< all≡
---   where
---     sucRemove : ∀ {m n : Nat} (suc≡ : _≡_ {_} {Nat} (suc m) (suc n)) → m ≡ n
---     sucRemove refl = refl
+allDistincts : {time : Time} {vec< vec≡ : List TXFieldWithId}
+  (all< : All (λ tx → tx out<time time) vec<)
+  (all≡ : All (λ tx → TXFieldWithId.time tx ≡ time) vec≡)
+  → twoListDistinct vec< vec≡
+allDistincts {time} {.[]} {vec≡} [] all≡ = unit
+allDistincts {time} {(x ∷ _)} {vec≡} (p< ∷ all<) all≡ = distinctLess all≡ , allDistincts all< all≡
+  where
+    sucRemove : ∀ {m n : Nat} (suc≡ : _≡_ {_} {Nat} (suc m) (suc n)) → m ≡ n
+    sucRemove refl = refl
 
---     ⊥-k+ : (k n : Nat) → ¬ (n ≡ suc k + n)
---     ⊥-k+ k zero ()
---     ⊥-k+ k (suc n) eqs = ⊥-k+ k n let eq = sucRemove eqs in trans eq (add-suc-r k n)
+    ⊥-k+ : (k n : Nat) → ¬ (n ≡ suc k + n)
+    ⊥-k+ k zero ()
+    ⊥-k+ k (suc n) eqs = ⊥-k+ k n let eq = sucRemove eqs in trans eq (add-suc-r k n)
 
---     ⊥-< : {n : Nat} → ¬ (n < n)
---     ⊥-< {n} (diff k eq) = ⊥-k+ k n eq
+    ⊥-< : {n : Nat} → ¬ (n < n)
+    ⊥-< {n} (diff k eq) = ⊥-k+ k n eq
 
---     distinctLess : {vec≡ : List TXFieldWithId}
---       (all≡ : All (λ tx → TXFieldWithId.time tx ≡ time) vec≡)
---       → isDistinct x vec≡
---     distinctLess [] = unit
---     distinctLess (refl ∷ all≡) = (λ{ refl → ⊥-< p<}) , (distinctLess all≡)
+    distinctLess : {vec≡ : List TXFieldWithId}
+      (all≡ : All (λ tx → TXFieldWithId.time tx ≡ time) vec≡)
+      → isDistinct x vec≡
+    distinctLess [] = unit
+    distinctLess (refl ∷ all≡) = (λ{ refl → ⊥-< p<}) , (distinctLess all≡)
 
--- distInputs : {time : Time}
---   {block : Nat}
---   {inputs : List TXFieldWithId}
---   {outSize : Nat}
---   {totalFees : Amount}
---   {qtTransactions : tQtTxs}
---   {outAmount : Amount}
---   {tree : TXTree time block inputs totalFees qtTransactions}
---   {outVec : VectorOutput time outSize outAmount}
---   (tx : TX tree outVec)
---   → Distinct $ inputsTX tx
--- distInputs (normalTX genesisTree [] outputs txSigned) = []
--- distInputs (normalTX (txtree {_} {_} {_} {_} {vecOut} tr tx _) SubInputs outputs txSigned) = {!!}
---   -- distList→distSub {_} {_} {SubInputs} (unionDistinct {_} {inputsTX tx} {{!!}}
---   -- (distInputs tx) (vecOutDist {!!})
---   -- (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime {!!})))
--- distInputs (coinbase genesisTree outVec _) = []
--- distInputs (coinbase (txtree {_} {_} {_} {_} {vecOut} tr tx _) outVec _) = {!!}
---   -- unionDistinct {_} {inputsTX tx} {vecOut} (distInputs tx)
---   -- (vecOutDist ?) (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut) )
+distInputs : {time : Time}
+  {block : Nat}
+  {inputs : List TXFieldWithId}
+  {outSize : Nat}
+  {totalFees : Amount}
+  {qtTransactions : tQtTxs}
+  {outAmount : Amount}
+  {tree : TXTree time block inputs totalFees qtTransactions}
+  {outVec : VectorOutput time outSize outAmount}
+  (tx : TX tree outVec)
+  → Distinct $ inputsTX tx
+distInputs (normalTX genesisTree [] outputs txSigned) = []
+distInputs (normalTX (txtree {_} {_} {_} {_} {_} {vecOut} tr tx _) SubInputs outputs txSigned) =
+  distList→distSub {_} {_} {SubInputs} (unionDistinct {_} {inputsTX tx}
+  (distInputs tx) (vecOutDist vecOut)
+  (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut)))
+distInputs (coinbase genesisTree outVec _) = []
+distInputs (coinbase (txtree {_} {_} {_} {_} {_} {vecOut} tr tx _) outVec _) =
+  unionDistinct {_} {inputsTX tx} (distInputs tx)
+  (vecOutDist vecOut) (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut) )
 
--- uniqueOutputs : {time : Time}
---   {block : Nat}
---   {outputs : List TXFieldWithId}
---   {totalFees : Amount}
---   {qtTransactions : tQtTxs}
---   (txTree : TXTree time block outputs totalFees qtTransactions)
---   → Distinct outputs
--- uniqueOutputs genesisTree = []
--- uniqueOutputs (txtree {block} {time} {outSize} {inputs} {vecOut} tree tx _) = {!!}
---   -- (unionDistinct {_} {inputsTX tx} {VectorOutput→List vecOut}
---   -- (distInputs tx) (vecOutDist vecOut)
---   -- (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut)))
-
+uniqueOutputs : {time : Time}
+  {block : Nat}
+  {outputs : List TXFieldWithId}
+  {totalFees : Amount}
+  {qtTransactions : tQtTxs}
+  (txTree : TXTree time block outputs totalFees qtTransactions)
+  → Distinct outputs
+uniqueOutputs genesisTree = []
+uniqueOutputs (txtree {block} {time} {outSize} {inputs} {_} {vecOut} tree tx _) =
+  (unionDistinct {_} {inputsTX tx} {VectorOutput→List vecOut}
+  (distInputs tx) (vecOutDist vecOut)
+  (allDistincts (inputsTXTimeLess tx) (allVecOutSameTime vecOut)))
 \end{code}
