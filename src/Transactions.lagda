@@ -10,16 +10,18 @@ open import Cripto
 %<*TXField>
 \begin{code}
 record TXField : Set where
+  constructor txfield
   field
     amount  : Amount
     address : Address
 
 record TXFieldWithId : Set where
-    field
-      time     : Time
-      position : Nat
-      amount   : Amount
-      address  : Address
+  constructor txfieldid
+  field
+    time     : Time
+    position : Nat
+    amount   : Amount
+    address  : Address
 \end{code}
 %</TXField>
 
