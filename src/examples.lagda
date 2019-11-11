@@ -61,40 +61,39 @@ txTree1El =
                 (el (txfieldid (nat zero) zero 100 (nat zero)) refl refl) refl) (right unit)
               }))
 
--- txTree1 = fromJust $ getElFromType txTree1El
+txTree1 = fromJust $ getElFromType txTree1El
 
--- tx1 : RawTX
--- tx1 = coinbase (record { outputs = record
---   { time = nat 1
---   ; position = zero
---   ; amount = 20
---   ; address = nat zero
---   } ∷ [] })
+tx1 : RawTX
+tx1 = coinbase (record { outputs = record
+  { time = nat 1
+  ; position = zero
+  ; amount = 100
+  ; address = nat zero
+  } ∷ [] })
 
--- txTree2El : TypeEl $ addTransactionTree txTree1 tx1
--- txTree2El = el (
---   just
---   (record
---     { time = nat 2
---     ; block = 2
---     ; outputs =
---         record
---         { time = nat zero
---         ; position = 0
---         ; amount = 100
---         ; address = nat zero
---         }
---         ∷
---         [
---         record
---         { time = nat 1 ; position = 0 ; amount = 20 ; address = nat zero }
---         ]
---   ; txTree =
---       txtree (RawTXTree.txTree txTree1)
---       (coinbase (RawTXTree.txTree txTree1)
---         (el
---           (record
---             { time = nat 1 ; position = 0 ; amount = 20 ; address = nat zero })
---         refl refl))
---   }))
+txTree2El : TypeEl $ addTransactionTree txTree1 tx1
+txTree2El = el (
+  just
+  (record
+  { time = nat 2
+  ; block = 2
+  ; outputs =
+      txfieldid (nat 0) 0 100 (nat 0) ∷
+      [ txfieldid (nat 1) 0 100 (nat 0) ]
+  ; totalFees = 0
+  ; qtTransactions = zero
+  ; txTree =
+      txtree
+      (txtree genesisTree
+        (coinbase genesisTree
+        (el (txfieldid (nat 0) 0 100 (nat 0)) refl refl) refl)
+        (right unit))
+      (coinbase
+        (txtree genesisTree
+        (coinbase genesisTree
+          (el (txfieldid (nat 0) 0 100 (nat 0)) refl refl) refl)
+        (right unit))
+        (el (txfieldid (nat 1) 0 100 (nat 0)) refl refl) refl)
+      (right unit)
+  }))
 \end{code}
