@@ -2,9 +2,7 @@
 %%% DOCUMENT PREAMBLE %%%
 \documentclass[12pt]{article}
 
-\usepackage{agda}
-\usepackage{apacite}
-\usepackage{catchfilebetweentags}
+\usepackage{agda} \usepackage{apacite} \usepackage{catchfilebetweentags}
 
 \usepackage{ucs}
 \usepackage{amssymb}
@@ -19,6 +17,8 @@
 \usepackage{fancyhdr}
 \usepackage{vmargin}
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\newcommand{\agda}[2]{\ExecuteMetaData[latex/#1.tex]{#2}}
 
 \title{Programming a cryptocurrency in Agda}								
 
@@ -218,75 +218,126 @@ The current version of Agda is Agda 2.
   In Agda, Set is equal to type.
   In dependent type languages, it is possible to create a function that return a type.
 
-  \ExecuteMetaData[latex/agdaExamples.tex]{funcType}
+  \agda{agdaExamples}{funcType}
 
   Because of dependent types, it is possible to have a type that depend on the input
 
-  \ExecuteMetaData[latex/agdaExamples.tex]{dependentType}
+  \agda{agdaExamples}{dependentType}
 
   It is possible in Agda to do pattern match.
   So it breaks the input in their possible cases.
 
-  \ExecuteMetaData[latex/agdaExamples.tex]{patternMatch}
+  \agda{agdaExamples}{patternMatch}
 
   To create a new type with different pattern match, it is used data constructor.
 
-  \ExecuteMetaData[latex/agdaExamples.tex]{dataConstructor}
+  \agda{agdaExamples}{dataConstructor}
 
   Records are data types with just one case of pattern match
 
-  \ExecuteMetaData[latex/agdaExamples.tex]{record}
+  \agda{agdaExamples}{record}
 
   Implicits terms are elements that the compiler is smart enough to deduce it.
   So it is not necessary to put it in argument of the function.
 
-  \ExecuteMetaData[latex/agdaExamples.tex]{id}
+  \agda{agdaExamples}{id}
 
   Implicits arguments are inside {}.
   In case of the function id, the type of the input can be deduced by the compiler.
   For example, the only type that zero can be is Natural.
 
-  \ExecuteMetaData[latex/agdaExamples.tex]{idNat}
+  \agda{agdaExamples}{idNat}
 
+  \subsection{Lambda Calculus}
+  Lambda Calculus is a minimalist turing complete programming language with the concept of abstraction,
+  application using binding and substitution. For example, x is a variable, $(\lambda x.M)$ is an Abstraction and (M N) is an Application.
+
+  In Lambda Calculus, there are two types of conversions $\alpha$-conversion and $\beta$-reduction.
+  In $\alpha$-conversion, $(\lambda x.M[x]) \rightarrow (\lambda y.M[y])$.
+  So in every free variable in M will be renamed from x to y.
+  For M[x] = x, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
+
+  A free variable is every variable that is not bind outside.
+  For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$. The \textcolor{blue}{blue x} is binded for the \textcolor{green}{green x}, but the \textcolor{red}{red x} is not binded for any function. So the \textcolor{red}{red x} is a free variable.
+
+  In $\beta$-reduction, it replaces the all free for the expression in the application.
+  The $\beta$-reduction of this expression $((\lambda x.M) N) \rightarrow (M[x := N])$ .
+  So if $M = x$, the $\beta$-reduction will be $((\lambda x.x) N) \rightarrow N$.
+  If $M = (\lambda x.x) x$, the $\beta$-reduction will be
+  $(\lambda x.((\lambda x.x)x))N \rightarrow (\lambda x.x)N$.
+
+  Agda uses typed lambda calculus.
+  So in an application (M N), M has to be of type $A \Rightarrow B$ and N has to be of type A.
+  $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because x is of type A.
+
+  \agda{lambdaCalculus}{Id}
+
+  The simplest function is the identity function made in Agda
+  \agda{lambdaCalculus}{Id2}
+
+  This is another way of writing the same function.
+
+  \agda{lambdaCalculus}{trueFalse}
+
+  This is how true and false are encoded in lambda calculus.
+  \agda{lambdaCalculus}{naturals}
+
+  This is how naturals numbers are defined in lambda calculs.
+  Look that the definition of zero looks like the definition of false.
+
+  \agda{lambdaCalculus}{plus}
+  Plus is defined this way using lambda calculus.
+
+  \agda{lambdaCalculus}{onePone}
+  This is one example of the calculation of one plus one in Lambda Calculus
+
+  \agda{lambdaCalculus}{list}
+  This is how lists are defined in Lambda Calculus
+  
+  \agda{lambdaCalculus}{sumList}
+  Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
+  the sum of the list.
+
+  
   \subsection{Martin-Löf type theory}
   Agda is also a proof assistance based on intensional Martin-Löf type theory.
 
     \subsection{Types}
     In Martin-Löf type theory, there are 3 finites types and 5 types constructors.
     The 0 type contain 0 terms, it is called empty type and it is written bot.
-    \ExecuteMetaData[latex/agdaExamples.tex]{botType}
+    \agda{agdaExamples}{botType}
 
     The 1 type is the type with just 1 canonical term and it represents existence.
     It is called unit type and it is written top .
-    \ExecuteMetaData[latex/agdaExamples.tex]{trivialType}
+    \agda{agdaExamples}{trivialType}
 
     The 2 type contains 2 canonical terms. It represents a choice between two values.
-    \ExecuteMetaData[latex/agdaExamples.tex]{eitherType}
+    \agda{agdaExamples}{eitherType}
 
     The Boolean Type is defined using the Trivial type and the Either type
-    \ExecuteMetaData[latex/agdaExamples.tex]{boolType}
+    \agda{agdaExamples}{boolType}
 
     If statement is defined using booleans
-    \ExecuteMetaData[latex/agdaExamples.tex]{ifThenElse}
+    \agda{agdaExamples}{ifThenElse}
 
 
     \subsection{Types Constructors}
     The sum-types contain an ordered pair.
     The second type can depend on the first type.
     It has the same meaning of exist.
-    \ExecuteMetaData[latex/agdaExamples.tex]{sumType}
+    \agda{agdaExamples}{sumType}
 
     The pi-types contain functions.
     So given an input type, it will return an output type.
     It has the same meaning of a function
-    \ExecuteMetaData[latex/agdaExamples.tex]{piType}
+    \agda{agdaExamples}{piType}
 
     In Inductive types, it is a self-referential type.
     Naturals numbers are examples of that
-    \ExecuteMetaData[latex/agdaExamples.tex]{Nat}
+    \agda{agdaExamples}{Nat}
     Other data structs like linked list of natural numbers, trees, graphs are too.
     Proofs in inductive types are made by induction.
-    \ExecuteMetaData[latex/agdaExamples.tex]{NatElim}
+    \agda{agdaExamples}{NatElim}
 
     Universe types are created to allow proofs written in all types.
     For example, the type of Nat is U0.
@@ -299,22 +350,22 @@ Agda needs it to be a consistent language.
 Agda has inductive data types that are similar to algebric data types in non-depently typed programming language.
 The definition of Peano numbers in Agda:
 
-\ExecuteMetaData[latex/agdaExamples.tex]{Nat}
+\agda{agdaExamples}{Nat}
 
 Definitions in Agda are done using induction.
 For example, the sum of two numbers in Agda:
 
-\ExecuteMetaData[latex/agdaExamples.tex]{sum}
+\agda{agdaExamples}{sum}
 
 In Agda, because of dependent types, it is possible to make some restrictions in types that is not possible in other language.
 For example, get the first element of a vector.
 For it, it is necessary to specify in the type that the vector should have at size greater or equal tha than one.
 
-\ExecuteMetaData[latex/agdaExamples.tex]{vecHead}
+\agda{agdaExamples}{vecHead}
 
 Another good example is that in sum of two matrices, they should have the same dimentions.
 
-\ExecuteMetaData[latex/agdaExamples.tex]{matrixSum}
+\agda{agdaExamples}{matrixSum}
 
 \subsection{UTXO Bitcoin}
 
@@ -378,7 +429,7 @@ just have to verify if the hash of the file is equal to the hash of the file wan
 These functions can be defined, but it is not the purpose of this theses.
 So they will be just postulates.
 
-\ExecuteMetaData[latex/Cripto.tex]{criptoPostulates}
+\agda{Cripto}{criptoPostulates}
 
 \subsection{Transactions}
 
@@ -389,7 +440,7 @@ The input of one transaction is the ouput of another transaction.
 Firsts outputs are generated from coinbase transaction (there is just one of this transaction at each block).
 Coinbase transactions are the miner reward.
 
-\ExecuteMetaData[latex/Transactions.tex]{VectorOutput}
+\agda{Transactions}{VectorOutput}
 
 Vector output is the vector of outputs transactions.
 It is a non empty vector.
@@ -400,7 +451,7 @@ and the total amount spend in this transaction,
 elStart is a proof that the position of TXFieldWithId is the last one.
 It is used after to specify wich input is in the transaction.
 
-\ExecuteMetaData[latex/Transactions.tex]{TXSigned}
+\agda{Transactions}{TXSigned}
 
 A signed transaction is composed of a non empty list of inputs and outputs.
 For each input, there is a signature that confirms that he accepted every output in the list of outputs.
@@ -414,7 +465,7 @@ Transaction tree is one of most important data structs in bitcoin.
 In the transaction tree, there are all unspent transaction outputs (UTXO).
 In every new transaction, the UTXOs used as input is removed from transaction tree.
 
-\ExecuteMetaData[latex/TXTree.tex]{TXTree}
+\agda{TXTree}{TXTree}
 
 In this implementation, time is the number of the transactions in TXTree.
 Block is related in which block the transaction tree is.
@@ -430,7 +481,7 @@ txtree is created from another tree.
 proofLessQtTX is a proof that the last transaction tree has its block size less than the maximum block size minus one or it is a coinbase transaction.
 It is because, it is necessary to verify the size of the last txtree so it will not have the size greater than the maximum.
 
-\ExecuteMetaData[latex/TXTree.tex]{TX}
+\agda{TXTree}{TX}
 
 TX is related to the transaction done in the cripto currency.
 There are two kinds of transaction.
@@ -446,16 +497,16 @@ So who receive the amount from this transaction can spend it after.
 TxSigned is the signature that proves that every owner of each input approve this transaction.
 In TxSigned, there is a proof that the output amount is greather than the input amount too.
 
-\ExecuteMetaData[latex/TXTree.tex]{isCoinBase}
+\agda{TXTree}{isCoinBase}
 
 This function just return trivial type if coinbase and bot type if not.
 
-\ExecuteMetaData[latex/TXTree.tex]{nextBlock}
+\agda{TXTree}{nextBlock}
 
 If it is a normal transaction, the block continue the same.
 If it is a coinbase transaction, the next transaction will be in a new block.
 
-\ExecuteMetaData[latex/TXTree.tex]{incQtTx}
+\agda{TXTree}{incQtTx}
 
 This function is to increment the quantity of transaction in the block.
 It has to receive a proof that the quantity of transaction that was before this new transaction was
@@ -464,7 +515,7 @@ So it is garantee that the quantity of transactions will never be greater than t
 If it is a coinbase transaction, it will be a new block.
 So the quantity of transactions start being zero.
 
-\ExecuteMetaData[latex/TXTree.tex]{incFees}
+\agda{TXTree}{incFees}
 
 IncFee is a function that increment how much fee the miner will receive.
 If it is a coinbase transaction, the fee will be received by the miner, so the next miner will not receive
@@ -473,7 +524,7 @@ Because of that, the new fee will start from zero.
 If it is a normal transaction, the newest fee will be the amount of input of the transaction minus
 the output of this trasaction plus the last fee of previous transactions.
 
-\ExecuteMetaData[latex/TXTree.tex]{outFee}
+\agda{TXTree}{outFee}
 
 outFee+RewardBlock is a proof that the amount of output transactions is equal to total fees of
 others transactions plus the block reward.
