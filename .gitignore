@@ -12,6 +12,7 @@
 docs/tex
 docs/latex
 docs/agda.sty
+tex
 
 *ignoregit*
 *.#*
