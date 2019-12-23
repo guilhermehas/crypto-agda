@@ -132,3 +132,33 @@ true-id : {A : Set} → Result (false-right {(A → A) → A → A} isZero id)
 true-id = res (λ true false → false)
 \end{code}
 %</eitherRes>
+
+%<*tuple>
+\begin{code}
+tuple : {A B C : Set} → A → B → (A → B → C) → C
+tuple x y f = f x y
+\end{code}
+%</tuple>
+
+%<*tupleExamples>
+\begin{code}
+zero-false : {A B C : Set} → (((A → A) → A → A) → (B → B → B) → C) → C
+zero-false = tuple zero false
+
+one-true : {A B C : Set} → (((A → A) → A → A) → (B → B → B) → C) → C
+one-true = tuple one true
+\end{code}
+%</tupleExamples>
+
+%<*tupleAdd>
+\begin{code}
+add-true : {A : Set} → ((A → A) → A → A) → (A → A → A) → ((A → A) → A → A)
+add-true n b suc z = b (suc (n suc z)) (n suc z)
+
+add-zero-false : {A : Set} → Result (zero-false {(A → A) → A → A} add-true)
+add-zero-false = res (λ suc z → z)
+
+add-one-true : {A : Set} → Result (one-true {(A → A) → A → A} add-true)
+add-one-true = res (λ suc z → suc (suc z))
+\end{code}
+%</tupleAdd>
