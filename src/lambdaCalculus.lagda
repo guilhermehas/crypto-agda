@@ -1,3 +1,8 @@
+\begin{code}
+data Result {A : Set} : A → Set where
+  res : (x : A) → Result x
+\end{code}
+
 %<*Id>
 \begin{code}
 id : {A : Set} → A → A
@@ -35,6 +40,19 @@ two suc z = suc (suc z)
 \end{code}
 %</naturals>
 
+%<*isZero>
+\begin{code}
+isZero : {A : Set} → ((A → A) → A → A) → (A → A → A)
+isZero n true false = n (λ _ → false) true
+
+isZero-zero : {A : Set} → Result (isZero {A} zero)
+isZero-zero = res (λ true false → true)
+
+isZero-two : {A : Set} → Result (isZero {A} two)
+isZero-two = res (λ true false → false)
+\end{code}
+%</isZero>
+
 %<*plus>
 \begin{code}
 plus : {A : Set} → ((A → A) → A → A)
@@ -48,11 +66,6 @@ _+_ : {A : Set} → ((A → A) → A → A)
 _+_ n m suc z = n suc (m suc z)
 \end{code}
 %</plus>
-
-\begin{code}
-data Result {A : Set} : A → Set where
-  res : (x : A) → Result x
-\end{code}
 
 %<*onePone>
 \begin{code}
@@ -77,3 +90,45 @@ sumList : {A List : Set} → Result (natList {A} {(A → A) → A → A} _+_ zer
 sumList = res (λ suc z → suc (suc (suc z)))
 \end{code}
 %</sumList>
+
+%<*either>
+\begin{code}
+left : {A B C : Set} → A → (A → C) → (B → C) → C
+left x f g = f x
+
+right : {A B C : Set} → B → (A → C) → (B → C) → C
+right x f g = g x
+\end{code}
+%</either>
+
+%<*eitherExamples>
+\begin{code}
+zero-left : {A B C : Set} → (((A → A) → A → A) → C) → (B → C) → C
+zero-left = left zero
+
+one-left : {A B C : Set} → (((A → A) → A → A) → C) → (B → C) → C
+one-left = left one
+
+false-right : {A B C : Set} → (A → C) → ((B → B → B) → C) → C
+false-right = right false
+
+true-right : {A B C : Set} → (A → C) → ((B → B → B) → C) → C
+true-right = right true
+\end{code}
+%</eitherExamples>
+
+%<*eitherRes>
+\begin{code}
+zero-isZero : {A : Set} → Result (zero-left {A} isZero id)
+zero-isZero = res (λ true false → true)
+
+one-isZero : {A : Set} → Result (one-left {A} isZero id)
+one-isZero = res (λ true false → false)
+
+false-id : {A : Set} → Result (false-right {(A → A) → A → A} isZero id)
+false-id = res (λ true false → false)
+
+true-id : {A : Set} → Result (false-right {(A → A) → A → A} isZero id)
+true-id = res (λ true false → false)
+\end{code}
+%</eitherRes>

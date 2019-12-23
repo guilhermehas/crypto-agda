@@ -272,19 +272,20 @@ The current version of Agda is Agda 2.
   $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because x is of type A.
 
   \agda{lambdaCalculus}{Id}
-
   The simplest function is the identity function made in Agda
-  \agda{lambdaCalculus}{Id2}
 
+  \agda{lambdaCalculus}{Id2}
   This is another way of writing the same function.
 
   \agda{lambdaCalculus}{trueFalse}
-
   This is how true and false are encoded in lambda calculus.
-  \agda{lambdaCalculus}{naturals}
 
+  \agda{lambdaCalculus}{naturals}
   This is how naturals numbers are defined in lambda calculs.
   Look that the definition of zero looks like the definition of false.
+
+  \agda{lambdaCalculus}{isZero}
+  Defining this way, it is possible to say if a natural number is zero or not.
 
   \agda{lambdaCalculus}{plus}
   Plus is defined this way using lambda calculus.
@@ -298,7 +299,18 @@ The current version of Agda is Agda 2.
   \agda{lambdaCalculus}{sumList}
   Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
   the sum of the list.
-  
+
+  \agda{lambdaCalculus}{either}
+  In this way, it is possible to define Either.
+  It is one way to create a type that can be a Natural or a Boolean.
+
+  \agda{lambdaCalculus}{eitherExamples}
+  In these examples, it is defined zero, one in left and false, true in right.
+
+  \agda{lambdaCalculus}{eitherRes}
+  Either is usefull when defining one function that works for left and another that works for the right.
+  The function choosen for left was if a natural number is zero and
+  the function choosen for right was if the identity function.
 
   
   \subsection{Martin-Löf type theory}
