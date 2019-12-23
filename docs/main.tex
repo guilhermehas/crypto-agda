@@ -19,6 +19,7 @@
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
 
 \newcommand{\agda}[2]{\ExecuteMetaData[latex/#1.tex]{#2}}
+\newcommand{\incimg}[1]{\includegraphics[width=\columnwidth]{imgs/#1}}
 
 \title{Programming a cryptocurrency in Agda}								
 
@@ -127,20 +128,20 @@ The bitcoin was made to be a peer to peer eletronic cash.
 It was made in one way that users can save and verify transactions without the need of a trust party.
 Because of that no authority or goverment can block the bitcoin.
 
-\includegraphics[width=\columnwidth]{imgs/transactions1.png}
+\incimg{transactions1.png}
 
 Transactions in bitcoins are one array of input of previous transactions and one array of outputs.
 The mining transaction does not need to have an input.
 For each input of the transaction, it is necessary a signature signed with a private key to prove the ownerchip of the bitcoins.
 
-\includegraphics[width=\columnwidth]{imgs/transactions2.jpg}
+\incimg{transactions2.jpg}
 
 Transactions are grouped in a block.
 Each block has in its header the timestamp that the block was created, the hash of the block,
 the previous hash and a nounce.
 A nounce is an arbitrary value that the miner has to choose to make the hash of the block respect some specific characteristics.
 
-\includegraphics[width=\columnwidth]{imgs/blockchain.png}
+\incimg{blockchain.png}
 
 Each block has a limit size of 1 MB.
 Because of that, bitcoin has a blockchain (one array of blocks).
@@ -297,6 +298,7 @@ The current version of Agda is Agda 2.
   \agda{lambdaCalculus}{sumList}
   Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
   the sum of the list.
+  
 
   
   \subsection{Martin-Löf type theory}
@@ -372,7 +374,7 @@ Another good example is that in sum of two matrices, they should have the same d
 There are two kinds of data structures to modeling accounts records and savings states.
 The UTXO model used in Bitcoin and the account model used in Ethereum.
 
-  \includegraphics[width=\columnwidth]{imgs/account.jpeg}
+  \incimg{account.jpeg}
 
 In account model, it is saved the address and the balance of each address.
 For example, the data struct will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
@@ -380,7 +382,7 @@ So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of 
 In this way, it is possible to easily know how much of balance each address has,
 but it is not possible to know how they got in this state.
 
-  \includegraphics[width=\columnwidth]{imgs/utxo.png}
+  \incimg{utxo.png}
 
 In UTXO model, each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
