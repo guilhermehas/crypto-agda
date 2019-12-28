@@ -58,6 +58,33 @@ data nextTXTree :
         (isCoinbase tx))
     → nextTXTree txTree₁ (txtree txTree₂ tx proofLessQtTX)
 
+firstTressInBlock :
+  {block : Nat}
+  {time : Time}
+  {outputs : List TXFieldWithId}
+  {totalFees : Amount}
+  {qtTransactions : tQtTxs}
+  (tree : TXTree time block outputs totalFees qtTransactions)
+  → Set
+firstTressInBlock genesisTree = ⊤
+firstTressInBlock (txtree genesisTree (normalTX .genesisTree _ _ _) _) = ⊥
+firstTressInBlock (txtree (txtree _ (normalTX _ _ _ _) _) (normalTX _ _ _ _) _) = ⊥
+firstTressInBlock (txtree (txtree _ (coinbase _ _ _) _) (normalTX _ _ _ _) _) = ⊤
+firstTressInBlock (txtree genesisTree (coinbase _ _ _) _) = ⊥
+firstTressInBlock (txtree (txtree _ (normalTX _ _ _ _) _) (coinbase _ _ _) _) = ⊥
+firstTressInBlock (txtree (txtree _ (coinbase _ _ _) _) (coinbase _ _ _) _) = ⊤
+
+coinbaseTree :
+  {block : Nat}
+  {time : Time}
+  {outputs : List TXFieldWithId}
+  {totalFees : Amount}
+  {qtTransactions : tQtTxs}
+  (tree : TXTree time block outputs totalFees qtTransactions)
+  → Set
+coinbaseTree genesisTree = ⊥
+coinbaseTree (txtree _ (normalTX _ _ _ _) _) = ⊥
+coinbaseTree (txtree _ (coinbase _ _ _) _) = ⊤
 
 record Block
   {block₁ : Nat}
@@ -71,9 +98,11 @@ record Block
   {outputs₂ : List TXFieldWithId}
   {totalFees₂ : Amount}
   {qtTransactions₂ : tQtTxs}
-  (txTree₂ : TXTree time₂ (suc block₁) outputs₂ totalFees₂ qtTransactions₂)
+  (txTree₂ : TXTree time₂ block₁ outputs₂ totalFees₂ qtTransactions₂)
   : Set where
   constructor block
   field
-    nxTree : nextTXTree txTree₁ txTree₂
+    nxTree           : nextTXTree txTree₁ txTree₂
+    fstBlock         : firstTressInBlock txTree₁
+    sndBlockCoinbase : coinbaseTree txTree₂
 \end{code}
