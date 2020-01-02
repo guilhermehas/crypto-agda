@@ -96,10 +96,10 @@ Later, in 1989, David Chaum found an eletronic money corporation called DigiCash
 It was declared bankruptcy in 1998.
 
 Adam Back developed a proof-of-work (PoW) scheme for spam control, Hashcash \cite{back2002hashcash}.
-To send an email, the hash of the content of this email plus a nounce has to have a numerically value smaller than a defined target.
+To send an email, the hash of the content of this email plus a nonce has to have a numerically value smaller than a defined target.
 So, to create a valide email, the sender (miner) has to spend a considerable CPU resource on it.
-Because, hash functions produces pratically random values, so the miner has to guess a lot of nounce values before find some nounce that make the hash of the email less than the target value.
-This idea is the same that is used in Bitcoin proof of work, because each block has a nounce guessed by the miner and the hash of the block has to be less than the target value.
+Because, hash functions produces pratically random values, so the miner has to guess a lot of nonce values before find some nonce that make the hash of the email less than the target value.
+This idea is used in Bitcoin proof of work, because each block has a nonce guessed by the miner and the hash of the block has to be less than the target value.
 
 Wei Dai propose b-money \cite{dai1998b} for the first proposal for distributed digital scarcity.
 And Hal Finney created Bit Gold \cite{wallace2011rise}, a reusable proof of work for hashcash for its algorithm of proof of work.
@@ -108,50 +108,56 @@ In 31 October 2008, Satoshi Nakamoto registered the website ``bitcoin.org'' and 
 In January 2009, Nakamoto released the bitcoin software as open-source code.
 The identity of Satoshi Nakamoto is still unknown.
 Since that time, the total market of Bitcoin came to 330 billions dollars in 17 of December of 2018
-and his value has a historic record of 20 thousands dollars.
+when its value reached the historic peak of 20 thousands dollars.
 
 Other cryptocurrencies like Ethereum \cite{wood2014ethereum}, Monero \cite{noether2015ring} and ZCash \cite{hopwood2016zcash} were created after Bitcoin,
 but Bitcoin is still the cryptocurrency with the biggest market value.
 
-Ethereum is a cryptocurrency that uses account model instead of UTXO used in bitcoin for its transaction data struct.
-It uses Solidity as its programming language for smart contracts, it looks like Java Script,
-so it is easier to programming in it than in stack machine programming language of Bitcoin.
-Ethereum is now changing from proof of work (used in Bitcoin) to proof of stake.
+Ethereum is a cryptocurrency that uses account model instead of UTXO used in bitcoin for its
+transaction data struct.
+It uses Solidity as its programming language for smart contracts which resembles Javascript,
+so it is easier to program in it than in the stack machine programming language of Bitcoin.
+Ethereum is now transitioning from proof of work (used in Bitcoin) to proof of stake
+which will be the default proof mechanism of Ethereum 2.0 which is due to be released in
+3 of January of 2020.
 
-Monero and ZCash are both cryptocurrency that focus on fungibility, privacy and descentralization.
-Monero uses obfuscated public ledger, so anyone can send transcations, but nobody can tell the source, amount or destination.
+Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy and descentralization.
+Monero uses an obfuscated public ledger, so anyone can send transactions,
+but nobody can tell the source, amount or destination.
 Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which garantee privacy for its users.
 
 \subsection{Bitcoin}
 
 The bitcoin was made to be a peer to peer eletronic cash.
-It was made in one way that users can save and verify transactions without the need of a trust party.
+It was made in one way that users can save and verify transactions without the need of a trusted party.
 Because of that no authority or goverment can block the bitcoin.
 
 \incimg{transactions1.png}
 
-Transactions in bitcoins are one array of input of previous transactions and one array of outputs.
-The mining transaction does not need to have an input.
-For each input of the transaction, it is necessary a signature signed with a private key to prove the ownerchip of the bitcoins.
+Transactions in bitcoins are an array of input of previous transactions and an array of outputs.
+The mining transaction does require an input.
+For each input of the transaction, it is necessary a signature signed with a private key to prove the
+ownership of the bitcoins.
 
 \incimg{transactions2.jpg}
 
 Transactions are grouped in a block.
-Each block has in its header the timestamp that the block was created, the hash of the block,
-the previous hash and a nounce.
-A nounce is an arbitrary value that the miner has to choose to make the hash of the block respect some specific characteristics.
+Each block contains in its header the timestamp of its creation, the hash of the block,
+the previous hash and a nonce.
+A nonce is an arbitrary value that the miner has to choose to make the hash of the block respect some
+specific characteristics.
 
 \incimg{blockchain.png}
 
-Each block has a limit size of 1 MB.
-Because of that, bitcoin has a blockchain (one array of blocks).
+Each block has a size limit of 1 MB.
+Because of that, Bitcoin forms a blockchain (an chain of blocks).
 Each block should be created in an average of 10 minutes.
-This time was choosen because in 10 minutes, it is enough to propagate the block in all the world.
-To make it possible, there is a concept called proof of work in bitcoin.
-So the miner has choose a random value as nounce that makes the hash of the block less than a certain value.
+This time was choosen because 10 minutes is enough to propagate the block throughout the world.
+To make the blockchain tamper-proof, there is a concept called proof of work in Bitcoin.
+So the miner has choose a random value as nonce that makes the hash of the block less than a certain value.
 This value is choosen in a way that each block should be generated in 10 minutes in average.
-If the value is too low, miners will take more time to find a nounce that make the hash block less than the it.
-If it is too high, it will be easier to find a nounce and they will find it faster.
+If the value is too low, miners will take more time to find a nonce that make the hash block less than the it.
+If it is too high, it will be easier to find a nonce and they will find it faster.
 
 When two blocks are mined in nearly the same time, there are two valid blockchains.
 It is because the last block in the both blockchains are valid but different.
@@ -198,21 +204,22 @@ because there are some other contracts that pay more that will be executed inste
 
 Because Ethereum has its own EVM with more instructions than Bitcoin and it is Turing Complete,
 its considered less secure.
-Ethereum has its own high level programming language called Solidity that looks like JavaScript.
+Ethereum has its own high level programming language called Solidity that looks like Javascript.
 
 \subsection{Introduction}
 
-Before my work, there were some research in this field.
+Before this work, there were some research in this field.
 Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and transactions tree of bitcoin.
 Orestis Melkonian start to formalize Bitcoin Script.
 
 My work try to extend Antom Setzel model and make possible to use Bitcoin protocol
 from inputs and outputs from plain text.
-For example, the user send a transaction in plain text to the software and it validates if it is right.
-To use the Antom Setzel model, the user has to send the data and the proof that it is correct.
+For example, the user send a transaction in plain text to the software and it validates if it is correct.
+To use the Antom Setzel model, the user has to send the data and the proof that are both valid.
 
 \subsection{Agda Introduction}
-Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology as his PhD Thesis.
+Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology
+as his PhD Thesis.
 The current version of Agda is Agda 2.
 
   \subsection{Syntax}
@@ -285,7 +292,7 @@ The current version of Agda is Agda 2.
   Look that the definition of zero looks like the definition of false.
 
   \agda{lambdaCalculus}{isZero}
-  Defining this way, it is possible to say if a natural number is zero or not.
+  Defining natural numbers in this way, it is possible to say if a natural number is zero or not.
 
   \agda{lambdaCalculus}{plus}
   Plus is defined this way using lambda calculus.
@@ -323,10 +330,10 @@ The current version of Agda is Agda 2.
 
   
   \subsection{Martin-Löf type theory}
-  Agda is also a proof assistance based on intensional Martin-Löf type theory.
+  Agda also provides a proof assistance based on intentional Martin-Löf type theory.
 
     \subsection{Types}
-    In Martin-Löf type theory, there are 3 finites types and 5 types constructors.
+    In Martin-Löf type theory, there are 3 finite types and 5 constructors types.
     The 0 type contain 0 terms, it is called empty type and it is written bot.
     \agda{agdaExamples}{botType}
 
@@ -429,9 +436,9 @@ because each user has more privacy.
 \section{Methods}
 
 \subsection{Cripto Functions}
-The first thing that we define are the cripto functions that will be needed to make the cripto currency.
-Message can be defined in multiple ways, one array of bytes, one string or a natural number.
-Message in this context means some data.
+The first thing that we define are the cripto functions that will be needed to make the criptocurrency.
+Messages can be defined in multiple ways, one array of bytes, one string or a natural number.
+Messages in this context means some data.
 
 Private key is a number, a secret that someone has.
 In Bitcoin, the private key is a 256-bit number.
@@ -534,7 +541,7 @@ If it is a coinbase transaction, the next transaction will be in a new block.
 This function is to increment the quantity of transaction in the block.
 It has to receive a proof that the quantity of transaction that was before this new transaction was
 less than then maximum quantity of transaction allowed.
-So it is garantee that the quantity of transactions will never be greater than the maximum allowed.
+So it is guaranteed that the quantity of transactions will never be greater than the maximum allowed.
 If it is a coinbase transaction, it will be a new block.
 So the quantity of transactions start being zero.
 
