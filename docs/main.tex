@@ -231,8 +231,8 @@ The current version of Agda is Agda 2.
   After the function name, it is two colon (:) and the arguments of the function.
   It is closed by (name\_of\_argument : type\_of\_argument).
   After all, there is one arrow and the type of the result of the function.
-  This if, then, else is not a function built-in in Agda.
-  It was a function defined this way if\_then\_else\_ .
+  This ``if, then, else'' is not a function built-in in Agda.
+  It is a function defined this way if\_then\_else\_ .
 
   So it is possible to use this function in the default way.
 
@@ -254,11 +254,10 @@ The current version of Agda is Agda 2.
   \agda{agdaExamples}{patternMatch}
 
   To create a new type with different pattern match, it is used data constructor.
-  The constructor is the name of data constructor.
 
   \agda{agdaExamples}{dataConstructor}
 
-  This is another example of data constructor, but it depend on argument.
+  This is another example of Data Set, but it depend on the argument.
 
   \agda{agdaExamples}{vector}
 
@@ -266,16 +265,17 @@ The current version of Agda is Agda 2.
   It is constructed from the first constructor.
   Other types of vectors like Vector 1 (vector of size one), Vector 2, ... can only be constructed by
   the second constructor.
-  It takes as argument one Natural and a vector and return a vector with size of the last vector
+  It takes as argument a natural number and a vector and return a vector with size of the last vector
   plus one.
-
 
   Records are data types with just one case of pattern match
 
   \agda{agdaExamples}{record}
 
+  The constructor is the name of data constructor.
+
   Implicits terms are elements that the compiler is smart enough to deduce it.
-  So it is not necessary to put it in argument of the function.
+  So it is not necessary to put it as argument of the function.
 
   \agda{agdaExamples}{id}
 
