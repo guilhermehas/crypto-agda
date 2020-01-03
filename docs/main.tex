@@ -140,9 +140,23 @@ Because of that no authority or goverment can block the bitcoin.
 \incimg{transactions1.png}
 
 Transactions in bitcoins are an array of input of previous transactions and an array of outputs.
+Each input and output is an address, each address is made from public key that is made from a private key.
+
+A private key is a big number.
+It is so big that it is almost impossible to generate two identicals private key.
+
+The public key is generated from private key,
+but a private key can not be generate from a public key.
+
 The mining transaction does require an input.
 For each input of the transaction, it is necessary a signature signed with a private key to prove the
 ownership of the bitcoins.
+With the message and the signature, it is possible to know that the owner of the private key
+that generates the public key signed this message.
+
+With the signature and the public key, it is not possible to know the private key.
+So because of that, the owner of the private key can sign several messages without anyone knows
+his private key.
 
 \incimg{transactions2.jpg}
 
