@@ -96,13 +96,17 @@ Later, in 1989, David Chaum found an eletronic money corporation called DigiCash
 It was declared bankruptcy in 1998.
 
 Adam Back developed a proof-of-work (PoW) scheme for spam control, Hashcash \cite{back2002hashcash}.
-To send an email, the hash of the content of this email plus a nonce has to have a numerically value smaller than a defined target.
+To send an email, the hash of the content of this email plus a nonce has to have a numerically value
+smaller than a defined target.
 So, to create a valide email, the sender (miner) has to spend a considerable CPU resource on it.
-Because, hash functions produces pratically random values, so the miner has to guess a lot of nonce values before find some nonce that make the hash of the email less than the target value.
-This idea is used in Bitcoin proof of work, because each block has a nonce guessed by the miner and the hash of the block has to be less than the target value.
+Because, hash functions produces pratically random values, so the miner has to guess a lot of nonce
+values before find some nonce that make the hash of the email less than the target value.
+This idea is used in Bitcoin proof of work, because each block has a nonce guessed by the miner and
+the hash of the block has to be less than the target value.
 
 Wei Dai propose b-money \cite{dai1998b} for the first proposal for distributed digital scarcity.
-And Hal Finney created Bit Gold \cite{wallace2011rise}, a reusable proof of work for hashcash for its algorithm of proof of work.
+And Hal Finney created Bit Gold \cite{wallace2011rise}, a reusable proof of work for hashcash for
+its algorithm of proof of work.
 
 In 31 October 2008, Satoshi Nakamoto registered the website ``bitcoin.org'' and put a link for his paper \cite{nakamoto2008bitcoin} in a cryptography mailing list.
 In January 2009, Nakamoto released the bitcoin software as open-source code.
@@ -110,7 +114,8 @@ The identity of Satoshi Nakamoto is still unknown.
 Since that time, the total market of Bitcoin came to 330 billions dollars in 17 of December of 2018
 when its value reached the historic peak of 20 thousands dollars.
 
-Other cryptocurrencies like Ethereum \cite{wood2014ethereum}, Monero \cite{noether2015ring} and ZCash \cite{hopwood2016zcash} were created after Bitcoin,
+Other cryptocurrencies like Ethereum \cite{wood2014ethereum}, Monero \cite{noether2015ring} and
+ZCash \cite{hopwood2016zcash} were created after Bitcoin,
 but Bitcoin is still the cryptocurrency with the biggest market value.
 
 Ethereum is a cryptocurrency that uses account model instead of UTXO used in bitcoin for its
@@ -154,16 +159,19 @@ Because of that, Bitcoin forms a blockchain (an chain of blocks).
 Each block should be created in an average of 10 minutes.
 This time was choosen because 10 minutes is enough to propagate the block throughout the world.
 To make the blockchain tamper-proof, there is a concept called proof of work in Bitcoin.
-So the miner has choose a random value as nonce that makes the hash of the block less than a certain value.
+So the miner has choose a random value as nonce that makes the hash of the block less
+than a certain value.
 This value is choosen in a way that each block should be generated in 10 minutes in average.
-If the value is too low, miners will take more time to find a nonce that make the hash block less than the it.
+If the value is too low, miners will take more time to find a nonce that make the hash block
+less than the it.
 If it is too high, it will be easier to find a nonce and they will find it faster.
 
 When two blocks are mined in nearly the same time, there are two valid blockchains.
 It is because the last block in the both blockchains are valid but different.
 Because of this problem, in Bitcoin protocol, the largest chain is always the right chain.
 While two valid chains have the same size, it is not possible to know which chain is the right.
-This situation is called fork and when it happens, it is necessary to wait to see in which chain the new block will be.
+This situation is called fork and when it happens, it is necessary to wait to see in which chain
+the new block will be.
 
 In Bitcoin, there is a possibility of 51\% attack.
 It happens when some miner, with more power than all network, mine secretly the blocks.
@@ -171,7 +179,8 @@ So if the main network has 50 blocks, the miner could produce hidden blocks from
 and he would have 10 hidden blocks from the network.
 When he shows their hidden blocks, his chain become the valid chain, because it is bigger.
 So all transactions from previous blockchain from 46 to 50 blocks become invalid.
-Because of that, when someone make a big transaction in the blockchain, it is a good idea to wait more time.
+Because of that, when someone make a big transaction in the blockchain, it is a good idea
+to wait more time.
 So it is becoming harder and harder to make a 51\% with more time.
 Bitcoin has the highest market value nowadays, so attacking the bitcoin network is very expensive.
 Nowadays, this kind of attack is more common in new altcoins.
@@ -209,7 +218,8 @@ Ethereum has its own high level programming language called Solidity that looks 
 \subsection{Introduction}
 
 Before this work, there were some research in this field.
-Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and transactions tree of bitcoin.
+Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and
+transactions tree of bitcoin.
 Orestis Melkonian start to formalize Bitcoin Script.
 
 My work try to extend Antom Setzel model and make possible to use Bitcoin protocol
@@ -298,7 +308,8 @@ The current version of Agda is Agda 2.
 
   \subsection{Lambda Calculus}
   Lambda Calculus is a minimalist turing complete programming language with the concept of abstraction,
-  application using binding and substitution. For example, x is a variable, $(\lambda x.M)$ is an Abstraction and (M N) is an Application.
+  application using binding and substitution. For example, x is a variable, $(\lambda x.M)$
+  is an Abstraction and (M N) is an Application.
 
   In Lambda Calculus, there are two types of conversions $\alpha$-conversion and $\beta$-reduction.
   In $\alpha$-conversion, $(\lambda x.M[x]) \rightarrow (\lambda y.M[y])$.
@@ -306,7 +317,10 @@ The current version of Agda is Agda 2.
   For M[x] = x, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
 
   A free variable is every variable that is not bind outside.
-  For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$. The \textcolor{blue}{blue x} is binded for the \textcolor{green}{green x}, but the \textcolor{red}{red x} is not binded for any function. So the \textcolor{red}{red x} is a free variable.
+  For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$.
+  The \textcolor{blue}{blue x} is binded for the \textcolor{green}{green x},
+  but the \textcolor{red}{red x}
+  is not binded for any function. So the \textcolor{red}{red x} is a free variable.
 
   In $\beta$-reduction, it replaces the all free for the expression in the application.
   The $\beta$-reduction of this expression $((\lambda x.M) N) \rightarrow (M[x := N])$ .
@@ -417,7 +431,8 @@ It looks like CoQ, but does not have tatics.
 Agda is a total language, so it is garanteed that the code always terminal and coverage all inputs.
 Agda needs it to be a consistent language.
 
-Agda has inductive data types that are similar to algebric data types in non-depently typed programming language.
+Agda has inductive data types that are similar to algebric data types in non-depently typed programming
+language.
 The definition of Peano numbers in Agda:
 
 \agda{agdaExamples}{Nat}
@@ -427,9 +442,11 @@ For example, the sum of two numbers in Agda:
 
 \agda{agdaExamples}{sum}
 
-In Agda, because of dependent types, it is possible to make some restrictions in types that is not possible in other language.
+In Agda, because of dependent types, it is possible to make some restrictions in types that is not
+possible in other language.
 For example, get the first element of a vector.
-For it, it is necessary to specify in the type that the vector should have at size greater or equal tha than one.
+For it, it is necessary to specify in the type that the vector should have at size greater or equal
+than that one.
 
 \agda{agdaExamples}{vecHead}
 
@@ -456,11 +473,14 @@ In UTXO model, each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
 But all inputs have to never been spent before.
 
-Because of that, in UTXO model, it is easy to make a new transaction from previous one, but it is harder to know how much each one has.
+Because of that, in UTXO model, it is easy to make a new transaction from previous one, but it is harder
+to know how much each one has.
 The wallet that calculate how much balance each address has.
 
-In account model, there could be one kind of vulnerability that is less probabable to happen in UTXO model.
-Because there is an undesirable intermediary state that there is some address without balance while another has not already received his money.
+In account model, there could be one kind of vulnerability that is less probabable to happen in UTXO
+model.
+Because there is an undesirable intermediary state that there is some address without balance while
+another has not already received his money.
 
 For example: \\
 bobBalance -= 1 \\
@@ -507,14 +527,16 @@ In Bitcoin, there are some transactions.
 In each transactions, there are multiple inputs and outputs.
 Each input is named TXFieldWithId.
 The input of one transaction is the ouput of another transaction.
-Firsts outputs are generated from coinbase transaction (there is just one of this transaction at each block).
+Firsts outputs are generated from coinbase transaction (there is just one of this transaction at
+each block).
 Coinbase transactions are the miner reward.
 
 \agda{Transactions}{VectorOutput}
 
 Vector output is the vector of outputs transactions.
 It is a non empty vector.
-In its representation, it is possible to know in what time it was created (time is the position of they in all transactions),
+In its representation, it is possible to know in what time it was created (time is the position of
+they in all transactions),
 what is his size (quantity of outputs fields)
 and the total amount spend in this transaction,
 
@@ -540,16 +562,20 @@ In every new transaction, the UTXOs used as input is removed from transaction tr
 In this implementation, time is the number of the transactions in TXTree.
 Block is related in which block the transaction tree is.
 After every new coinbase transaction (the miner transaction), the block size increment in one quantity.
-Total fees are how much the miner will have in fee of transactions if he makes a block with these transactions.
+Total fees are how much the miner will have in fee of transactions if he makes a block with these
+transactions.
 Quantity of transactions is how many transactions there are in the current block.
-The type is tQtTxs instead of a natural number, because in this implementation, each block can has a number maximum of transactions.
+The type is tQtTxs instead of a natural number, because in this implementation, each block can has
+a number maximum of transactions.
 In bitcoin, it is different, each block has a limit size in space of 1 MB.
 
 Genesis tree is the first case.
 It is when the crypto currency was created.
 txtree is created from another tree.
-proofLessQtTX is a proof that the last transaction tree has its block size less than the maximum block size minus one or it is a coinbase transaction.
-It is because, it is necessary to verify the size of the last txtree so it will not have the size greater than the maximum.
+proofLessQtTX is a proof that the last transaction tree has its
+block size less than the maximum block size minus one or it is a coinbase transaction.
+It is because, it is necessary to verify the size of the last txtree so it will not have
+the size greater than the maximum.
 
 \agda{TXTree}{TX}
 
@@ -588,8 +614,8 @@ So the quantity of transactions start being zero.
 \agda{TXTree}{incFees}
 
 IncFee is a function that increment how much fee the miner will receive.
-If it is a coinbase transaction, the fee will be received by the miner, so the next miner will not receive
-this previous fee.
+If it is a coinbase transaction, the fee will be received by the miner,
+so the next miner will not receive this previous fee.
 Because of that, the new fee will start from zero.
 If it is a normal transaction, the newest fee will be the amount of input of the transaction minus
 the output of this trasaction plus the last fee of previous transactions.
