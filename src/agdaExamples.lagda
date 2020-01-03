@@ -146,6 +146,20 @@ bool→Set b = if b then ℕ else Bool
 \end{code}
 %</funcType>
 
+%<*funcTypeUnd>
+\begin{code}
+bool→Set-und : Bool → Set
+bool→Set-und b = if_then_else_ b ℕ Bool
+\end{code}
+%</funcTypeUnd>
+
+%<*funcType2>
+\begin{code}
+bool→Set' : Bool → Set
+bool→Set' b = if b then ℕ else Bool
+\end{code}
+%</funcType2>
+
 %<*dataConstructor>
 \begin{code}
 data Boolean : Set where
@@ -153,6 +167,20 @@ data Boolean : Set where
   false : Boolean
 \end{code}
 %</dataConstructor>
+
+%<*vector>
+\begin{code}
+data Vec : ℕ → Set where
+  []   : Vec zero
+  _::_ : {size : ℕ} → ℕ → Vec size → Vec (suc size)
+
+nil : Vec zero
+nil = []
+
+vec-one : Vec (suc zero)
+vec-one = zero :: nil
+\end{code}
+%</vector>
 
 %<*patternMatch>
 \begin{code}
@@ -188,3 +216,13 @@ zeroℕ : ℕ
 zeroℕ = id zero
 \end{code}
 %</idNat>
+
+%<*funcs>
+\begin{code}
+id-nat : ℕ → ℕ
+id-nat x = x
+
+id-nat' : ℕ → ℕ
+id-nat' = λ x → x
+\end{code}
+%</funcs>

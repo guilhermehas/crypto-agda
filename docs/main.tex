@@ -228,6 +228,22 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{funcType}
 
+  After the function name, it is two colon (:) and the arguments of the function.
+  It is closed by (name\_of\_argument : type\_of\_argument).
+  After all, there is one arrow and the type of the result of the function.
+  This if, then, else is not a function built-in in Agda.
+  It was a function defined this way if\_then\_else\_ .
+
+  So it is possible to use this function in the default way.
+
+  \agda{agdaExamples}{funcTypeUnd}
+
+  Or use the arguments inside the underscore.
+
+  \agda{agdaExamples}{funcType2}
+
+  The same notation can be done using just arrows without naming the arguments.
+
   Because of dependent types, it is possible to have a type that depend on the input
 
   \agda{agdaExamples}{dependentType}
@@ -238,8 +254,21 @@ The current version of Agda is Agda 2.
   \agda{agdaExamples}{patternMatch}
 
   To create a new type with different pattern match, it is used data constructor.
+  The constructor is the name of data constructor.
 
   \agda{agdaExamples}{dataConstructor}
+
+  This is another example of data constructor, but it depend on argument.
+
+  \agda{agdaExamples}{vector}
+
+  Vector zero is a type of a vector of size zero, so the only option to construct it is the empty vector.
+  It is constructed from the first constructor.
+  Other types of vectors like Vector 1 (vector of size one), Vector 2, ... can only be constructed by
+  the second constructor.
+  It takes as argument one Natural and a vector and return a vector with size of the last vector
+  plus one.
+
 
   Records are data types with just one case of pattern match
 
@@ -250,11 +279,22 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{id}
 
-  Implicits arguments are inside {}.
+  Implicits arguments are inside \{\}.
+  In this example, the name of the Set (A) can not be omitted
+  (like the second function version of boolean to set),
+  because it is used to say that x is of type A.
+
   In case of the function id, the type of the input can be deduced by the compiler.
   For example, the only type that zero can be is Natural.
 
   \agda{agdaExamples}{idNat}
+
+  Functions in Agda can be defined in two ways
+
+  \agda{agdaExamples}{funcs}
+
+  In the first case, the arguments are before equal sign (=).
+  In the second way, it is used the lambda abstraction that mean the same thing.
 
   \subsection{Lambda Calculus}
   Lambda Calculus is a minimalist turing complete programming language with the concept of abstraction,
