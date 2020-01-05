@@ -2,7 +2,10 @@
 %%% DOCUMENT PREAMBLE %%%
 \documentclass[12pt]{article}
 
-\usepackage{agda} \usepackage{apacite} \usepackage{catchfilebetweentags}
+\include{style}
+\usepackage{agda}
+\usepackage{apacite}
+\usepackage{catchfilebetweentags}
 
 \usepackage{ucs}
 \usepackage{amssymb}
@@ -45,39 +48,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{titlepage}
-	\centering
-    \vspace*{0.5 cm}
-   % \includegraphics[scale = 0.075]{bsulogo.png}\\[1.0 cm]	% University Logo
-   \begin{center}    \textsc{\Large   Fundação Getúlio Vargas}\\[2.0 cm]	\end{center}% University Name
-   \textsc{\Large Modelagem Matemática  }\\[0.5 cm]				% Course Code
-	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
-	{ \huge \bfseries \thetitle}\\
-	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
-	
-	\begin{minipage}{0.4\textwidth}
-		\begin{flushleft} \large
-		%	\emph{Submitted To:}\\
-		%	Name\\
-          % Affiliation\\
-           %contact info\\
-			\end{flushleft}
-			\end{minipage}~
-			\begin{minipage}{0.4\textwidth}
-            
-			\begin{flushright} \large
-        \emph{Student:} \\
-        Guilherme Horta Alvares da Silva \\
-        \emph{Professor:} \\
-        Doctor Flávio Codeço Coelho
-		\end{flushright}
-           
-	\end{minipage}\\[2 cm]
-
-  \includegraphics[scale = 0.5]{imgs/FGV.png}
-    
-	
-\end{titlepage}
+\firstpage{Fundação Getúlio Vargas}
+          {Modelagem Matemática}
+          {Guilherme Horta Alvares da Silva}
+          {Doctor Flávio Codeço Coelho}
+          {FGV}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

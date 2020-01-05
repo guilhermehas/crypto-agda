@@ -1,0 +1,28 @@
+\newcommand{\firstpage}[5]{
+  \begin{titlepage}
+    \centering
+      \vspace*{0.5 cm}
+    \begin{center}    \textsc{\Large #1}\\[2.0 cm]	\end{center}% University Name
+    \textsc{\Large #2 }\\[0.5 cm]				% Course Code
+    \rule{\linewidth}{0.2 mm} \\[0.4 cm]
+    { \huge \bfseries \thetitle}\\
+    \rule{\linewidth}{0.2 mm} \\[1.5 cm]
+
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft} \large
+        \end{flushleft}
+        \end{minipage}~
+        \begin{minipage}{0.4\textwidth}
+
+        \begin{flushright} \large
+          \emph{Student:} \\
+          #3 \\
+          \emph{Professor:} \\
+          #4
+      \end{flushright}
+
+    \end{minipage}\\[2 cm]
+
+    \includegraphics[scale = 0.5]{imgs/#5.png}
+  \end{titlepage}
+}
