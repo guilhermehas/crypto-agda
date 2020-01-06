@@ -308,7 +308,7 @@
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
@@ -351,12 +351,12 @@
 \>[2]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPrimitiveType{Set}\<%
 \\
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaInductiveConstructor{genesisTree}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaRecord{⊤}\<%
 \\
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaInductiveConstructor{genesisTree}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{normalTX}\AgdaSpace{}%
@@ -368,7 +368,7 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaDatatype{⊥}\<%
 \\
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -387,7 +387,7 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaDatatype{⊥}\<%
 \\
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -405,7 +405,7 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaRecord{⊤}\<%
 \\
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaInductiveConstructor{genesisTree}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{coinbase}\AgdaSpace{}%
@@ -416,7 +416,7 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaDatatype{⊥}\<%
 \\
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -434,7 +434,7 @@
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaDatatype{⊥}\<%
 \\
-\>[0]\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\>[0]\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{txtree}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -523,9 +523,10 @@
 \AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaRecord{⊤}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+
+%<*block>
+\begin{code}%
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Block}\<%
 \\
@@ -620,7 +621,7 @@
 %
 \>[4]\AgdaField{fstBlock}%
 \>[21]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{firstTressInBlock}\AgdaSpace{}%
+\AgdaFunction{firstTreesInBlock}\AgdaSpace{}%
 \AgdaBound{txTree₁}\<%
 \\
 %
@@ -628,11 +629,11 @@
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{coinbaseTree}\AgdaSpace{}%
 \AgdaBound{txTree₂}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+%</block>
+
+%<*blockchain>
+\begin{code}%
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{Blockchain}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
@@ -1005,3 +1006,4 @@
 \AgdaDatatype{Blockchain}\AgdaSpace{}%
 \AgdaBound{block}\<%
 \end{code}
+%</blockchain>
