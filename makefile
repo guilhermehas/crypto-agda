@@ -10,17 +10,18 @@ install:
 	cp docs/res/main.pdf $(out)/thesis.pdf
 
 clean:
-	rm docs/main.pdf; \
+	rm -rf docs/main.pdf; \
 	rm -rf docs/latex; \
-	rm docs/agda.sty \
+	rm -rf docs/agda.sty \
 	rm -rf docs/res; \
-	rm docs/*.log; \
-	rm docs/*.aux; \
-	rm docs/*latexmk; \
-	rm docs/*.toc; \
-	rm docs/*.fls; \
-	rm docs/*f agda.sty; \
-	rm docs/*rf latex; \
-	rm docs/*.ptb; \
-	rm docs/*.bbl; \
-	rm docs/*.blg; \
+	rm -rf docs/latex; \
+	rm -f docs/*.log; \
+	rm -f docs/*.aux; \
+	rm -f docs/*latexmk; \
+	rm -f docs/*.toc; \
+	rm -f docs/*.fls; \
+	rm -f docs/*f agda.sty; \
+	rm -f docs/*rf latex; \
+	rm -f docs/*.ptb; \
+	rm -f docs/*.bbl; \
+	rm -f docs/*.blg; \

@@ -6,5 +6,12 @@ pdf:
 	cd .. && nix-shell --command "make"
 	mv res/main.pdf .
 
+prepare: clean
+	cd .. && nix-build
+	cp -Lr ../result/tex/* .
+
+local:
+	latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=. main.tex
+
 clean:
-	rm -rf res
+	cd .. && make clean
