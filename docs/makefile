@@ -3,7 +3,7 @@ default: pdf
 pdf:
 	rm -f main.pdf
 	rm -rf ../src/build
-	cd .. && nix-shell --command "make"
+	cd .. && nix-shell --command make
 	mv res/main.pdf .
 
 prepare: clean
