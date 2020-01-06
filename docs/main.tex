@@ -24,10 +24,10 @@
 \newcommand{\agda}[2]{\ExecuteMetaData[latex/#1.tex]{#2}}
 \newcommand{\incimg}[1]{\includegraphics[width=\columnwidth]{imgs/#1}}
 
-\title{Programming a cryptocurrency in Agda}								
+\title{Programming a cryptocurrency in Agda}
 
 % Title
-\author{Guilherme H. A. Silva}						
+\author{Guilherme H. A. Silva}
 % Author
 \date{15 de Abril de 2019}
 % Date
@@ -250,7 +250,7 @@ The current version of Agda is Agda 2.
 
   \agda{lambdaCalculus}{list}
   This is how lists are defined in Lambda Calculus.
-  
+
   \agda{lambdaCalculus}{sumList}
   Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
   the sum of the list.
@@ -276,7 +276,7 @@ The current version of Agda is Agda 2.
   \agda{lambdaCalculus}{tupleAdd}
   This is one way of defining a function that add one if the first element of tuple is true.
 
-  
+
   \subsubsection{Martin-Löf type theory}
   Agda also provides a proof assistance based on intentional Martin-Löf type theory.
 
@@ -625,10 +625,33 @@ the output of this trasaction plus the last fee of previous transactions.
 outFee+RewardBlock is a proof that the amount of output transactions is equal to total fees of
 others transactions plus the block reward.
 
+\subsection{Blockchain}
+
+Block is a chain of transaction that is added in Bitcoin blockchain in every ten minutes.
+Each block consisit of serveral transactions and a miner transaction.
+This is how block in defined in this work:
+
+\agda{Blockchain}{block}
+
+nextTXTree assure that the second transaction tree is from the first transaction tree.
+firstTreesInBlock garantee that the last transaction in the first transaction tree
+is the first in the block.
+coinBaseTree assure that the last  transaction in the second transaction tree is
+a coinbase transaction.
+
+Blockchain is a chain of valid blocks.
+Every new block must be a continuation of the previous one.
+Here is the definition of the blockchain:
+
+\agda{Blockchain}{blockchain}
+
+In the first case, blockchain just has one block, called fstBlock.
+In the second case, the blockchain is an addition of a valid block from a previous blockchain.
+
 \section{Conclusion}
 
 \newpage
- 
+
 \bibliographystyle{apacite}
 \bibliography{References}
 

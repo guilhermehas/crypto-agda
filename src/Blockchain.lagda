@@ -58,7 +58,7 @@ data nextTXTree :
         (isCoinbase tx))
     → nextTXTree txTree₁ (txtree txTree₂ tx proofLessQtTX)
 
-firstTressInBlock :
+firstTreesInBlock :
   {block : Nat}
   {time : Time}
   {outputs : List TXFieldWithId}
@@ -66,13 +66,13 @@ firstTressInBlock :
   {qtTransactions : tQtTxs}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Set
-firstTressInBlock genesisTree = ⊤
-firstTressInBlock (txtree genesisTree (normalTX .genesisTree _ _ _) _) = ⊥
-firstTressInBlock (txtree (txtree _ (normalTX _ _ _ _) _) (normalTX _ _ _ _) _) = ⊥
-firstTressInBlock (txtree (txtree _ (coinbase _ _ _) _) (normalTX _ _ _ _) _) = ⊤
-firstTressInBlock (txtree genesisTree (coinbase _ _ _) _) = ⊥
-firstTressInBlock (txtree (txtree _ (normalTX _ _ _ _) _) (coinbase _ _ _) _) = ⊥
-firstTressInBlock (txtree (txtree _ (coinbase _ _ _) _) (coinbase _ _ _) _) = ⊤
+firstTreesInBlock genesisTree = ⊤
+firstTreesInBlock (txtree genesisTree (normalTX .genesisTree _ _ _) _) = ⊥
+firstTreesInBlock (txtree (txtree _ (normalTX _ _ _ _) _) (normalTX _ _ _ _) _) = ⊥
+firstTreesInBlock (txtree (txtree _ (coinbase _ _ _) _) (normalTX _ _ _ _) _) = ⊤
+firstTreesInBlock (txtree genesisTree (coinbase _ _ _) _) = ⊥
+firstTreesInBlock (txtree (txtree _ (normalTX _ _ _ _) _) (coinbase _ _ _) _) = ⊥
+firstTreesInBlock (txtree (txtree _ (coinbase _ _ _) _) (coinbase _ _ _) _) = ⊤
 
 coinbaseTree :
   {block : Nat}
@@ -85,7 +85,10 @@ coinbaseTree :
 coinbaseTree genesisTree = ⊥
 coinbaseTree (txtree _ (normalTX _ _ _ _) _) = ⊥
 coinbaseTree (txtree _ (coinbase _ _ _) _) = ⊤
+\end{code}
 
+%<*block>
+\begin{code}
 record Block
   {block₁ : Nat}
   {time₁ : Time}
@@ -103,10 +106,13 @@ record Block
   constructor block
   field
     nxTree           : nextTXTree txTree₁ txTree₂
-    fstBlock         : firstTressInBlock txTree₁
+    fstBlock         : firstTreesInBlock txTree₁
     sndBlockCoinbase : coinbaseTree txTree₂
+\end{code}
+%</block>
 
-
+%<*blockchain>
+\begin{code}
 data Blockchain :
   {block₁ : Nat}
   {time₁ : Time}
@@ -174,3 +180,4 @@ data Blockchain :
       (block : Block (txtree txTree-p₂ tx proofLessQtTX) txTree₂)
       → Blockchain block
 \end{code}
+%</blockchain>
