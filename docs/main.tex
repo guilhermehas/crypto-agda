@@ -63,7 +63,7 @@
 \renewcommand{\thesection}{\arabic{section}}
 \section{Introduction}
 
-\subsection{Cryptocurrencies}
+\subsection{Context}
 
 In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
 This cryptocurrency use RSA blind signatures \cite{chaum1983blind} to spend transactions.
@@ -106,6 +106,248 @@ Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy an
 Monero uses an obfuscated public ledger, so anyone can send transactions,
 but nobody can tell the source, amount or destination.
 Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which garantee privacy for its users.
+
+\section{Relevant Background}
+
+\subsection{Bibliograph revision}
+
+Before this work, there were some research in this field.
+Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and
+transactions tree of bitcoin.
+Orestis Melkonian start to formalize Bitcoin Script.
+
+My work try to extend Antom Setzel model and make possible to use Bitcoin protocol
+from inputs and outputs from plain text.
+For example, the user send a transaction in plain text to the software and it validates if it is correct.
+To use the Antom Setzel model, the user has to send the data and the proof that are both valid.
+
+\subsection{Agda Introduction}
+Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology
+as his PhD Thesis.
+The current version of Agda is Agda 2.
+
+  \subsubsection{Syntax}
+  In Agda, Set is equal to type.
+  In dependent type languages, it is possible to create a function that return a type.
+
+  \agda{agdaExamples}{funcType}
+
+  After the function name, it is two colon (:) and the arguments of the function.
+  It is closed by (name\_of\_argument : type\_of\_argument).
+  After all, there is one arrow and the type of the result of the function.
+  This ``if, then, else'' is not a function built-in in Agda.
+  It is a function defined this way if\_then\_else\_ .
+
+  So it is possible to use this function in the default way.
+
+  \agda{agdaExamples}{funcTypeUnd}
+
+  Or use the arguments inside the underscore.
+
+  \agda{agdaExamples}{funcType2}
+
+  The same notation can be done using just arrows without naming the arguments.
+
+  Because of dependent types, it is possible to have a type that depend on the input.
+
+  \agda{agdaExamples}{dependentType}
+
+  It is possible in Agda to do pattern match.
+  So it breaks the input in their possible cases.
+
+  \agda{agdaExamples}{patternMatch}
+
+  To create a new type with different pattern match, it is used data constructor.
+
+  \agda{agdaExamples}{dataConstructor}
+
+  This is another example of Data Set, but it depend on the argument.
+
+  \agda{agdaExamples}{vector}
+
+  Vector zero is a type of a vector of size zero, so the only option to construct it is the empty vector.
+  It is constructed from the first constructor.
+  Other types of vectors like Vector 1 (vector of size one), Vector 2, ... can only be constructed by
+  the second constructor.
+  It takes as argument a natural number and a vector and return a vector with size of the last vector
+  plus one.
+
+  Records are data types with just one case of pattern match.
+
+  \agda{agdaExamples}{record}
+
+  The constructor is the name of data constructor.
+
+  Implicits terms are elements that the compiler is smart enough to deduce it.
+  So it is not necessary to put it as argument of the function.
+
+  \agda{agdaExamples}{id}
+
+  Implicits arguments are inside \{\}.
+  In this example, the name of the Set (A) can not be omitted
+  (like the second function version of boolean to set),
+  because it is used to say that x is of type A.
+
+  In case of the function id, the type of the input can be deduced by the compiler.
+  For example, the only type that zero can be is Natural.
+
+  \agda{agdaExamples}{idNat}
+
+  Functions in Agda can be defined in two ways
+
+  \agda{agdaExamples}{funcs}
+
+  In the first case, the arguments are before equal sign (=).
+  In the second way, it is used the lambda abstraction that mean the same thing.
+
+  \subsubsection{Lambda Calculus}
+  Lambda Calculus is a minimalist turing complete programming language with the concept of abstraction,
+  application using binding and substitution. For example, x is a variable, $(\lambda x.M)$
+  is an Abstraction and (M N) is an Application.
+
+  In Lambda Calculus, there are two types of conversions $\alpha$-conversion and $\beta$-reduction.
+  In $\alpha$-conversion, $(\lambda x.M[x]) \rightarrow (\lambda y.M[y])$.
+  So in every free variable in M will be renamed from x to y.
+  For M[x] = x, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
+
+  A free variable is every variable that is not bind outside.
+  For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$.
+  The \textcolor{blue}{blue x} is binded for the \textcolor{green}{green x},
+  but the \textcolor{red}{red x}
+  is not binded for any function. So the \textcolor{red}{red x} is a free variable.
+
+  In $\beta$-reduction, it replaces the all free for the expression in the application.
+  The $\beta$-reduction of this expression $((\lambda x.M) N) \rightarrow (M[x := N])$ .
+  So if $M = x$, the $\beta$-reduction will be $((\lambda x.x) N) \rightarrow N$.
+  If $M = (\lambda x.x) x$, the $\beta$-reduction will be
+  $(\lambda x.((\lambda x.x)x))N \rightarrow (\lambda x.x)N$.
+
+  Agda uses typed lambda calculus.
+  So in an application (M N), M has to be of type $A \Rightarrow B$ and N has to be of type A.
+  $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because x is of type A.
+
+  \agda{lambdaCalculus}{Id}
+  The simplest function is the identity function made in Agda.
+
+  \agda{lambdaCalculus}{Id2}
+  This is another way of writing the same function.
+
+  \agda{lambdaCalculus}{trueFalse}
+  This is how true and false are encoded in lambda calculus.
+
+  \agda{lambdaCalculus}{naturals}
+  This is how naturals numbers are defined in lambda calculus.
+  Look that the definition of zero looks like the definition of false.
+
+  \agda{lambdaCalculus}{isZero}
+  Defining natural numbers in this way, it is possible to say if a natural number is zero or not.
+
+  \agda{lambdaCalculus}{plus}
+  Plus is defined this way using lambda calculus.
+
+  \agda{lambdaCalculus}{onePone}
+  This is one example of the calculation of one plus one in Lambda Calculus.
+
+  \agda{lambdaCalculus}{list}
+  This is how lists are defined in Lambda Calculus.
+  
+  \agda{lambdaCalculus}{sumList}
+  Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
+  the sum of the list.
+
+  \agda{lambdaCalculus}{either}
+  In this way, it is possible to define Either.
+  It is one way to create a type that can be a Natural or a Boolean.
+
+  \agda{lambdaCalculus}{eitherExamples}
+  In these examples, it is defined zero, one in left and false, true in right.
+
+  \agda{lambdaCalculus}{eitherRes}
+  Either is usefull when defining one function that works for left and another that works for the right.
+  The function choosen for left was if a natural number is zero and
+  the function choosen for right was if the identity function.
+
+  \agda{lambdaCalculus}{tuple}
+  This way is how tuple is defined in Lambda Calculus.
+
+  \agda{lambdaCalculus}{tupleExamples}
+  This is how is defined the tuple zero false and the tuple one true.
+
+  \agda{lambdaCalculus}{tupleAdd}
+  This is one way of defining a function that add one if the first element of tuple is true.
+
+  
+  \subsubsection{Martin-Löf type theory}
+  Agda also provides a proof assistance based on intentional Martin-Löf type theory.
+
+    In Martin-Löf type theory, there are 3 finite types and 5 constructors types.
+    The 0 type contain 0 terms, it is called empty type and it is written bot.
+    \agda{agdaExamples}{botType}
+
+    The 1 type is the type with just 1 canonical term and it represents existence.
+    It is called unit type and it is written top.
+    \agda{agdaExamples}{trivialType}
+
+    The 2 type contains 2 canonical terms. It represents a choice between two values.
+    \agda{agdaExamples}{eitherType}
+
+    The Boolean Type is defined using the Trivial type and the Either type.
+    \agda{agdaExamples}{boolType}
+
+    If statement is defined using booleans.
+    \agda{agdaExamples}{ifThenElse}
+
+
+    \subsubsection{Types Constructors}
+    The sum-types contain an ordered pair.
+    The second type can depend on the first type.
+    It has the same meaning of exist.
+    \agda{agdaExamples}{sumType}
+
+    The $\pi$-types contain functions.
+    So given an input type, it will return an output type.
+    It has the same meaning of a function:
+    \agda{agdaExamples}{piType}
+
+    In Inductive types, it is a self-referential type.
+    Naturals numbers are examples of that:
+    \agda{agdaExamples}{Nat}
+    Other data structs like linked list of natural numbers, trees, graphs are inductives types too.
+
+    Proofs in inductive types are made by induction.
+    \agda{agdaExamples}{NatElim}
+
+    Universe types are created to allow proofs written in all types.
+    For example, the type of Nat is U0.
+
+
+It looks like CoQ, but does not have tatics.
+Agda is a total language, so it is garanteed that the code always terminal and coverage all inputs.
+Agda needs it to be a consistent language.
+
+Agda has inductive data types that are similar to algebric data types in non-depently typed programming
+language.
+The definition of Peano numbers in Agda is:
+
+\agda{agdaExamples}{Nat}
+
+Definitions in Agda are done using induction.
+For example, the sum of two numbers in Agda:
+
+\agda{agdaExamples}{sum}
+
+In Agda, because of dependent types, it is possible to make some restrictions in types that is not
+possible in other language.
+For example, get the first element of a vector.
+For it, it is necessary to specify in the type that the vector should have at size greater or equal
+than that one.
+
+\agda{agdaExamples}{vecHead}
+
+Another good example is that in sum of two matrices, they should have the same dimentions.
+
+\agda{agdaExamples}{matrixSum}
+
 
 \subsection{Bitcoin}
 
@@ -214,246 +456,9 @@ Because Ethereum has its own EVM with more instructions than Bitcoin and it is T
 its considered less secure.
 Ethereum has its own high level programming language called Solidity that looks like Javascript.
 
-\subsection{Introduction}
+\section{Metodology}
 
-Before this work, there were some research in this field.
-Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and
-transactions tree of bitcoin.
-Orestis Melkonian start to formalize Bitcoin Script.
-
-My work try to extend Antom Setzel model and make possible to use Bitcoin protocol
-from inputs and outputs from plain text.
-For example, the user send a transaction in plain text to the software and it validates if it is correct.
-To use the Antom Setzel model, the user has to send the data and the proof that are both valid.
-
-\subsection{Agda Introduction}
-Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology
-as his PhD Thesis.
-The current version of Agda is Agda 2.
-
-  \subsection{Syntax}
-  In Agda, Set is equal to type.
-  In dependent type languages, it is possible to create a function that return a type.
-
-  \agda{agdaExamples}{funcType}
-
-  After the function name, it is two colon (:) and the arguments of the function.
-  It is closed by (name\_of\_argument : type\_of\_argument).
-  After all, there is one arrow and the type of the result of the function.
-  This ``if, then, else'' is not a function built-in in Agda.
-  It is a function defined this way if\_then\_else\_ .
-
-  So it is possible to use this function in the default way.
-
-  \agda{agdaExamples}{funcTypeUnd}
-
-  Or use the arguments inside the underscore.
-
-  \agda{agdaExamples}{funcType2}
-
-  The same notation can be done using just arrows without naming the arguments.
-
-  Because of dependent types, it is possible to have a type that depend on the input.
-
-  \agda{agdaExamples}{dependentType}
-
-  It is possible in Agda to do pattern match.
-  So it breaks the input in their possible cases.
-
-  \agda{agdaExamples}{patternMatch}
-
-  To create a new type with different pattern match, it is used data constructor.
-
-  \agda{agdaExamples}{dataConstructor}
-
-  This is another example of Data Set, but it depend on the argument.
-
-  \agda{agdaExamples}{vector}
-
-  Vector zero is a type of a vector of size zero, so the only option to construct it is the empty vector.
-  It is constructed from the first constructor.
-  Other types of vectors like Vector 1 (vector of size one), Vector 2, ... can only be constructed by
-  the second constructor.
-  It takes as argument a natural number and a vector and return a vector with size of the last vector
-  plus one.
-
-  Records are data types with just one case of pattern match.
-
-  \agda{agdaExamples}{record}
-
-  The constructor is the name of data constructor.
-
-  Implicits terms are elements that the compiler is smart enough to deduce it.
-  So it is not necessary to put it as argument of the function.
-
-  \agda{agdaExamples}{id}
-
-  Implicits arguments are inside \{\}.
-  In this example, the name of the Set (A) can not be omitted
-  (like the second function version of boolean to set),
-  because it is used to say that x is of type A.
-
-  In case of the function id, the type of the input can be deduced by the compiler.
-  For example, the only type that zero can be is Natural.
-
-  \agda{agdaExamples}{idNat}
-
-  Functions in Agda can be defined in two ways
-
-  \agda{agdaExamples}{funcs}
-
-  In the first case, the arguments are before equal sign (=).
-  In the second way, it is used the lambda abstraction that mean the same thing.
-
-  \subsection{Lambda Calculus}
-  Lambda Calculus is a minimalist turing complete programming language with the concept of abstraction,
-  application using binding and substitution. For example, x is a variable, $(\lambda x.M)$
-  is an Abstraction and (M N) is an Application.
-
-  In Lambda Calculus, there are two types of conversions $\alpha$-conversion and $\beta$-reduction.
-  In $\alpha$-conversion, $(\lambda x.M[x]) \rightarrow (\lambda y.M[y])$.
-  So in every free variable in M will be renamed from x to y.
-  For M[x] = x, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
-
-  A free variable is every variable that is not bind outside.
-  For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$.
-  The \textcolor{blue}{blue x} is binded for the \textcolor{green}{green x},
-  but the \textcolor{red}{red x}
-  is not binded for any function. So the \textcolor{red}{red x} is a free variable.
-
-  In $\beta$-reduction, it replaces the all free for the expression in the application.
-  The $\beta$-reduction of this expression $((\lambda x.M) N) \rightarrow (M[x := N])$ .
-  So if $M = x$, the $\beta$-reduction will be $((\lambda x.x) N) \rightarrow N$.
-  If $M = (\lambda x.x) x$, the $\beta$-reduction will be
-  $(\lambda x.((\lambda x.x)x))N \rightarrow (\lambda x.x)N$.
-
-  Agda uses typed lambda calculus.
-  So in an application (M N), M has to be of type $A \Rightarrow B$ and N has to be of type A.
-  $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because x is of type A.
-
-  \agda{lambdaCalculus}{Id}
-  The simplest function is the identity function made in Agda.
-
-  \agda{lambdaCalculus}{Id2}
-  This is another way of writing the same function.
-
-  \agda{lambdaCalculus}{trueFalse}
-  This is how true and false are encoded in lambda calculus.
-
-  \agda{lambdaCalculus}{naturals}
-  This is how naturals numbers are defined in lambda calculus.
-  Look that the definition of zero looks like the definition of false.
-
-  \agda{lambdaCalculus}{isZero}
-  Defining natural numbers in this way, it is possible to say if a natural number is zero or not.
-
-  \agda{lambdaCalculus}{plus}
-  Plus is defined this way using lambda calculus.
-
-  \agda{lambdaCalculus}{onePone}
-  This is one example of the calculation of one plus one in Lambda Calculus.
-
-  \agda{lambdaCalculus}{list}
-  This is how lists are defined in Lambda Calculus.
-  
-  \agda{lambdaCalculus}{sumList}
-  Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
-  the sum of the list.
-
-  \agda{lambdaCalculus}{either}
-  In this way, it is possible to define Either.
-  It is one way to create a type that can be a Natural or a Boolean.
-
-  \agda{lambdaCalculus}{eitherExamples}
-  In these examples, it is defined zero, one in left and false, true in right.
-
-  \agda{lambdaCalculus}{eitherRes}
-  Either is usefull when defining one function that works for left and another that works for the right.
-  The function choosen for left was if a natural number is zero and
-  the function choosen for right was if the identity function.
-
-  \agda{lambdaCalculus}{tuple}
-  This way is how tuple is defined in Lambda Calculus.
-
-  \agda{lambdaCalculus}{tupleExamples}
-  This is how is defined the tuple zero false and the tuple one true.
-
-  \agda{lambdaCalculus}{tupleAdd}
-  This is one way of defining a function that add one if the first element of tuple is true.
-
-  
-  \subsection{Martin-Löf type theory}
-  Agda also provides a proof assistance based on intentional Martin-Löf type theory.
-
-    In Martin-Löf type theory, there are 3 finite types and 5 constructors types.
-    The 0 type contain 0 terms, it is called empty type and it is written bot.
-    \agda{agdaExamples}{botType}
-
-    The 1 type is the type with just 1 canonical term and it represents existence.
-    It is called unit type and it is written top.
-    \agda{agdaExamples}{trivialType}
-
-    The 2 type contains 2 canonical terms. It represents a choice between two values.
-    \agda{agdaExamples}{eitherType}
-
-    The Boolean Type is defined using the Trivial type and the Either type.
-    \agda{agdaExamples}{boolType}
-
-    If statement is defined using booleans.
-    \agda{agdaExamples}{ifThenElse}
-
-
-    \subsection{Types Constructors}
-    The sum-types contain an ordered pair.
-    The second type can depend on the first type.
-    It has the same meaning of exist.
-    \agda{agdaExamples}{sumType}
-
-    The $\pi$-types contain functions.
-    So given an input type, it will return an output type.
-    It has the same meaning of a function:
-    \agda{agdaExamples}{piType}
-
-    In Inductive types, it is a self-referential type.
-    Naturals numbers are examples of that:
-    \agda{agdaExamples}{Nat}
-    Other data structs like linked list of natural numbers, trees, graphs are inductives types too.
-
-    Proofs in inductive types are made by induction.
-    \agda{agdaExamples}{NatElim}
-
-    Universe types are created to allow proofs written in all types.
-    For example, the type of Nat is U0.
-
-
-It looks like CoQ, but does not have tatics.
-Agda is a total language, so it is garanteed that the code always terminal and coverage all inputs.
-Agda needs it to be a consistent language.
-
-Agda has inductive data types that are similar to algebric data types in non-depently typed programming
-language.
-The definition of Peano numbers in Agda is:
-
-\agda{agdaExamples}{Nat}
-
-Definitions in Agda are done using induction.
-For example, the sum of two numbers in Agda:
-
-\agda{agdaExamples}{sum}
-
-In Agda, because of dependent types, it is possible to make some restrictions in types that is not
-possible in other language.
-For example, get the first element of a vector.
-For it, it is necessary to specify in the type that the vector should have at size greater or equal
-than that one.
-
-\agda{agdaExamples}{vecHead}
-
-Another good example is that in sum of two matrices, they should have the same dimentions.
-
-\agda{agdaExamples}{matrixSum}
-
-\subsection{UTXO Bitcoin}
+\subsection{Bitcoin UTXO}
 
 There are two kinds of data structures to modeling accounts records and savings states.
 The UTXO model used in Bitcoin and the account model used in Ethereum.
@@ -489,10 +494,6 @@ aliceBalance += 1
 In account model, it is straight foward to know how much balance each address has.
 In UTXO model, this calculation is made offchain. It can be a good thing,
 because each user has more privacy.
-
-\subsection{TXTree in Agda}
-
-\section{Methods}
 
 \subsection{Cripto Functions}
 The first thing that we define are the cripto functions that will be needed to make the criptocurrency.
@@ -623,7 +624,6 @@ the output of this trasaction plus the last fee of previous transactions.
 
 outFee+RewardBlock is a proof that the amount of output transactions is equal to total fees of
 others transactions plus the block reward.
-
 
 \section{Conclusion}
 
