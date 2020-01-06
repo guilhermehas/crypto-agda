@@ -1,9 +1,13 @@
-\newcommand{\firstpage}[5]{
+\newcommand\attr[2]{%%
+  \expandafter\def\csname#1\endcsname{#2}%%
+}
+
+\newcommand{\firstpage}{
   \begin{titlepage}
     \centering
       \vspace*{0.5 cm}
-    \begin{center}    \textsc{\Large #1}\\[2.0 cm]	\end{center}% University Name
-    \textsc{\Large #2 }\\[0.5 cm]				% Course Code
+    \begin{center}    \textsc{\Large \university}\\[2.0 cm]	\end{center}% University Name
+    \textsc{\Large \mastertheme }\\[0.5 cm]				% Course Code
     \rule{\linewidth}{0.2 mm} \\[0.4 cm]
     { \huge \bfseries \thetitle}\\
     \rule{\linewidth}{0.2 mm} \\[1.5 cm]
@@ -16,13 +20,13 @@
 
         \begin{flushright} \large
           \emph{Student:} \\
-          #3 \\
+          \author \\
           \emph{Professor:} \\
-          #4
+          \professor
       \end{flushright}
 
     \end{minipage}\\[2 cm]
 
-    \includegraphics[scale = 0.5]{imgs/#5.png}
+    \includegraphics[scale = 0.5]{imgs/\universityinitials.png}
   \end{titlepage}
 }
