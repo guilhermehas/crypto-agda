@@ -65,7 +65,7 @@
 
 \subsection{Cryptocurrencies}
 
-In 1983, David Chaum created ecash \cite{panurach1996money} , an anonymous cryptographic eletronic money.
+In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
 This cryptocurrency use RSA blind signatures \cite{chaum1983blind} to spend transactions.
 Later, in 1989, David Chaum found an eletronic money corporation called DigiCash Inc.
 It was declared bankruptcy in 1998.
@@ -95,11 +95,11 @@ ZCash \cite{hopwood2016zcash} were created after Bitcoin,
 but Bitcoin is still the cryptocurrency with the biggest market value.
 
 Ethereum is a cryptocurrency that uses account model instead of UTXO used in bitcoin for its
-transaction data struct.
+transaction data structure.
 It uses Solidity as its programming language for smart contracts which resembles Javascript,
 so it is easier to program in it than in the stack machine programming language of Bitcoin.
 Ethereum is now transitioning from proof of work (used in Bitcoin) to proof of stake
-which will be the default proof mechanism of Ethereum 2.0 which is due to be released in
+which will be the default proof mechanism of Ethereum 2.0 and will be released in
 3 of January of 2020.
 
 Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy and descentralization.
@@ -253,7 +253,7 @@ The current version of Agda is Agda 2.
 
   The same notation can be done using just arrows without naming the arguments.
 
-  Because of dependent types, it is possible to have a type that depend on the input
+  Because of dependent types, it is possible to have a type that depend on the input.
 
   \agda{agdaExamples}{dependentType}
 
@@ -277,7 +277,7 @@ The current version of Agda is Agda 2.
   It takes as argument a natural number and a vector and return a vector with size of the last vector
   plus one.
 
-  Records are data types with just one case of pattern match
+  Records are data types with just one case of pattern match.
 
   \agda{agdaExamples}{record}
 
@@ -332,7 +332,7 @@ The current version of Agda is Agda 2.
   $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because x is of type A.
 
   \agda{lambdaCalculus}{Id}
-  The simplest function is the identity function made in Agda
+  The simplest function is the identity function made in Agda.
 
   \agda{lambdaCalculus}{Id2}
   This is another way of writing the same function.
@@ -341,7 +341,7 @@ The current version of Agda is Agda 2.
   This is how true and false are encoded in lambda calculus.
 
   \agda{lambdaCalculus}{naturals}
-  This is how naturals numbers are defined in lambda calculs.
+  This is how naturals numbers are defined in lambda calculus.
   Look that the definition of zero looks like the definition of false.
 
   \agda{lambdaCalculus}{isZero}
@@ -351,10 +351,10 @@ The current version of Agda is Agda 2.
   Plus is defined this way using lambda calculus.
 
   \agda{lambdaCalculus}{onePone}
-  This is one example of the calculation of one plus one in Lambda Calculus
+  This is one example of the calculation of one plus one in Lambda Calculus.
 
   \agda{lambdaCalculus}{list}
-  This is how lists are defined in Lambda Calculus
+  This is how lists are defined in Lambda Calculus.
   
   \agda{lambdaCalculus}{sumList}
   Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
@@ -385,22 +385,21 @@ The current version of Agda is Agda 2.
   \subsection{Martin-Löf type theory}
   Agda also provides a proof assistance based on intentional Martin-Löf type theory.
 
-    \subsection{Types}
     In Martin-Löf type theory, there are 3 finite types and 5 constructors types.
     The 0 type contain 0 terms, it is called empty type and it is written bot.
     \agda{agdaExamples}{botType}
 
     The 1 type is the type with just 1 canonical term and it represents existence.
-    It is called unit type and it is written top .
+    It is called unit type and it is written top.
     \agda{agdaExamples}{trivialType}
 
     The 2 type contains 2 canonical terms. It represents a choice between two values.
     \agda{agdaExamples}{eitherType}
 
-    The Boolean Type is defined using the Trivial type and the Either type
+    The Boolean Type is defined using the Trivial type and the Either type.
     \agda{agdaExamples}{boolType}
 
-    If statement is defined using booleans
+    If statement is defined using booleans.
     \agda{agdaExamples}{ifThenElse}
 
 
@@ -410,15 +409,16 @@ The current version of Agda is Agda 2.
     It has the same meaning of exist.
     \agda{agdaExamples}{sumType}
 
-    The pi-types contain functions.
+    The $\pi$-types contain functions.
     So given an input type, it will return an output type.
-    It has the same meaning of a function
+    It has the same meaning of a function:
     \agda{agdaExamples}{piType}
 
     In Inductive types, it is a self-referential type.
-    Naturals numbers are examples of that
+    Naturals numbers are examples of that:
     \agda{agdaExamples}{Nat}
-    Other data structs like linked list of natural numbers, trees, graphs are too.
+    Other data structs like linked list of natural numbers, trees, graphs are inductives types too.
+
     Proofs in inductive types are made by induction.
     \agda{agdaExamples}{NatElim}
 
@@ -432,7 +432,7 @@ Agda needs it to be a consistent language.
 
 Agda has inductive data types that are similar to algebric data types in non-depently typed programming
 language.
-The definition of Peano numbers in Agda:
+The definition of Peano numbers in Agda is:
 
 \agda{agdaExamples}{Nat}
 
@@ -461,7 +461,7 @@ The UTXO model used in Bitcoin and the account model used in Ethereum.
   \incimg{account.jpeg}
 
 In account model, it is saved the address and the balance of each address.
-For example, the data struct will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
+For example, the data structure will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
 So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of balance.
 In this way, it is possible to easily know how much of balance each address has,
 but it is not possible to know how they got in this state.
@@ -552,7 +552,7 @@ The remainder will be used by the miner.
 
 \subsection{Transaction Tree}
 
-Transaction tree is one of most important data structs in bitcoin.
+Transaction tree is one of most important data structures in bitcoin.
 In the transaction tree, there are all unspent transaction outputs (UTXO).
 In every new transaction, the UTXOs used as input is removed from transaction tree.
 

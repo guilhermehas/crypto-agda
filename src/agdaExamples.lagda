@@ -35,14 +35,14 @@ suc n +' m = suc (n + m)
 \end{code}
 %</sum>
 
-<%trivialType>
+%<*trivialType>
 \begin{code}
 data ⊤ : Set where
   tt : ⊤
 \end{code}
 %</trivialType>
 
-<%botType>
+%<*botType>
 \begin{code}
 data ⊥ : Set where
 
@@ -51,7 +51,7 @@ data ⊥ : Set where
 \end{code}
 %</botType>
 
-<%eitherType>
+%<*eitherType>
 \begin{code}
 data Either {l : Level} (A : Set l) (B : Set l) : Set l where
   left  : (l : A) → Either A B
@@ -68,21 +68,21 @@ Either-elim (right r) onleft onright = onright r
 \end{code}
 %</eitherType>
 
-<%boolType>
+%<*boolType>
 \begin{code}
 Bool : Set
 Bool = Either ⊤ ⊤
 \end{code}
 %</boolType>
 
-<%ifThenElse>
+%<*ifThenElse>
 \begin{code}
 if_then_else_ : {l : Level} {A : Set l} (b : Bool) (tRes fRes : A) → A
 if b then tRes else fRes = Either-elim b (λ _ → tRes) λ _ → fRes
 \end{code}
 %</ifThenElse>
 
-<%piType>
+%<*piType>
 \begin{code}
 ∀-elim : ∀ {A : Set} {B : A → Set}
   (L : ∀ (x : A) → B x)
