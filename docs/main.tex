@@ -358,6 +358,7 @@ It was made in one way that users can save and verify transactions without the n
 Because of that no authority or goverment can block the bitcoin.
 
 \incimg{transactions1.png}
+%% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
 
 Transactions in bitcoins are an array of input of previous transactions and an array of outputs.
 Each input and output is an address, each address is made from public key that is made from a private key.
@@ -382,6 +383,7 @@ So because of that, the owner of the private key can sign several messages witho
 his private key.
 
 \incimg{transactions2.jpg}
+%% https://en.wikipedia.org/wiki/Bitcoin_network
 
 Transactions are grouped in a block.
 Each block contains in its header the timestamp of its creation, the hash of the block,
@@ -390,6 +392,8 @@ A nonce is an arbitrary value that the miner has to choose to make the hash of t
 specific characteristics.
 
 \incimg{blockchain.png}
+%% https://bitcoin.stackexchange.com/questions/12427/can-someone-explain-how-the-bitcoin-blockchain-works/13347
+%% https://i.stack.imgur.com/HrKX0.png
 
 Each block has a size limit of 1 MB.
 Because of that, Bitcoin forms a blockchain (an chain of blocks).
@@ -466,6 +470,7 @@ There are two kinds of data structures to modeling accounts records and savings 
 The UTXO model used in Bitcoin and the account model used in Ethereum.
 
   \incimg{account.jpeg}
+  %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
 In account model, it is saved the address and the balance of each address.
 For example, the data structure will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
@@ -474,6 +479,8 @@ In this way, it is possible to easily know how much of balance each address has,
 but it is not possible to know how they got in this state.
 
   \incimg{utxo.png}
+  %% https://bitcoin.org/
+  %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
 In UTXO model, each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
