@@ -360,7 +360,8 @@ Because of that no authority or goverment can block the bitcoin.
 \incimg{transactions1.png}
 %% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
 
-Transactions in bitcoins are an array of input of previous transactions and an array of outputs.
+Transactions in bitcoins (like in FIG1) are an array of input of
+previous transactions and an array of outputs.
 Each input and output is an address, each address is made from public key that is made from a private key.
 
 \incimg{privatekey.png}
@@ -369,23 +370,25 @@ Each input and output is an address, each address is made from public key that i
 A private key is a big number.
 It is so big that it is almost impossible to generate two identicals private key.
 
-The public key is generated from private key,
+The public key is generated from private key (like in FIG2 where account number is f(p)), 
 but a private key can not be generate from a public key.
 
 The mining transaction does require an input.
-For each input of the transaction, it is necessary a signature signed with a private key to prove the
-ownership of the bitcoins.
+For each input of the transaction, it is necessary a signature signed with a private key
+(like in FIG2 where signature is f(p,t))
+to prove the ownership of the bitcoins.
 With the message and the signature, it is possible to know that the owner of the private key
 that generates the public key signed this message.
 
 With the signature and the public key, it is not possible to know the private key.
+In FIG2, the checker is a f(t,s,a).
 So because of that, the owner of the private key can sign several messages without anyone knows
 his private key.
 
 \incimg{transactions2.jpg}
 %% https://en.wikipedia.org/wiki/Bitcoin_network
 
-Transactions are grouped in a block.
+Transactions (shown in FIG3) are grouped in a block (shown in FIG4).
 Each block contains in its header the timestamp of its creation, the hash of the block,
 the previous hash and a nonce.
 A nonce is an arbitrary value that the miner has to choose to make the hash of the block respect some
@@ -429,7 +432,7 @@ Nowadays, this kind of attack is more common in new altcoins.
 \includegraphics[width=\columnwidth/2]{imgs/wallet.png}
 %% https://trustwallet.com/buy-bitcoin/
 
-Wallet is a software that track all transactions that the users received and sent.
+Wallet (shown in FIG5) is a software that track all transactions that the users received and sent.
 It also make new transactions from previous received transactions.
 
 \subsection{Ethereum}
@@ -472,7 +475,8 @@ The UTXO model used in Bitcoin and the account model used in Ethereum.
   \incimg{account.jpeg}
   %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
-In account model, it is saved the address and the balance of each address.
+In account model, it is saved the address and the balance of each address
+(like in FIG6).
 For example, the data structure will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
 So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of balance.
 In this way, it is possible to easily know how much of balance each address has,
@@ -482,7 +486,7 @@ but it is not possible to know how they got in this state.
   %% https://bitcoin.org/
   %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
-In UTXO model, each transaction is saved in the transaction tree.
+In UTXO model (shown in FIG7), each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
 But all inputs have to never been spent before.
 
