@@ -268,10 +268,15 @@ firstTree :
   → fstTree tree
 firstTree {_} {time} {outputs} {totalFees} {qtTransactions} genesisTree =
   fstTreec time outputs totalFees qtTransactions genesisTree (firstTX genesisTree) unit
-firstTree (txtree genesisTree tx proofLessQtTX) = {!!}
-firstTree (txtree (txtree tree (normalTX .tree SubInputs outputs txSigned) proofLessQtTX₁) tx proofLessQtTX) = {!!}
+firstTree (txtree genesisTree (normalTX _ SubInputs outputs txSigned) proofLessQtTX) =
+  let sameTX = normalTX genesisTree SubInputs outputs txSigned
+  in fstTreec (nat zero) [] zero zero genesisTree (nextTX genesisTree genesisTree (firstTX genesisTree) sameTX proofLessQtTX) unit
+firstTree (txtree genesisTree (coinbase _ outputs pAmountFee) proofLessQtTX) =
+  let sameTX = coinbase genesisTree outputs pAmountFee
+  in fstTreec (nat zero) [] zero zero genesisTree (nextTX genesisTree genesisTree (firstTX genesisTree) sameTX proofLessQtTX) unit
+firstTree (txtree (txtree tree (normalTX _ SubInputs outputs txSigned) proofLessQtTX₁) tx proofLessQtTX) = {!!}
 firstTree {_} {time} {outs} {totalFees} {qtTransactions}
-  (txtree (txtree tree (coinbase .tree outputs pAmountFee) proofLessQtTX₁) tx proofLessQtTX) =
+  (txtree (txtree tree (coinbase _ outputs pAmountFee) proofLessQtTX₁) tx proofLessQtTX) =
   let sameTree = (txtree (txtree tree (coinbase tree outputs pAmountFee) proofLessQtTX₁) tx proofLessQtTX)
   in fstTreec time outs totalFees qtTransactions sameTree (firstTX sameTree) unit
 
