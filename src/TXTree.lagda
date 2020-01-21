@@ -93,8 +93,12 @@ mutual
     {outputs : VectorOutput time outSize amount}
     (tx : TX {time} {block} {inputs} {outSize} tr outputs)
     → Nat
-  nextBlock {block} (normalTX _ _ _ _) = block
-  nextBlock {block} (coinbase _ _ _)     = suc block
+  nextBlock (normalTX genesisTree _ _ _) = zero
+  nextBlock {block} (normalTX (txtree _ (normalTX _ _ _ _) _) _ _ _) = block
+  nextBlock {block} (normalTX (txtree _ (coinbase _ _ _) _) _ _ _) = suc block
+  nextBlock (coinbase genesisTree _ _) = zero
+  nextBlock {block} (coinbase (txtree _ (normalTX _ _ _ _) _) _ _) = block
+  nextBlock {block} (coinbase (txtree _ (coinbase _ _ _) _) _ _) = suc block
 \end{code}
 %</nextBlock>
 
