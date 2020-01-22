@@ -307,9 +307,7 @@ firstTree (txtree (txtree (txtree tree tx proofLessQtTX₂) (normalTX .(txtree t
       fstTree = fstTree.tree fstTreeRec
   in fstTreec {fstTreeBlock fstTreeRec} {_} {_} {_} {_} {_} {_} {_} {_} {_} {_}  {!!} {!!}
 
-firstTree (txtree (txtree genesisTree (coinbase .genesisTree outputs₁ pAmountFee) proofLessQtTX₁) (normalTX .(txtree genesisTree (coinbase genesisTree outputs₁ pAmountFee) proofLessQtTX₁) SubInputs outputs txSigned) proofLessQtTX) = {!!}
-firstTree (txtree (txtree genesisTree (coinbase .genesisTree outputs₁ pAmountFee₁) proofLessQtTX₁) (coinbase .(txtree genesisTree (coinbase genesisTree outputs₁ pAmountFee₁) proofLessQtTX₁) outputs pAmountFee) proofLessQtTX) = {!!}
-firstTree (txtree (txtree (txtree tree tx proofLessQtTX₂) (coinbase .(txtree tree tx proofLessQtTX₂) outputs₁ pAmountFee₁) proofLessQtTX₁) (coinbase .(txtree (txtree tree tx proofLessQtTX₂) (coinbase (txtree tree tx proofLessQtTX₂) outputs₁ pAmountFee₁) proofLessQtTX₁) outputs pAmountFee) proofLessQtTX) = {!!}
+firstTree (txtree (txtree tx (coinbase .tx outputs₁ pAmountFee) proofLessQtTX₁) tx₁ proofLessQtTX) = {!!}
 
 
 -- let fstTreeRec = firstTree (txtree (txtree {block} tree (coinbase tree outputs₁ pAmountFee) proofLessQtTX₂) (normalTX _ SubInputs outputs txSigned) proofLessQtTX₁)
