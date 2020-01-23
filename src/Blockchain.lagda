@@ -208,7 +208,7 @@ record RawBlock
     {outputs}        : List TXFieldWithId
     {totalFees}      : Amount
     {qtTransactions} : tQtTxs
-    tree             : TXTree time block outputs totalFees qtTransactions
+    {tree}           : TXTree time block outputs totalFees qtTransactions
     rawBlock         : Block tree tree₂
 
 isCoinbaseTree :
@@ -391,9 +391,12 @@ txTree→Block :
   {qtTransactions : tQtTxs}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Dec (RawBlock tree)
-txTree→Block genesisTree = no λ{(rawBlockc _ (blockc _ _ sndBlockCoinbase)) → sndBlockCoinbase}
+txTree→Block genesisTree = no λ{(rawBlockc (blockc _ _ sndBlockCoinbase)) → sndBlockCoinbase}
 txTree→Block (txtree tree tx proofLessQtTX) with isCoinbaseTree (txtree tree tx proofLessQtTX)
-... | no ¬p = no λ{ (rawBlockc _ (blockc _ _ coinbaseTree)) → ¬p coinbaseTree}
-... | yes p = {!!}
+... | no ¬isCoinbase = no λ{ (rawBlockc (blockc _ _ coinbaseTree)) → ¬isCoinbase coinbaseTree}
+... | yes isCoinbase = let fTree = firstTree (txtree tree tx proofLessQtTX)
+                           nxTree = fstTree.nxTree fTree
+                           fBlock = fstTree.fstBlockc fTree
+                       in yes (rawBlockc (blockc nxTree fBlock isCoinbase))
 
 \end{code}
