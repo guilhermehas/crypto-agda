@@ -37,21 +37,20 @@ data nextTXTree :
     {outputs₁ : List TXFieldWithId}
     {totalFees₁ : Amount}
     {qtTransactions₁ : tQtTxs}
-    (txTree₁ : TXTree time₁ block₁ outputs₁ totalFees₁ qtTransactions₁)
+    {txTree₁ : TXTree time₁ block₁ outputs₁ totalFees₁ qtTransactions₁}
 
     {block₂ : Nat}
     {time₂ : Time}
     {outputs₂ : List TXFieldWithId}
     {totalFees₂ : Amount}
     {qtTransactions₂ : tQtTxs}
-    (txTree₂ : TXTree time₂ block₂ outputs₂ totalFees₂ qtTransactions₂)
+    {txTree₂ : TXTree time₂ block₂ outputs₂ totalFees₂ qtTransactions₂}
 
     (nxTree : nextTXTree txTree₁ txTree₂)
 
     {outSize : Nat} {amount : Amount}
     {outputTX : VectorOutput time₂ outSize amount}
-    {totalFees : Amount}
-    (tx : TX {time₂} {block₂} {outputs₂} {outSize} txTree₂ outputTX)
+    (tx : TX txTree₂ outputTX)
     (proofLessQtTX :
       Either
         (IsTrue (lessNat (finToNat qtTransactions₂) totalQtSub1))
@@ -187,7 +186,6 @@ data Blockchain :
       {totalFees₂ : Amount}
       {qtTransactions₂ : tQtTxs}
       {txTree₂ : TXTree time₂ (nextBlock tx) outputs₂ totalFees₂ qtTransactions₂}
-
       (block : Block (txtree txTree-p₂ tx proofLessQtTX) txTree₂)
       → Blockchain block
 \end{code}
@@ -328,9 +326,9 @@ changeTXType : ∀
   (tx : TX tree₂ outputTX)
   (proofLess : Either (IsTrue (lessNat (finToNat qtTransactions₂) totalQtSub1)) (isCoinbase tx))
   (eq : nextBlock tx ≡ block)
-  → TXChange tree₂ tx proofLess
-changeTXType {block} nxTree fblock tx proof eq =
-  let nxTX = nextTX {!!} {!!} nxTree tx proof
+  → TXChange {block} tree₂ tx proofLess
+changeTXType nxTree fblock tx proof eq =
+  let nxTX = nextTX nxTree tx proof
       ftree = fstTree₂→fstTree (fstTreec₂ eq nxTX fblock)
   in TXChangedc ftree
 
@@ -345,22 +343,6 @@ fstTreeBlock :
   (fstTree : fstTree tree)
   → Nat
 fstTreeBlock {block} _ = block
-
-firstTree¬ :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
-  (tree : TXTree time block outputs totalFees qtTransactions)
-  (¬fstInBlock : ¬ (firstTreesInBlock tree))
-  → Dec (fstTree tree)
-firstTree¬ genesisTree ¬fstInBlock = no λ x → ¬fstInBlock tt
-firstTree¬ (txtree genesisTree (normalTX _ SubInputs outputs txSigned) proofLessQtTX) ¬fstInBlock = yes {!!}
-firstTree¬ (txtree genesisTree (coinbase _ outputs pAmountFee) proofLessQtTX) ¬fstInBlock = yes {!!}
-firstTree¬ (txtree (txtree tree (normalTX _ SubInputs outputs txSigned) proofLessQtTX₁) tx proofLessQtTX) ¬fstInBlock = yes {!!}
-firstTree¬ (txtree (txtree _ (coinbase _ _ _) _) _ _) ¬fstInBlock = no λ x → ¬fstInBlock tt
-
 
 firstTree :
   {block : Nat}
