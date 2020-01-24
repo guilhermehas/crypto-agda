@@ -23,32 +23,18 @@ data nextTXTree :
   (txTree₂ : TXTree time₂ block₂ outputs₂ totalFees₂ qtTransactions₂)
   → Set where
 
-  firstTX :
-    {block : Nat}
-    {time : Time}
-    {outputs : List TXFieldWithId}
-    {totalFees : Amount}
-    {qtTransactions : tQtTxs}
+  firstTX : ∀ {block time outputs totalFees qtTransactions}
     (txTree : TXTree time block outputs totalFees qtTransactions)
     → nextTXTree txTree txTree
-  nextTX :
-    {block₁ : Nat}
-    {time₁ : Time}
-    {outputs₁ : List TXFieldWithId}
-    {totalFees₁ : Amount}
-    {qtTransactions₁ : tQtTxs}
+  nextTX : ∀ {block₁ time₁ outputs₁ totalFees₁ qtTransactions₁}
     {txTree₁ : TXTree time₁ block₁ outputs₁ totalFees₁ qtTransactions₁}
 
-    {block₂ : Nat}
-    {time₂ : Time}
-    {outputs₂ : List TXFieldWithId}
-    {totalFees₂ : Amount}
-    {qtTransactions₂ : tQtTxs}
+    {block₂ time₂ outputs₂ totalFees₂ qtTransactions₂}
     {txTree₂ : TXTree time₂ block₂ outputs₂ totalFees₂ qtTransactions₂}
 
     (nxTree : nextTXTree txTree₁ txTree₂)
 
-    {outSize : Nat} {amount : Amount}
+    {outSize amount}
     {outputTX : VectorOutput time₂ outSize amount}
     (tx : TX txTree₂ outputTX)
     (proofLessQtTX :
@@ -57,12 +43,8 @@ data nextTXTree :
         (isCoinbase tx))
     → nextTXTree txTree₁ (txtree txTree₂ tx proofLessQtTX)
 
-firstTreesInBlock :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+firstTreesInBlock : ∀
+  {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Set
 firstTreesInBlock genesisTree = ⊤
@@ -70,12 +52,8 @@ firstTreesInBlock (txtree genesisTree _ _) = ⊥
 firstTreesInBlock (txtree (txtree _ (normalTX _ _ _ _) _) _ _) = ⊥
 firstTreesInBlock (txtree (txtree _ (coinbase _ _ _) _) _ _) = ⊤
 
-isFirstTreeInBlock :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+isFirstTreeInBlock : ∀
+  {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Dec (firstTreesInBlock tree)
 isFirstTreeInBlock genesisTree = yes tt
@@ -84,12 +62,8 @@ isFirstTreeInBlock (txtree genesisTree (coinbase _ _ _) _) = no λ x → x
 isFirstTreeInBlock (txtree (txtree _ (normalTX _ _ _ _) _) _ _) = no λ x → x
 isFirstTreeInBlock (txtree (txtree _ (coinbase _ _ _) _) _ _) = yes tt
 
-coinbaseTree :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+coinbaseTree : ∀
+  {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Set
 coinbaseTree genesisTree = ⊥
@@ -209,12 +183,8 @@ record RawBlock
     {tree}           : TXTree time block outputs totalFees qtTransactions
     rawBlock         : Block tree tree₂
 
-isCoinbaseTree :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+isCoinbaseTree : ∀
+  {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Dec (coinbaseTree tree)
 isCoinbaseTree genesisTree = no λ x → x
@@ -259,12 +229,8 @@ record fstTree₂
     nxTree               : nextTXTree tree txTree₂
     fstBlockc            : firstTreesInBlock tree
 
-fstTree₂→fstTree :
-  {block : Nat}
-  {time₂ : Time}
-  {outputs₂ : List TXFieldWithId}
-  {totalFees₂ : Amount}
-  {qtTransactions₂ : tQtTxs}
+fstTree₂→fstTree : ∀
+  {block time₂ outputs₂ totalFees₂ qtTransactions₂}
   {txTree₂ : TXTree time₂ block outputs₂ totalFees₂ qtTransactions₂}
   (fTree₂ : fstTree₂ txTree₂)
   → fstTree txTree₂
@@ -282,13 +248,8 @@ record fstTreeChange
     {tree}      : TXTree time block outputs totalFees qtTransactions
     ftree       : fstTree tree
 
-changeBlockType :
-  {block : Nat}
-  {block₂ : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+changeBlockType : ∀
+  {block block₂ time outputs totalFees qtTransactions}
   {tree : TXTree time block outputs totalFees qtTransactions}
   {txTree : TXTree time block outputs totalFees qtTransactions}
   (fstTree : fstTree tree)
@@ -333,23 +294,15 @@ changeTXType nxTree fblock tx proof eq =
   in TXChangedc ftree
 
 
-fstTreeBlock :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+fstTreeBlock : ∀
+  {block time outputs totalFees qtTransactions}
   {tree : TXTree time block outputs totalFees qtTransactions}
   (fstTree : fstTree tree)
   → Nat
 fstTreeBlock {block} _ = block
 
-firstTree :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+firstTree : ∀
+  {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → fstTree tree
 firstTree genesisTree = fstTreec (firstTX genesisTree) unit
@@ -365,12 +318,8 @@ firstTree {block₂} (txtree {block₁} tree tx proofLessQtTX)
 ...   | no ¬eq = ⊥-elim impossible
           where postulate impossible : ⊥
 
-txTree→Block :
-  {block : Nat}
-  {time : Time}
-  {outputs : List TXFieldWithId}
-  {totalFees : Amount}
-  {qtTransactions : tQtTxs}
+txTree→Block : ∀
+  {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Dec (RawBlock tree)
 txTree→Block genesisTree = no λ{(rawBlockc (blockc _ _ sndBlockCoinbase)) → sndBlockCoinbase}
