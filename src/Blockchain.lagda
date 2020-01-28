@@ -94,7 +94,25 @@ record Block
     sndBlockCoinbase : coinbaseTree txTree₂
 \end{code}
 %</block>
+\begin{code}
 
+fstTree→coinbase : ∀
+  {block time outputs totalFees qtTransactions}
+  {tree : TXTree time block outputs totalFees qtTransactions}
+  {outSize amount}
+  {outputTX : VectorOutput time outSize amount}
+  {tx : TX tree outputTX}
+  {proofLessQtTX :
+    Either
+      (IsTrue (lessNat (finToNat qtTransactions) totalQtSub1))
+      (isCoinbase tx)}
+  (fstTree : firstTreesInBlock (txtree tree tx proofLessQtTX))
+  → coinbaseTree tree
+fstTree→coinbase {_} {_} {_} {_} {_} {genesisTree} ()
+fstTree→coinbase {_} {_} {_} {_} {_} {txtree _ (normalTX _ _ _ _) _} ()
+fstTree→coinbase {_} {_} {_} {_} {_} {txtree _ (coinbase _ _ _) _} _ = unit
+
+\end{code}
 %<*blockpchain>
 \begin{code}
 data Blockchain :
@@ -144,11 +162,9 @@ data Blockchain :
       {block-p : Block txTree-p₁ txTree-p₂}
       (blockchain : Blockchain block-p)
 
-      {outputs : List TXFieldWithId}
       {outSize : Nat}
       {amount : Amount}
       {outputTX : VectorOutput time-p₂ outSize amount}
-      {totalFees : Amount} {qtTransactions : tQtTxs}
       {tx : TX {time-p₂} {block-p₁} {outputs-p₂} {outSize} txTree-p₂ outputTX}
       {proofLessQtTX :
         Either
@@ -329,5 +345,25 @@ txTree→Block (txtree tree tx proofLessQtTX) with isCoinbaseTree (txtree tree t
                            nxTree = fstTree.nxTree fTree
                            fBlock = fstTree.fstBlockc fTree
                        in yes (rawBlockc (blockc nxTree fBlock isCoinbase))
+
+{-# TERMINATING #-}
+
+block→blockchain : ∀
+  {block₁ time₁ outputs₁ totalFees₁ qtTransactions₁}
+  {txTree₁ : TXTree time₁ block₁ outputs₁ totalFees₁ qtTransactions₁}
+  {time₂ outputs₂ totalFees₂ qtTransactions₂}
+  {txTree₂ : TXTree time₂ block₁ outputs₂ totalFees₂ qtTransactions₂}
+  (block : Block txTree₁ txTree₂)
+  → Blockchain block
+block→blockchain {_} {_} {_} {_} {_} {genesisTree} (blockc nxTree fstBlock₁ sndBlockCoinbase) =
+  fstBlock (blockc nxTree unit sndBlockCoinbase)
+block→blockchain {_} {_} {_} {_} {_} {txtree tree tx proofLessQtTX}
+  (blockc nxTree fstBlock₁ sndBlockCoinbase)
+  with firstTree tree
+... | fstTreec nxTree₁ fstBlockc = addBlock
+  (block→blockchain (blockc nxTree₁ fstBlockc (fstTree→coinbase fstBlock₁)))
+  (blockc nxTree fstBlock₁ sndBlockCoinbase)
+
+
 
 \end{code}
