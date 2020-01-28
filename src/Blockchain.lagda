@@ -363,7 +363,4 @@ block→blockchain {_} {_} {_} {_} {_} {txtree tree tx proofLessQtTX}
 ... | fstTreec nxTree₁ fstBlockc = addBlock
   (block→blockchain (blockc nxTree₁ fstBlockc (fstTree→coinbase fstBlock₁)))
   (blockc nxTree fstBlock₁ sndBlockCoinbase)
-
-
-
 \end{code}

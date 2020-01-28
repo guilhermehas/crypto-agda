@@ -29,7 +29,7 @@ vecOut→Amount : {amount : Amount}
   → Amount
 vecOut→Amount {amount} _ = amount
 
-addTransactionTree : (txTree : RawTXTree) → (tx : RawTX) → Maybe RawTXTree
+addTransactionTree : (txTree : RawTXTree) (tx : RawTX) → Maybe RawTXTree
 addTransactionTree record { time = time ; block = block ; outputs = outputs ;
   qtTransactions = qtTransactions ; totalFees = totalFees ; txTree = txTree }
   (coinbase record { outputs = outputsTX }) with listTXField→VecOut outputsTX
@@ -41,7 +41,7 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ;
   with time == timeOut
 ...     | no _     = nothing
 ...     | yes refl = just $
-  record { time = sucTime time ; block = suc block ;
+  record { time = sucTime time ; block = nextBlock (coinbase txTree vecOut eqBlockReward) ;
   outputs = outputs ++ VectorOutput→List vecOut ; txTree = txtree txTree tx (right unit) }
   where
     tx : TX txTree vecOut
@@ -58,7 +58,7 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ;
 ...   | just txSig with rawTXSigned→TXSigAll time outputs txSig
 ...     | nothing    = nothing
 ...     | just record { outSize = outSize ; sub = sub ; outputs = outs ; signed = signed } =
-  just $ record { time = sucTime time ; block = block ;
+  just $ record { time = sucTime time ; block = nextBlock (normalTX txTree sub outs signed) ;
   outputs = list-sub sub ++ VectorOutput→List outs ;
   txTree = txtree txTree (normalTX txTree sub outs signed) (left pLess) }
 
