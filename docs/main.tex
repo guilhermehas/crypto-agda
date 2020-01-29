@@ -4,6 +4,7 @@
 
 \include{style}
 \usepackage{agda}
+\usepackage{hyperref}
 \usepackage{apacite}
 \usepackage{catchfilebetweentags}
 
@@ -18,6 +19,7 @@
 \graphicspath{{images/}}
 \usepackage{parskip}
 \usepackage{fancyhdr}
+
 \usepackage{vmargin}
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
 
@@ -61,11 +63,12 @@
 \tableofcontents
 \pagebreak
 
+\listoffigures
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand{\thesection}{\arabic{section}}
 \section{Introduction}
 
-\subsection{Context}
+\subsection{Context} 
 
 In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
 This cryptocurrency use RSA blind signatures \cite{chaum1983blind} to spend transactions.
@@ -432,7 +435,8 @@ Nowadays, this kind of attack is more common in new altcoins.
 \includegraphics[width=\columnwidth/2]{imgs/wallet.png}
 %% https://trustwallet.com/buy-bitcoin/
 
-Wallet (shown in FIG5) is a software that track all transactions that the users received and sent.
+Wallet (shown in \ref{fig:account}) is a software that track all transactions 
+that the users received and sent.
 It also make new transactions from previous received transactions.
 
 \subsection{Ethereum}
@@ -471,9 +475,14 @@ Ethereum has its own high level programming language called Solidity that looks 
 
 There are two kinds of data structures to modeling accounts records and savings states.
 The UTXO model used in Bitcoin and the account model used in Ethereum.
-
-  \incimg{account.jpeg}
+\begin{figure}
+   \incimg{account.jpeg}
   %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
+  \caption{teste}
+  \label{fig:account}
+\end{figure}
+
+
 
 In account model, it is saved the address and the balance of each address
 (like in FIG6).
