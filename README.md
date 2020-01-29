@@ -12,18 +12,34 @@ Cripto currency made in agda
 # Build with nix
 This project works with nix channel version 18, so it is necessary to run this command before.
 ```bash
-$ nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
-$ nix-channel --update
+nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
+nix-channel --update
 ```
 
 Install nix and run this command:
 ```bash
-$ nix-build
+nix-build
 ```
 
-To put the necessary files to compile locally, run this command:
+# Build with docker
+Create docker image
 ```bash
-$ nix-shell --command "make install"
+docker build --tag cripto-agda .
+```
+
+Create the container
+```bash
+docker run --name cripto cripto-agda
+```
+
+Copy the pdf
+```bash
+docker cp cripto:/proj/result/thesis.pdf .
+```
+
+Copy tex files
+```bash
+docker cp cripto:/proj/result/tex/* docs
 ```
 
 
