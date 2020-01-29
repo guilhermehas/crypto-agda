@@ -34,12 +34,14 @@ docker run --name cripto cripto-agda
 
 Copy the pdf
 ```bash
-docker cp cripto:/proj/result/thesis.pdf .
+docker cp cripto:/cripto/thesis.pdf .
 ```
 
 Copy tex files
 ```bash
-docker cp cripto:/proj/result/tex/* docs
+docker cp cripto:/cripto/tex .
+mv tex/* docs
+rm -rf tex
 ```
 
 
