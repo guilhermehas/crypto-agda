@@ -24,7 +24,16 @@
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
 
 \newcommand{\agda}[2]{\ExecuteMetaData[latex/#1.tex]{#2}}
-\newcommand{\incimg}[1]{\includegraphics[width=\columnwidth]{imgs/#1}}
+\newcommand{\incgraph}[2]{\includegraphics[width=\columnwidth/#2]{imgs/#1}}
+\newcommand{\incimgdiv}[3]{
+  \begin{figure}
+    \incgraph{#1.#2}{#3}
+    \caption{#1}
+    \label{fig:#1}
+  \end{figure}
+}
+\newcommand{\incimg}[2]{\incimgdiv{#1}{#2}{1}}
+
 
 \title{Programming a cryptocurrency in Agda}
 
@@ -360,14 +369,14 @@ The bitcoin was made to be a peer to peer eletronic cash.
 It was made in one way that users can save and verify transactions without the need of a trusted party.
 Because of that no authority or goverment can block the bitcoin.
 
-\incimg{transactions1.png}
+\incimg{transactions1}{png}
 %% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
 
 Transactions in bitcoins (like in FIG1) are an array of input of
 previous transactions and an array of outputs.
 Each input and output is an address, each address is made from public key that is made from a private key.
 
-\incimg{privatekey.png}
+\incimg{privatekey}{png}
 %% https://coinsutra.com/bitcoin-private-key/
 
 A private key is a big number.
@@ -388,7 +397,7 @@ In FIG2, the checker is a f(t,s,a).
 So because of that, the owner of the private key can sign several messages without anyone knows
 his private key.
 
-\incimg{transactions2.jpg}
+\incimg{transactions2}{jpg}
 %% https://en.wikipedia.org/wiki/Bitcoin_network
 
 Transactions (shown in FIG3) are grouped in a block (shown in FIG4).
@@ -397,7 +406,7 @@ the previous hash and a nonce.
 A nonce is an arbitrary value that the miner has to choose to make the hash of the block respect some
 specific characteristics.
 
-\incimg{blockchain.png}
+\incimg{blockchain}{png}
 %% https://bitcoin.stackexchange.com/questions/12427/can-someone-explain-how-the-bitcoin-blockchain-works/13347
 %% https://i.stack.imgur.com/HrKX0.png
 
@@ -432,7 +441,7 @@ So it is becoming harder and harder to make a 51\% with more time.
 Bitcoin has the highest market value nowadays, so attacking the bitcoin network is very expensive.
 Nowadays, this kind of attack is more common in new altcoins.
 
-\includegraphics[width=\columnwidth/2]{imgs/wallet.png}
+\incimgdiv{wallet}{png}{2}
 %% https://trustwallet.com/buy-bitcoin/
 
 Wallet (shown in \ref{fig:account}) is a software that track all transactions 
@@ -475,14 +484,9 @@ Ethereum has its own high level programming language called Solidity that looks 
 
 There are two kinds of data structures to modeling accounts records and savings states.
 The UTXO model used in Bitcoin and the account model used in Ethereum.
-\begin{figure}
-   \incimg{account.jpeg}
-  %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
-  \caption{teste}
-  \label{fig:account}
-\end{figure}
 
-
+\incimg{account}{jpeg}
+%% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
 In account model, it is saved the address and the balance of each address
 (like in FIG6).
@@ -491,7 +495,7 @@ So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of 
 In this way, it is possible to easily know how much of balance each address has,
 but it is not possible to know how they got in this state.
 
-  \incimg{utxo.png}
+  \incimg{utxo}{png}
   %% https://bitcoin.org/
   %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 

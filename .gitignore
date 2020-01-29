@@ -9,6 +9,8 @@
 *.bbl
 *.blg
 *.dvi
+*.lof
+*.out
 docs/tex
 docs/latex
 docs/agda.sty
