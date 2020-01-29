@@ -10,17 +10,22 @@
 Cripto currency made in agda
 
 # Build with nix
+This project works with nix channel version 18, so it is necessary to run this command before.
+```bash
+$ nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
+$ nix-channel --update
+```
+
 Install nix and run this command:
 ```bash
 $ nix-build
 ```
 
-# Latex File
-Some latex files (agda.sty and .tex) are compiled in gh-pages.
-Execute this command to get them
+To put the necessary files to compile locally, run this command:
 ```bash
-$ bash copy-latex-ghpages.bash
+$ nix-shell --command "make install"
 ```
+
 
 License
 ----
