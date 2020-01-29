@@ -113,7 +113,7 @@ fstTree→coinbase {_} {_} {_} {_} {_} {txtree _ (normalTX _ _ _ _) _} ()
 fstTree→coinbase {_} {_} {_} {_} {_} {txtree _ (coinbase _ _ _) _} _ = unit
 
 \end{code}
-%<*blockpchain>
+%<*blockchain>
 \begin{code}
 data Blockchain :
   {block₁ : Nat}
