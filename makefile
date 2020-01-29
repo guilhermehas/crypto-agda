@@ -4,8 +4,10 @@ pdf:
 	mkdir -p docs/res
 	cd docs && latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=res main.tex
 
-install: pdf
-	cd docs && cp -r res/* .
+install:
+	mkdir -p $(out)/tex/latex
+	bash copylatexout.bash $(out)/tex/latex $(out)/tex
+	cp docs/res/main.pdf $(out)/thesis.pdf
 
 clean:
 	rm -rf docs/main.pdf; \
