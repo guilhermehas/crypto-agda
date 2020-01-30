@@ -534,9 +534,7 @@ Because Ethereum has its own EVM with more instructions than Bitcoin and it is T
 its considered less secure.
 Ethereum has its own high level programming language called Solidity that looks like Javascript.
 
-\section{Metodology}
-
-\subsection{Bitcoin UTXO}
+\section{Bitcoin UTXO}
 
 The UTXO model used in Bitcoin and the account model used in Ethereum are the two most used kinds
 of data structures to model accounts records and savings states.
@@ -579,7 +577,7 @@ In account model, it is straight foward to know how much balance each address ha
 In UTXO model, this calculation is made offchain. It can be a good thing,
 because each user has more privacy.
 
-\subsection{Cripto Functions}
+\section{Cripto Functions}
 The first thing that we define are the cripto functions that will be needed to make the criptocurrency.
 Messages can be defined in multiple ways, one array of bytes, one string or a natural number.
 Messages in this context means some data.
@@ -605,7 +603,7 @@ So they will be just postulates.
 
 \agda{Cripto}{criptoPostulates}
 
-\subsection{Transactions}
+\section{Transactions}
 
 In Bitcoin, there are some transactions.
 In each transactions, there are multiple inputs and outputs.
@@ -635,7 +633,7 @@ And in the transaction, there is a proof that the total amount of money in all i
 the total amount of outputs.
 The remainder will be used by the miner.
 
-\subsection{Transaction Tree}
+\section{Transaction Tree}
 
 Transaction tree is one of most important data structures in Bitcoin.
 In the transaction tree, there are all unspent transaction outputs (UTXO).
@@ -709,7 +707,7 @@ the output of this trasaction plus the last fee of previous transactions.
 outFee+RewardBlock is a proof that the amount of output transactions is equal to total fees of
 others transactions plus the block reward.
 
-\subsection{Blockchain}
+\section{Blockchain}
 
 Block is a chain of transaction that is added in Bitcoin blockchain in every ten minutes.
 Each block consisit of serveral transactions and a miner transaction.
@@ -731,6 +729,7 @@ Here is the definition of the blockchain:
 
 In the first case, blockchain just has one block, called fstBlock.
 In the second case, the blockchain is an addition of a valid block from a previous blockchain.
+
 
 \section{Conclusion}
 
