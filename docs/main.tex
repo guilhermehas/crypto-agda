@@ -99,7 +99,7 @@ its algorithm of proof of work.
 
 In 31 October 2008, Satoshi Nakamoto registered the website ``bitcoin.org'' and put a link for his
 paper \cite{nakamoto2008bitcoin} in a cryptography mailing list.
-In January 2009, Nakamoto released the bitcoin software as open-source code.
+In January 2009, Nakamoto released the Bitcoin software as open-source code.
 The identity of Satoshi Nakamoto is still unknown.
 Since that time, the total market of Bitcoin came to 330 billions dollars in 17 of December of 2018
 when its value reached the historic peak of 20 thousands dollars.
@@ -108,7 +108,7 @@ Other cryptocurrencies like Ethereum \cite{wood2014ethereum}, Monero \cite{noeth
 ZCash \cite{hopwood2016zcash} were created after Bitcoin,
 but Bitcoin is still the cryptocurrency with the biggest market value.
 
-Ethereum is a cryptocurrency that uses account model instead of UTXO used in bitcoin for its
+Ethereum is a cryptocurrency that uses account model instead of UTXO used in Bitcoin for its
 transaction data structure.
 It uses Solidity as its programming language for smart contracts which resembles Javascript,
 so it is easier to program in it than in the stack machine programming language of Bitcoin.
@@ -121,13 +121,57 @@ Monero uses an obfuscated public ledger, so anyone can send transactions,
 but nobody can tell the source, amount or destination.
 Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which guarantee privacy for its users.
 
+\section{Objectives}
+
+\subsection{History}
+
+Criptocurrencies are used as money and used in smart contracts in a decentralized way.
+Because of that, it is not possible to revert a transaction or undo the creation of the smart contract.
+There is no legal framework or agent to solve a problem in case of the existence of a bug.
+Because of that, it is necessary formal proofs in the criptocurrency protocol.
+So it can avoid big financial loss.
+
+In the case of Bitcoin, if there is some problem in the source code,
+it is possible to fix it using soft or hard forks.
+In soft fork, there is an upgrade in the software that is compatible with the old software.
+So it is possible the existence of old and new nodes in the same Bitcoin network.
+In hard forks, all the nodes should be upgraded at same time.
+Because the newer version is not compatible with the older one.
+So it is very dangerous to do this kind of fork.
+Therefore in Bitcoin, this kind of fork never happened.
+
+For example, in Bitcoin, the uniqueness of transactions IDs were not guaranteed.
+To fix this problem, it should put the block number in the coinbase transaction.
+This kind of change was solved in a soft fork named SegWit.
+
+In Ethereum, there was a bug in DAO smart contract.
+Because of that, malicious users exploited a vulnerability in it.
+The total loss of this exploit was 150 million dollars in this day.
+There was a hard fork to undo most of transactions that exploited this contract.
+This kind of hard fork violate the principle that smart contracts should be ruled just by
+algorithms without any human intervention.
+Because of that, the Ethereum blockchain that has not done the fork become the Ethereum classic.
+It is the version of Ethereum that has never done a hard fork before.
+
+\subsection{Proposes}
+
+The objective of this work is to give a formal definition of what a criptocurrency should be.
+There are some different definitions of a criptocurrency in this work,
+but there are some formal proofs that they are the same.
+
+In this work, it is possible to generate proofs transactions from transactions without proofs.
+This mean that a user can send a simple transaction without he worried to have to proof that
+the transaction is right to put in the blockchain.
+In Bitcoin, it happened in the same way.
+Because the node that has to verifies the transactions.
+
 \section{Relevant Background}
 
 \subsection{Literature Review}
 
 Before this work, there were some research in this field.
 Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and
-transactions tree of bitcoin.
+transactions tree of Bitcoin.
 Orestis Melkonian start to formalize Bitcoin Script.
 
 My work tries to extend Antom Setzel model and makes it possible to use Bitcoin protocol
@@ -365,14 +409,14 @@ Another good example is that in sum of two matrices, they should have the same d
 
 \subsection{Bitcoin}
 
-The bitcoin was made to be a peer to peer eletronic cash.
+The Bitcoin was made to be a peer to peer eletronic cash.
 It was made in one way that users can save and verify transactions without the need of a trusted party.
-Because of that no authority or goverment can block the bitcoin.
+Because of that no authority or goverment can block the Bitcoin.
 
 \incimg{transactions1}{png}
 %% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
 
-Transactions in bitcoins (like in FIG1) are an array of input of
+Transactions in Bitcoins (like in FIG1) are an array of input of
 previous transactions and an array of outputs.
 Each input and output is an address, each address is made from public key that is made from a private key.
 
@@ -388,7 +432,7 @@ but a private key can not be generate from a public key.
 The mining transaction does require an input.
 For each input of the transaction, it is necessary a signature signed with a private key
 (like in FIG2 where signature is f(p,t))
-to prove the ownership of the bitcoins.
+to prove the ownership of the Bitcoins.
 With the message and the signature, it is possible to know that the owner of the private key
 that generates the public key signed this message.
 
@@ -438,7 +482,7 @@ So all transactions from previous blockchain from 46 to 50 blocks become invalid
 Because of that, when someone make a big transaction in the blockchain, it is a good idea
 to wait more time.
 So it is becoming harder and harder to make a 51\% with more time.
-Bitcoin has the highest market value nowadays, so attacking the bitcoin network is very expensive.
+Bitcoin has the highest market value nowadays, so attacking the Bitcoin network is very expensive.
 Nowadays, this kind of attack is more common in new altcoins.
 
 \incimgdiv{wallet}{png}{2}
@@ -450,11 +494,11 @@ It also make new transactions from previous received transactions.
 
 \subsection{Ethereum}
 
-Ethereum differs from bitcoin in having an Ethereum Virtual Machine (EVM) to run script code.
+Ethereum differs from Bitcoin in having an Ethereum Virtual Machine (EVM) to run script code.
 EVM is a stack machine and turing complete while Bitcoin Script is not
 (it is impossible to do loops and recursion in Bitcoin).
 
-Transactions in bitcoin are all stored in blockchain.
+Transactions in Bitcoin are all stored in blockchain.
 In Ethereum, just the hash of it is stored in it.
 So it is saved in off chain database.
 Because of that, it is possible to save more information in Ethereum Blockchain.
@@ -581,7 +625,7 @@ The remainder will be used by the miner.
 
 \subsection{Transaction Tree}
 
-Transaction tree is one of most important data structures in bitcoin.
+Transaction tree is one of most important data structures in Bitcoin.
 In the transaction tree, there are all unspent transaction outputs (UTXO).
 In every new transaction, the UTXOs used as input is removed from transaction tree.
 
@@ -595,7 +639,7 @@ transactions.
 Quantity of transactions is how many transactions there are in the current block.
 The type is tQtTxs instead of a natural number, because in this implementation, each block can has
 a number maximum of transactions.
-In bitcoin, it is different, each block has a limit size in space of 1 MB.
+In Bitcoin, it is different, each block has a limit size in space of 1 MB.
 
 Genesis tree is the first case.
 It is when the crypto currency was created.
