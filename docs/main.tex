@@ -35,7 +35,7 @@
 \newcommand{\incimg}[2]{\incimgdiv{#1}{#2}{1}}
 
 
-\title{Programming a cryptocurrency in Agda}
+\title{A Simplified version of Bitcoin, implemented in Agda}
 
 % Title
 \author{Guilherme H. A. Silva}
@@ -45,7 +45,7 @@
 
 \attr{university}{Fundação Getúlio Vargas}
 \attr{universityinitials}{FGV}
-\attr{professor}{Doctor Flávio Codeço Coelho}
+\attr{professor}{Flávio Codeço Coelho}
 \attr{mastertheme}{Modelagem Matemática}
 \attr{author}{Guilherme Horta Alvares da Silva}
 
@@ -119,18 +119,18 @@ which will be the default proof mechanism of Ethereum 2.0 and will be released i
 Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy and descentralization.
 Monero uses an obfuscated public ledger, so anyone can send transactions,
 but nobody can tell the source, amount or destination.
-Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which garantee privacy for its users.
+Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which guarantee privacy for its users.
 
 \section{Relevant Background}
 
-\subsection{Bibliograph revision}
+\subsection{Literature Review}
 
 Before this work, there were some research in this field.
 Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and
 transactions tree of bitcoin.
 Orestis Melkonian start to formalize Bitcoin Script.
 
-My work try to extend Antom Setzel model and make possible to use Bitcoin protocol
+My work tries to extend Antom Setzel model and makes it possible to use Bitcoin protocol
 from inputs and outputs from plain text.
 For example, the user send a transaction in plain text to the software and it validates if it is correct.
 To use the Antom Setzel model, the user has to send the data and the proof that are both valid.
@@ -141,16 +141,16 @@ as his PhD Thesis.
 The current version of Agda is Agda 2.
 
   \subsubsection{Syntax}
-  In Agda, Set is equal to type.
+  In Agda, \emph{Set} is equal to type.
   In dependent type languages, it is possible to create a function that return a type.
 
   \agda{agdaExamples}{funcType}
 
-  After the function name, it is two colon (:) and the arguments of the function.
-  It is closed by (name\_of\_argument : type\_of\_argument).
+  After the function name, it is two colon (\emph{:}) and the arguments of the function.
+  It is closed by \emph{(name\_of\_argument : type\_of\_argument)}.
   After all, there is one arrow and the type of the result of the function.
   This ``if, then, else'' is not a function built-in in Agda.
-  It is a function defined this way if\_then\_else\_ .
+  It is a function defined this way \emph{if\_then\_else\_} .
 
   So it is possible to use this function in the default way.
 
@@ -175,13 +175,13 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{dataConstructor}
 
-  This is another example of Data Set, but it depend on the argument.
+  This is another example of \emph{Data Set}, but it depend on the argument.
 
   \agda{agdaExamples}{vector}
 
-  Vector zero is a type of a vector of size zero, so the only option to construct it is the empty vector.
+  \emph{Vector zero} is a type of a vector of size zero, so the only option to construct it is the empty vector.
   It is constructed from the first constructor.
-  Other types of vectors like Vector 1 (vector of size one), Vector 2, ... can only be constructed by
+  Other types of vectors like \emph{Vector 1} (vector of size one), \emph{Vector 2}, ... can only be constructed by
   the second constructor.
   It takes as argument a natural number and a vector and return a vector with size of the last vector
   plus one.
@@ -197,13 +197,13 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{id}
 
-  Implicits arguments are inside \{\}.
-  In this example, the name of the Set (A) can not be omitted
+  Implicits arguments are inside \emph{\{\}}.
+  In this example, the name of the Set (\emph{A}) can not be omitted
   (like the second function version of boolean to set),
-  because it is used to say that x is of type A.
+  because it is used to say that \emph{x} is of type \emph{A}.
 
-  In case of the function id, the type of the input can be deduced by the compiler.
-  For example, the only type that zero can be is Natural.
+  In case of the function \emph{id}, the type of the input can be deduced by the compiler.
+  For example, the only type that \emph{zero} can be is Natural.
 
   \agda{agdaExamples}{idNat}
 
@@ -211,18 +211,18 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{funcs}
 
-  In the first case, the arguments are before equal sign (=).
+  In the first case, the arguments are before equal sign (\emph{=}).
   In the second way, it is used the lambda abstraction that mean the same thing.
 
   \subsubsection{Lambda Calculus}
   Lambda Calculus is a minimalist turing complete programming language with the concept of abstraction,
-  application using binding and substitution. For example, x is a variable, $(\lambda x.M)$
-  is an Abstraction and (M N) is an Application.
+  application using binding and substitution. For example, \emph{x} is a variable, $(\lambda x.M)$
+  is an Abstraction and (\emph{M N}) is an Application.
 
   In Lambda Calculus, there are two types of conversions $\alpha$-conversion and $\beta$-reduction.
   In $\alpha$-conversion, $(\lambda x.M[x]) \rightarrow (\lambda y.M[y])$.
-  So in every free variable in M will be renamed from x to y.
-  For M[x] = x, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
+  So in every free variable in \emph{M} will be renamed from \emph{x} to \emph{y}.
+  For \emph{M[x] = x}, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
 
   A free variable is every variable that is not bind outside.
   For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$.
@@ -237,8 +237,8 @@ The current version of Agda is Agda 2.
   $(\lambda x.((\lambda x.x)x))N \rightarrow (\lambda x.x)N$.
 
   Agda uses typed lambda calculus.
-  So in an application (M N), M has to be of type $A \Rightarrow B$ and N has to be of type A.
-  $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because x is of type A.
+  So in an application \emph{(M N)}, \emph{M} has to be of type $A \Rightarrow B$ and N has to be of type A.
+  $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because \emph{x} is of type \emph{A}.
 
   \agda{lambdaCalculus}{Id}
   The simplest function is the identity function made in Agda.
@@ -270,14 +270,14 @@ The current version of Agda is Agda 2.
   the sum of the list.
 
   \agda{lambdaCalculus}{either}
-  In this way, it is possible to define Either.
+  In this way, it is possible to define \emph{Either}.
   It is one way to create a type that can be a Natural or a Boolean.
 
   \agda{lambdaCalculus}{eitherExamples}
   In these examples, it is defined zero, one in left and false, true in right.
 
   \agda{lambdaCalculus}{eitherRes}
-  Either is usefull when defining one function that works for left and another that works for the right.
+  \emph{Either} is useful when defining one function that works for left and another that works for the right.
   The function choosen for left was if a natural number is zero and
   the function choosen for right was if the identity function.
 
@@ -332,7 +332,7 @@ The current version of Agda is Agda 2.
     \agda{agdaExamples}{NatElim}
 
     Universe types are created to allow proofs written in all types.
-    For example, the type of Nat is U0.
+    For example, the type of \emph{Nat} is \emph{U0}.
 
 
 It looks like CoQ, but does not have tatics.
@@ -482,8 +482,8 @@ Ethereum has its own high level programming language called Solidity that looks 
 
 \subsection{Bitcoin UTXO}
 
-There are two kinds of data structures to modeling accounts records and savings states.
-The UTXO model used in Bitcoin and the account model used in Ethereum.
+The UTXO model used in Bitcoin and the account model used in Ethereum are the two most used kinds
+of data structures to model accounts records and savings states.
 
 \incimg{account}{jpeg}
 %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
@@ -513,9 +513,11 @@ Because there is an undesirable intermediary state that there is some address wi
 another has not already received his money.
 
 For example: \\
+\textbf{
 bobBalance -= 1 \\
 Intermediary State \\
 aliceBalance += 1
+}
 
 In account model, it is straight foward to know how much balance each address has.
 In UTXO model, this calculation is made offchain. It can be a good thing,
