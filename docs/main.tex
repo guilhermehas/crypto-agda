@@ -170,7 +170,19 @@ Because the node that has to verifies the transactions.
 \subsection{Literature Review}
 
 Before this work, there were some research in this field.
-Antom Setzel \cite{setzer2018modelling} already code the definitions of transactions and
+Beukema \cite{beukema2014formalising} was one of the first to try
+to define a formal specification of Bitcoin.
+In this work, he defines functions interfaces of Bitcoin and what they should do.
+Most of these functions define how Bitcoin Network protocol should be.
+In his work, he does not utilize any programming language with dependent types like Agda or CoQ.
+He uses mCRL2, a specification programming language.
+
+Orestis Melkonian \cite{melkonian2019formalizing} in his masters has done the formal specification
+of BitML (smart contract language) in Agda.
+This language can be compiled to Script, the smart contract language of Bitcoin. 
+
+Antom Setzel \cite{setzer2018modelling} also contributed for modeling Bitcoin.
+He coded in Agda the definitions of transactions and
 transactions tree of Bitcoin.
 Orestis Melkonian start to formalize Bitcoin Script.
 
