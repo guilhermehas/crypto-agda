@@ -6,7 +6,10 @@ open import Utils
 open import Cripto
 open import Transactions
 open import TXTree
+\end{code}
 
+%<*nexttree>
+\begin{code}
 data nextTXTree :
   {block₁ : Nat}
   {time₁ : Time}
@@ -42,7 +45,11 @@ data nextTXTree :
         (IsTrue (lessNat (finToNat qtTransactions₂) totalQtSub1))
         (isCoinbase tx))
     → nextTXTree txTree₁ (txtree txTree₂ tx proofLessQtTX)
+\end{code}
+%</nexttree>
 
+%<*firsttreeinblock>
+\begin{code}
 firstTreesInBlock : ∀
   {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
@@ -51,7 +58,11 @@ firstTreesInBlock genesisTree = ⊤
 firstTreesInBlock (txtree genesisTree _ _) = ⊥
 firstTreesInBlock (txtree (txtree _ (normalTX _ _ _ _) _) _ _) = ⊥
 firstTreesInBlock (txtree (txtree _ (coinbase _ _ _) _) _ _) = ⊤
+\end{code}
+%</firsttreeinblock>
 
+%<*isfirsttreeinblock>
+\begin{code}
 isFirstTreeInBlock : ∀
   {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
@@ -61,7 +72,11 @@ isFirstTreeInBlock (txtree genesisTree (normalTX _ _ _ _) _) = no λ x → x
 isFirstTreeInBlock (txtree genesisTree (coinbase _ _ _) _) = no λ x → x
 isFirstTreeInBlock (txtree (txtree _ (normalTX _ _ _ _) _) _ _) = no λ x → x
 isFirstTreeInBlock (txtree (txtree _ (coinbase _ _ _) _) _ _) = yes tt
+\end{code}
+%</isfirsttreeinblock>
 
+%<*coinbasetree>
+\begin{code}
 coinbaseTree : ∀
   {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
@@ -70,6 +85,7 @@ coinbaseTree genesisTree = ⊥
 coinbaseTree (txtree _ (normalTX _ _ _ _) _) = ⊥
 coinbaseTree (txtree _ (coinbase _ _ _) _) = ⊤
 \end{code}
+%</coinbasetree>
 
 %<*block>
 \begin{code}
@@ -181,6 +197,7 @@ data Blockchain :
 \end{code}
 %</blockchain>
 
+%<*rawblock>
 \begin{code}
 record RawBlock
   {block : Nat}
@@ -198,7 +215,11 @@ record RawBlock
     {qtTransactions} : tQtTxs
     {tree}           : TXTree time block outputs totalFees qtTransactions
     rawBlock         : Block tree tree₂
+\end{code}
+%</rawblock>
 
+%<*iscoinbase>
+\begin{code}
 isCoinbaseTree : ∀
   {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
@@ -206,7 +227,11 @@ isCoinbaseTree : ∀
 isCoinbaseTree genesisTree = no λ x → x
 isCoinbaseTree (txtree _ (normalTX _ _ _ _) _) = no λ x → x
 isCoinbaseTree (txtree _ (coinbase _ _ _) _) = yes tt
+\end{code}
+%</iscoinbase>
 
+%<*fsttree>
+\begin{code}
 record fstTree
   {block : Nat}
   {time₂ : Time}
@@ -224,7 +249,10 @@ record fstTree
     {tree}               : TXTree time block outputs totalFees qtTransactions
     nxTree               : nextTXTree tree txTree₂
     fstBlockc            : firstTreesInBlock tree
+\end{code}
+%</fsttree>
 
+\begin{code}
 record fstTree₂
   {block : Nat}
   {time₂ : Time}
@@ -316,7 +344,10 @@ fstTreeBlock : ∀
   (fstTree : fstTree tree)
   → Nat
 fstTreeBlock {block} _ = block
+\end{code}
 
+%<*firsttree>
+\begin{code}
 firstTree : ∀
   {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
@@ -333,21 +364,35 @@ firstTree {block₂} (txtree {block₁} tree tx proofLessQtTX)
                  in TXChange.fTree chgType
 ...   | no ¬eq = ⊥-elim impossible
           where postulate impossible : ⊥
+\end{code}
+%</firsttree>
 
+%<*treeblock>
+\begin{code}
 txTree→Block : ∀
   {block time outputs totalFees qtTransactions}
   (tree : TXTree time block outputs totalFees qtTransactions)
   → Dec (RawBlock tree)
-txTree→Block genesisTree = no λ{(rawBlockc (blockc _ _ sndBlockCoinbase)) → sndBlockCoinbase}
-txTree→Block (txtree tree tx proofLessQtTX) with isCoinbaseTree (txtree tree tx proofLessQtTX)
-... | no ¬isCoinbase = no λ{ (rawBlockc (blockc _ _ coinbaseTree)) → ¬isCoinbase coinbaseTree}
+txTree→Block genesisTree =
+  no λ{(rawBlockc (blockc _ _ sndBlockCoinbase)) → sndBlockCoinbase}
+txTree→Block (txtree tree tx proofLessQtTX)
+  with isCoinbaseTree (txtree tree tx proofLessQtTX)
+... | no ¬isCoinbase =
+         no λ{ (rawBlockc (blockc _ _ coinbaseTree)) → ¬isCoinbase coinbaseTree}
 ... | yes isCoinbase = let fTree = firstTree (txtree tree tx proofLessQtTX)
                            nxTree = fstTree.nxTree fTree
                            fBlock = fstTree.fstBlockc fTree
                        in yes (rawBlockc (blockc nxTree fBlock isCoinbase))
+\end{code}
+%</treeblock>
 
+
+\begin{code}
 {-# TERMINATING #-}
+\end{code}
 
+%<*blockblockchain>
+\begin{code}
 block→blockchain : ∀
   {block₁ time₁ outputs₁ totalFees₁ qtTransactions₁}
   {txTree₁ : TXTree time₁ block₁ outputs₁ totalFees₁ qtTransactions₁}
@@ -355,7 +400,8 @@ block→blockchain : ∀
   {txTree₂ : TXTree time₂ block₁ outputs₂ totalFees₂ qtTransactions₂}
   (block : Block txTree₁ txTree₂)
   → Blockchain block
-block→blockchain {_} {_} {_} {_} {_} {genesisTree} (blockc nxTree fstBlock₁ sndBlockCoinbase) =
+block→blockchain {_} {_} {_} {_} {_} {genesisTree}
+  (blockc nxTree fstBlock₁ sndBlockCoinbase) =
   fstBlock (blockc nxTree unit sndBlockCoinbase)
 block→blockchain {_} {_} {_} {_} {_} {txtree tree tx proofLessQtTX}
   (blockc nxTree fstBlock₁ sndBlockCoinbase)
@@ -364,3 +410,4 @@ block→blockchain {_} {_} {_} {_} {_} {txtree tree tx proofLessQtTX}
   (block→blockchain (blockc nxTree₁ fstBlockc (fstTree→coinbase fstBlock₁)))
   (blockc nxTree fstBlock₁ sndBlockCoinbase)
 \end{code}
+%</blockblockchain>
