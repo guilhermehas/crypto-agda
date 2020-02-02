@@ -36,7 +36,7 @@ vecOut→Amount : {amount : Amount}
 vecOut→Amount {amount} _ = amount
 \end{code}
 
-%<*addtxtree>
+%<*addtxtree1>
 \begin{code}
 addTransactionTree : (txTree : RawTXTree) (tx : RawTX) → Maybe RawTXTree
 addTransactionTree record { time = time ; block = block ; outputs = outputs ;
@@ -57,7 +57,11 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ;
   where
     tx : TX txTree vecOut
     tx = coinbase txTree vecOut eqBlockReward
+\end{code}
+%</addtxtree1>
 
+%<*addtxtree2>
+\begin{code}
 addTransactionTree record { time = time ; block = block ; outputs = outputs ;
   qtTransactions = qtTransactions ; txTree = txTree }
   (normalTX record { inputs = inputsTX ; outputs = outputsTX })
@@ -75,7 +79,7 @@ addTransactionTree record { time = time ; block = block ; outputs = outputs ;
   outputs = list-sub sub ++ VectorOutput→List outs ;
   txTree = txtree txTree (normalTX txTree sub outs signed) (left pLess) }
 \end{code}
-%</addtxtree>
+%</addtxtree2>
 
 \begin{code}
 addMaybeTransTree : (txTree : Maybe RawTXTree) (tx : RawTX) → Maybe RawTXTree

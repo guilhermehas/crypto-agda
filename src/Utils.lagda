@@ -160,13 +160,19 @@ isDistUnion : {A : Set} {la lb : List A} (x : A) (isDistLa : isDistinct x la)
 isDistUnion {_} {[]} {lb} y isDistLa isDistLb = isDistLb
 isDistUnion {_} {x ∷ la} {lb} y (x≢y , isDistLa) isDistLb
   rewrite ∷++≡ x la lb = x≢y , isDistUnion y isDistLa isDistLb
+\end{code}
 
+%<*uniondist>
+\begin{code}
 unionDistinct : {A : Set} {la lb : List A} (da : Distinct la) (db : Distinct lb)
   (twoDist : twoListDistinct la lb) → Distinct $ la ++ lb
 unionDistinct {_} {[]} {lb} da db twoDist = db
-unionDistinct {_} {x ∷ la} {lb} (cons x da isDistXla) db (isDistXlb , distLaLb) =
+unionDistinct {_} {_} {lb} (cons x da isDistXla) db (isDistXlb , distLaLb) =
   cons x (unionDistinct da db distLaLb) (isDistUnion x isDistXla isDistXlb)
+\end{code}
+%</uniondist>
 
+\begin{code}
 allJoin : {A : Set} {f : A → Set} (xs ys : List A) (allXS : All f xs) (allYS : All f ys)
   → All f $ xs ++ ys
 allJoin [] ys allXS allYS = allYS

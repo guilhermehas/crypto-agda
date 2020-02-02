@@ -725,7 +725,7 @@ A better solution is a proof that this transaction is invalid with the transacti
 instead of nothing.
 But defining what is an invalid transaction can be tricky.
 
-\agda{RawTXTree}{addtxtree}
+\agda{RawTXTree}{addtxtree1}
 
 There are two cases.
 The first one is if the transaction is a coinbase transaction.
@@ -736,6 +736,8 @@ After, it validates if the time of the transaction is equal to the time of the t
 In the end, it add the outputs of the transaction to the vector of outputs.
 Because it is a coinbase transaction, there is no inputs to be removed.
 
+\agda{RawTXTree}{addtxtree2}
+
 The second case, that the transaction is a regular transaction, looks like the same.
 First, it validate if the quantity of transaction is less than the maximum allowed.
 Second, it validate if this transaction is a valid signed transaction.
@@ -743,6 +745,61 @@ If all these conditions are true, it returns a new transaction tree
 with news outputs equal to the outputs of this transaction plus the outputs of the last transaction tree
 minus the inputs.
 In case of invalid transaction, it returns nothing.
+
+\subsection{Proofs}
+
+One of the importants proofs is that the each output of \emph{outputs transaction} is distinct.
+This is very important, because it garantees that each input in the transaction could be
+just related to just one unspent output.
+This characteristic could be in the type of transaction tree,
+but it is proven outside of it.
+
+First, it is necessary to define what is a distinct union:
+
+\agda{Utils}{uniondist}
+
+The union of distinct lists make a new distinct list if both are distinct to each other.
+
+Now, to proof that outputs are a distict list:
+
+\agda{proofsTXTree}{uniqueouts}
+
+In the first case, the transaction tree is a genesis tree without any outputs.
+So a empty list is a distinct list.
+In the second case, the outputs are the union of inputs of the transacion with the outputs
+of \emph{vector output}.
+So, it is necessary to proof that inputs of the transaction are distinct,
+that elements of \emph{vector output} are also distinct and that both lists are distinct to each other.
+
+\agda{proofsTXTree}{distinps}
+
+There are some cases to proof that inputs are distinct.
+First, if it is a regular transaction or if it is a coinbase transaction.
+Second, if the transaction tree of this transaction is a genesis tree or if it is a regular tree.
+
+If the transaction tree of the transaction is a genesis tree,
+the number of inputs are zero.
+So they are distinct.
+
+In the other cases, it does the same thing of the proof of unique outputs.
+The only difference is that it also does a recursive proof.
+It assumes that the transaction of the last transaction tree is also distinct.
+
+\agda{proofsTXTree}{alldists}
+
+Both are distinct to each other because all of the transactions of input has the time less
+than the time of the transaction.
+And because all of outputs of the currenct transaction has time equal to the current time
+of this transaction.
+
+\agda{proofsTXTree}{outtimeless}
+
+The proof that the time of the outputs is less than current time of the transaction
+is done in a recursive way.
+It is both necessary to proof that \emph{inputs of tx} and \emph{vector output} have both
+times less than the current time of this transaction.
+It is all done in a recursive way.
+
 
 \section{Ledger}
 
