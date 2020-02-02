@@ -412,7 +412,7 @@
 %
 \>[4]\AgdaFunction{nonNilMap}\AgdaSpace{}%
 \AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
 \AgdaBound{nla}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -466,7 +466,7 @@
 %
 \>[4]\AgdaFunction{nonNilAddId}\AgdaSpace{}%
 \AgdaSymbol{(\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaBound{outputs}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{nonNil}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -545,7 +545,7 @@
 %
 \>[4]\AgdaFunction{All?Signed}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{input}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaBound{inputs}\AgdaSymbol{)}\<%
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
@@ -625,7 +625,7 @@
 \\
 %
 \>[40]\AgdaSymbol{\})}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaBound{allInputs}\<%
 \\
 %
@@ -828,7 +828,7 @@
 \AgdaOperator{\AgdaFunction{\$}}\AgdaSpace{}%
 \AgdaRecord{RawVecOutput}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{tx}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaInductiveConstructor{[]}\AgdaSymbol{)}\<%
 \\
 \>[0]\AgdaFunction{createVecOutsize}\AgdaSpace{}%
@@ -904,7 +904,7 @@
 \\
 \>[0]\AgdaFunction{listTXField→VecOut}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{tx}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaBound{txs}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{with}\AgdaSpace{}%
 \AgdaFunction{listTXField→VecOut}\AgdaSpace{}%
@@ -1038,7 +1038,7 @@
 \AgdaOperator{\AgdaFunction{\$}}\AgdaSpace{}%
 \AgdaRecord{RawVecOutput}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{tx}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaBound{outs}\AgdaSymbol{)}\<%
 \\
 %
@@ -1147,7 +1147,7 @@
 \AgdaField{proof}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{cong}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{}∷\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{}::\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaBound{tx}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{proof}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
@@ -1798,15 +1798,15 @@
 %
 \>[4]\AgdaFunction{allSigned}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{input}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaBound{inputs}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{sig}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaBound{allSig}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{sigPub}\AgdaSpace{}%
 \AgdaBound{sig}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{∷}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{::}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{allSigned}\AgdaSpace{}%
 \AgdaBound{allSig}\AgdaSymbol{)}\<%
 \\
