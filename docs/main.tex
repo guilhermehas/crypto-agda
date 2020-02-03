@@ -605,6 +605,8 @@ So they will be just postulates.
 
 \section{Transactions}
 
+\subsection{Definitions}
+
 In Bitcoin, there are some transactions.
 In each transactions, there are multiple inputs and outputs.
 Each input is named TXFieldWithId.
@@ -632,6 +634,113 @@ For each input, there is a signature that confirms that he accepted every output
 And in the transaction, there is a proof that the total amount of money in all inputs are bigger than
 the total amount of outputs.
 The remainder will be used by the miner.
+
+\subsection{Raw Transaction}
+
+Raw transactions are transactions without any explicit dependent type.
+Here the definition of \emph{raw signed transaction}:
+
+\agda{RawTransactions}{rawtxsigned}
+
+\emph{Raw signed transactions} is a record with \emph{inputs}, \emph{outputs}
+and the signature of \emph{inputs} and \emph{outputs}.
+
+The definition of \emph{Raw Input}:
+
+\agda{RawTransactions}{rawinput}
+
+In each input, it is necessary to know the time, the position of it in the transaction,
+the amount spent, its message, its signature and its public key.
+The signature is the signature of the message.
+And the message is usually related to the amount spent in each output.
+
+The definition of \emph{raw transaction}:
+
+\agda{RawTransactions}{rawTransaction}
+
+It is all inputs and all outputs.
+
+The definition of \emph{Raw TX}:
+
+\agda{RawTransactions}{rawTX}
+
+The definition of \emph{raw transaction coinbase}:
+
+\agda{RawTransactions}{rawCoinbase}
+
+The defintion of \emph{raw Vector Output}: 
+
+\agda{RawTransactions}{rawVecOut}
+
+It has the time, its size, the total amount, the \emph{vector output}
+and a proof that this vector is the same of the list of outputs of this type.
+
+The definition of the record that every input transaction is signed in a given time:
+
+\agda{RawTransactions}{txsigall}
+
+It has the size of vector output, the sublist of all inputs, the total amount,
+the \emph{vector output} and a proof that all sublist of inputs are signed.
+
+To get the proof that the transaction is signed from the raw transaction:
+
+\agda{RawTransactions}{rawtxSigToTxsigAll}
+
+It has to validate first that the \emph{list of outputs} are a valid \emph{Vector Output}.
+Second, it validates if the signature of the inputs are valid with the
+\emph{raw signed transaction}.
+In the last case, it validates if the time of the \emph{vector output} is equal
+of the time of this transaction.
+If all conditions match, it returns a proven signed transaction.
+If not, it returns nothing.
+
+This function transforms a \emph{raw transaction} into a \emph{signed transaction}:
+
+\agda{RawTransactions}{txrawToTxsig}
+
+The first function returns a proof that the \emph{vector output} is equal to the total amount of
+the \emph{list of transactions}.
+It is impossible that the \emph{vector output} is equal to an empty list.
+In case that the list has just one element, it just has to return \emph{refl}.
+The another case, it is done in a recursive way.
+
+The proof that the amount of input transaction is greater than the amount of output
+is just a rewrite from the previous proof.
+
+The function of \emph{same message} returns a proof that the message of \emph{raw transaction}
+is the same of the message of the \emph{vector output}.
+In case that \emph{vector output} has just size one or two, it is a trivial case.
+The other cases are doing it in a recursive way.
+
+\emph{sigPub} is another function that returns a proof that a input message is really signed.
+It validates it with its public key.
+
+The last function returns a proof that every input was signed.
+It is done in a recursive way using the function \emph{sigPub}.
+
+This is the function that transforms a list ot transactions into a possible \emph{vector output}:
+
+\agda{RawTransactions}{listTXFieldtoVecOut}
+
+The list has to be at least with size one.
+Because the \emph{vector output} can not be empty.
+To add one element into the vector, it has to verify if the time is equal to the first time.
+Another verification is that the informed position in the vector is right.
+If all validations are right, it returns the vector output.
+If it is not, it returns nothing.
+
+The definition of the function that transform a \emph{raw transaction} into a
+\emph{signed transaction}:
+
+\agda{RawTransactions}{rawtoTXSigned}
+
+The first validation that the function does is verifying that the outputs are not empty.
+Another validation is verifying if the amount spent of inputs are greater than the amount of the outputs.
+The function \emph{Signed?}, defined in the cripto library, validates if the
+message was really signed with the input.
+After, it validates if all inputs are signed.
+If all validations are right, it returns the \emph{raw transaction signed}.
+If it is not, it returns nothing.
 
 \section{Transaction Tree}
 
