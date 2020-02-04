@@ -1,4 +1,4 @@
-# cripto-agda
+# crypto-agda
 
 [![Build Status](https://travis-ci.com/guilhermehas/cripto-agda.svg?branch=master)](https://travis-ci.com/guilhermehas/cripto-agda)
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
@@ -7,7 +7,7 @@
 [PDF in GitHub Pages](https://guilhermehas.github.io/cripto-agda/thesis.pdf)
 
 # Description
-Cripto currency made in agda
+Cryptocurrency made in agda
 
 # Build with nix
 This project works with nix channel version 18, so it is necessary to run this command before.
