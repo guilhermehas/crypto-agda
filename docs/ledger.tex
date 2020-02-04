@@ -1,0 +1,21 @@
+\section{Ledger}
+
+Ledger in the cryptocurrency is like a wallet.
+It makes it easier for users to send their coins or to know how much money they have in total.
+
+Here, the definition of how much money the user has in the last tree:
+
+\agda{Ledger}{ledgertree}
+
+The definition of \emph{ledgerOut}:
+
+\agda{Ledger}{ledgerout}
+
+If there is no output, it returns zero of the amount.
+If there is at least one output, it verifies if the output address is the same as the address.
+If it is, it adds the amount to the amount of the rest of the outputs.
+If it is not, it just returns the result of the recursion of the rest of the outputs.
+
+Here, the same code for list of outputs without id:
+
+\agda{Ledger}{ledgernoid}

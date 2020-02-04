@@ -1,0 +1,166 @@
+\section{Transaction Tree}
+
+\subsection{Definition}
+
+The transaction tree is one of the most important data structures in Bitcoin.
+In the transaction tree, there are all unspent transaction outputs (UTXO).
+In every new transaction, the UTXOs used as input is removed from the transaction tree.
+
+\agda{TXTree}{TXTree}
+
+In this implementation, time is the number of transactions in TXTree.
+Block is related to which block the transaction tree is.
+After every new coinbase transaction (the miner transaction), the block size increment in one quantity.
+Total fees are how much the miner will have in fee of transactions if he makes a block with these
+transactions.
+Quantity of transactions is how many transactions there are in the current block.
+The type is tQtTxs instead of a natural number because, in this implementation, each block can have
+a number maximum of transactions.
+In Bitcoin, it is different, each block has a limit size in space of 1 MB.
+
+Genesis tree is the first case.
+It is when the cryptocurrency was created.
+\emph{txtree} is created from another tree.
+\emph{proofLessQtTX} is proof that the last transaction tree has its
+block size less than the maximum block size minus one or it is a coinbase transaction.
+It is because it is necessary to verify the size of the last \emph{txtree} so it will not have
+the size greater than the maximum.
+
+\agda{TXTree}{TX}
+
+TX is related to the transaction done in the cryptocurrency.
+There are two kinds of transaction.
+Coinbase transaction is the transaction done by the miner.
+In coinbase, they have just outputs and do not have any input.
+\emph{pAmountFee} is proof that the output of the coinbase transaction is equal to the total fees plus
+a block reward.
+
+Another kind of transaction is the \emph{normalTX}, a regular transaction.
+\emph{SubInputs} are a sub-list of all unspent transaction outputs of the previous transaction tree.
+Outputs are the new unspent transaction from this transaction.
+So who receives the amount from this transaction can spend it after.
+\emph{TxSigned} is the signature that proves that every owner of each input approve this transaction.
+In \emph{TxSigned}, there is proof that the output amount is greater than the input amount too.
+
+\agda{TXTree}{isCoinBase}
+
+This function just returns trivial type if coinbase and bot type if not.
+
+\agda{TXTree}{nextBlock}
+
+If it is a normal transaction, the block continues the same.
+If it is a coinbase transaction, the next transaction will be in a new block.
+
+\agda{TXTree}{incQtTx}
+
+This function is to increment the number of transactions in the block.
+It has to receive proof that the quantity of transaction that was before this new transaction was
+less than then the maximum quantity of transactions allowed.
+So it is guaranteed that the number of transactions will never be greater than the maximum allowed.
+If it is a coinbase transaction, it will be a new block.
+So the number of transactions starts being zero.
+
+\agda{TXTree}{incFees}
+
+\emph{IncFee} is a function that increments how much fee the miner will receive.
+If it is a coinbase transaction, the fee will be received by the miner,
+so the next miner will not receive this previous fee.
+Because of that, the new fee will start from zero.
+If it is a normal transaction, the newest fee will be the amount of input of the transaction minus
+the output of this transaction plus the last fee of previous transactions.
+
+\agda{TXTree}{outFee}
+
+\emph{outFee+RewardBlock} is proof that the amount of output transactions is equal to total fees of
+other transactions plus the block reward.
+
+\subsection{Raw Transaction Tree}
+
+The raw transaction tree is the tree without the explicit types.
+Here, the definition:
+
+\agda{RawTXTree}{rawtxtree}
+
+A good utility of raw data types is that it is not necessary to add type arguments in functions.
+Here, a function that adds a transaction to a transaction tree.
+If this transaction is compatible with the transaction tree,
+it returns a new transaction tree.
+If it is not compatible, it returns nothing.
+A better solution is a proof that this transaction is invalid with the transaction tree
+instead of nothing.
+But defining what is an invalid transaction can be tricky.
+
+\agda{RawTXTree}{addtxtree1}
+
+There are two cases.
+The first one is if the transaction is a coinbase transaction.
+It tries first to transform a list of \emph{TXField} into \emph{VecOut}.
+If it can not transforms, it returns nothing.
+If it can, it validates if the amount of vector output is equal to total fees plus the block reward.
+After, it validates if the time of the transaction is equal to the time of the transaction tree.
+In the end, it adds the outputs of the transaction to the vector of outputs.
+Because it is a coinbase transaction, there are no inputs to be removed.
+
+\agda{RawTXTree}{addtxtree2}
+
+The second case, that the transaction is regular, looks like the same.
+First, it validates if the quantity of transaction is less than the maximum allowed.
+Second, it validates if this transactions is a valid signed transaction.
+If all these conditions are true, it returns a new transaction tree
+with news outputs equal to the outputs of this transaction plus the outputs of the last transaction tree
+minus the inputs.
+In case of an invalid transaction, it returns nothing.
+
+\subsection{Proofs}
+
+One of the important proofs is that each output of \emph{outputs transaction} is distinct.
+This is very important because it guarantees that each input in the transaction could be
+just related to just one unspent output.
+This characteristic could be in the type of transaction tree,
+but it is proven outside of it.
+
+First, it is necessary to define what is a distinct union:
+
+\agda{Utils}{uniondist}
+
+The union of distinct lists makes a new distinct list if both are distinct to each other.
+
+Now, to prove that outputs are a distinct list:
+
+\agda{proofsTXTree}{uniqueouts}
+
+In the first case, the transaction tree is a genesis tree without any outputs.
+So an empty list is a distinct list.
+In the second case, the outputs are the union of inputs of the transaction with the outputs
+of \emph{vector output}.
+So, it is necessary to prove that inputs of the transaction are distinct,
+that elements of \emph{vector output} are also distinct and that both lists are distinct to each other.
+
+\agda{proofsTXTree}{distinps}
+
+There are some cases to prove that inputs are distinct.
+First, if it is a regular transaction or if it is a coinbase transaction.
+Second, if the transaction tree of this transaction is a genesis tree or if it is a regular tree.
+
+If the transaction tree of the transaction is a genesis tree,
+the number of inputs is zero.
+So they are distinct.
+
+In other cases, it does the same thing as proof of unique outputs.
+The only difference is that it also does a recursive proof.
+It assumes that the transaction of the last transaction tree is also distinct.
+
+\agda{proofsTXTree}{alldists}
+
+Both are distinct to each other because all of the transactions of input has the timeless
+then the time of the transaction.
+And because all of the outputs of the current transaction has time equal to the current time
+of this transaction.
+
+\agda{proofsTXTree}{outtimeless}
+
+The proof that the time of the outputs is less than the current time of the transaction
+is done recursively.
+It is both necessary to proof that \emph{inputs of tx} and \emph{vector output} have both
+times less than the current time of this transaction.
+It is all done recursively.

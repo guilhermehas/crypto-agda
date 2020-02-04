@@ -1,0 +1,22 @@
+\section{Conclusion}
+
+This text has shown the definition of Bitcoin protocol.
+Definitions of transactions, transactions tree, block, and blockchain.
+In this work, it was also made the code that transforms raw transactions in a possible valid transaction,
+to incorporate it in the transaction tree.
+
+\subsection{Future work}
+
+In this work, there was a code that transforms a raw transaction into a possible valid transaction.
+It is not a decidable function, because there is no definition of what it is an invalid transaction.
+From future work, it should have a definition of what is an invalid raw transaction.
+So it will avoid that valid transaction will be discarded. 
+
+There is no definition of crypto functions like SHA-256 and elliptic curves in this work.
+One thing that can be done is importing these functions from some Agda or Haskell packages.
+
+This work does not have any IO operation.
+So it is not possible to add transactions in the blockchain from the command line or the network.
+
+The cryptocurrency of this work does not have any smart contract.
+It would be good to define some of them in it.

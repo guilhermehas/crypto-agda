@@ -1,0 +1,99 @@
+\section{Blockchain}
+
+\subsection{Definition}
+
+Block is a chain of transactions that is added in Bitcoin blockchain in every ten minutes.
+Each block consists of several transactions and a miner transaction.
+This is how a block is defined in this work:
+
+\agda{Blockchain}{block}
+
+\emph{nextTXTree} assures that the second transaction tree is from the first transaction tree.
+\emph{firstTreesInBlock} guarantees that the last transaction in the first transaction tree
+is the first in the block.
+\emph{coinBaseTree} assures that the last transaction in the second transaction tree is
+a coinbase transaction.
+
+Blockchain is a chain of valid blocks.
+Every new block must be a continuation of the previous one.
+Here is the definition of the blockchain:
+
+\agda{Blockchain}{blockchain}
+
+In the first case, blockchain just has one block, called \emph{fstBlock}.
+In the second case, the blockchain is an addition of a valid block from a previous blockchain.
+
+\subsection{Creation}
+
+To create a blockchain, it is first needed to create the last block.
+From the last block, it is possible to create all the chain.
+
+\agda{Blockchain}{blockblockchain}
+
+In this proof, if the first transaction tree of the block is a genesis tree,
+it will return a blockchain of just one block.
+If it is a regular tree, it tries to find the first transaction tree of this block.
+Using a recursive definition of block to blockchain,
+it is possible to generate all the rest of this blockchain from this block.
+
+It is not always possible to generate a block from the transaction tree.
+It is because the last transaction of a transaction tree must be a coinbase transaction.
+Here, the function that returns a decidable if it is possible to generate a block from
+the transaction tree.
+
+\agda{Blockchain}{treeblock}
+
+The definition of the raw block gets just the coinbase transaction tree as an explicit type.
+The other transaction tree can be founded opening the record.
+
+\agda{Blockchain}{rawblock}
+
+The code of the definition of what is a coinbase tree:
+
+\agda{Blockchain}{coinbasetree}
+
+The definition of a coinbase tree is the one that the last transaction is a coinbase.
+
+The code verifies if the last transaction tree is a coinbase tree:
+
+\agda{Blockchain}{iscoinbase}
+
+If it is, it returns that it is possible to create a block from that with the block definition.
+If it is not, it returns that it is impossible to create a block from this transaction tree.
+
+But to create a block from this coinbase transaction tree, it is necessary to find the first tree
+of the block.
+
+\agda{Blockchain}{fsttree}
+
+The definition of \emph{fstTree} is that it has a tree that is before this tree in the type.
+And this tree before is the first in the block.
+
+\agda{Blockchain}{firsttreeinblock}
+
+The decidable version of this \emph{Set}:
+
+\agda{Blockchain}{isfirsttreeinblock}
+
+In this case, it pattern match trees that are genesis tree or if the last transaction was a coinbase
+transaction.
+
+\agda{Blockchain}{firsttree}
+
+To find the first tree in the block, there are two cases.
+The first case is that if the tree is a genesis tree, so the result is itself.
+The second case is if it a regular tree, so it still has to divide it in many cases.
+If this tree is already the first tree in the block, it will return itself.
+If this tree is not, it has to verify if the block number of the tree is the same as this tree.
+If the block number is equal, it can recursively find the first tree.
+If it is not, it has to provide proof that this tree must be
+the first and the blocks numbers are different.
+
+To define what it means of one tree is next to another:
+
+\agda{Blockchain}{nexttree}
+
+There are two cases. If both trees are the same, they are next to each other.
+If there is a proof that both trees are next to each other and
+if there is one tree that was generated from the last one,
+so the first tree is next to the last one.

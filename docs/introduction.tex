@@ -1,0 +1,45 @@
+\section{Introduction}
+
+\subsection{Context} 
+
+In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
+This cryptocurrency use RSA blind signatures \cite{chaum1983blind} to spend transactions.
+Later, in 1989, David Chaum found an electronic money corporation called DigiCash Inc.
+It was declared bankruptcy in 1998.
+
+Adam Back developed a proof-of-work (PoW) scheme for spam control, Hashcash \cite{back2002hashcash}.
+To send an email, the hash of the content of this email plus a nonce has to have a numerical value
+smaller than a defined target.
+So, to create a valid email, the sender (miner) has to spend a considerable CPU resource on it.
+Because hash functions produce practically random values, so the miner has to guess a lot of nonce
+values before finding some nonce that makes the hash of the email less than the target value.
+This idea is used in Bitcoin proof of work because each block has a nonce guessed by the miner and
+the hash of the block has to be less than the target value.
+
+Wei Dai propose b-money \cite{dai1998b} for the first proposal for distributed digital scarcity.
+And Hal Finney created Bit Gold \cite{wallace2011rise}, a reusable proof of work for hash cash for
+its algorithm of proof of work.
+
+On 31 October 2008, Satoshi Nakamoto registered the website ``bitcoin.org'' and put a link for his
+paper \cite{nakamoto2008bitcoin} in a cryptography mailing list.
+In January 2009, Nakamoto released the Bitcoin software as an open-source code.
+The identity of Satoshi Nakamoto is still unknown.
+Since that time, the total market of Bitcoin came to 330 billion dollars in 17 of December of 2018
+when its value reached a historic peak of 20 thousand dollars.
+
+Other cryptocurrencies like Ethereum \cite{wood2014ethereum}, Monero \cite{noether2015ring} and
+ZCash \cite{hopwood2016zcash} were created after Bitcoin,
+but Bitcoin is still the cryptocurrency with the biggest market value.
+
+Ethereum is a cryptocurrency that uses an account model instead of UTXO used in Bitcoin for its
+transaction data structure.
+It uses Solidity as its programming language for smart contracts which resembles Javascript,
+so it is easier to program in it than in the stack machine programming language of Bitcoin.
+Ethereum is now transitioning from proof of work (used in Bitcoin) to proof of stake
+which will be the default proof mechanism of Ethereum 2.0 and will be released in
+3 of January of 2020.
+
+Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy and decentralization.
+Monero uses an obfuscated public ledger, so anyone can send transactions,
+but nobody can tell the source, amount or destination.
+Zcash uses the concept of zero-knowledge proof called zk-SNARKs, which guarantee privacy for its users.

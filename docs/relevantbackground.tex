@@ -1,0 +1,397 @@
+\section{Relevant Background}
+
+\subsection{Literature Review}
+
+Before this work, there was some research in this field.
+Beukema \cite{beukema2014formalising} was one of the first to try
+to define a formal specification of Bitcoin.
+In this work, he defines functions interfaces of Bitcoin and what they should do.
+Most of these functions define how the Bitcoin Network protocol should be.
+In his work, he does not utilize any programming language with dependent types like Agda or CoQ.
+He uses mCRL2, a specification programming language.
+
+Chaudhary \cite{chaudhary2015modeling} and his team have created a model of Bitcoin blockchain
+in the model checker UPPAAL.
+In his work, he calculates the probability of a malicious attack to succeed in doing a double spend.
+For a small number of blocks, it is easier to do this attack.
+Because of that, it is usually recommended that the user wait more blocks confirmations
+after a big transaction.
+
+Bastiaan \cite{bastiaan2015preventing} showed a stochastic model of Bitcoin using
+continuous Markov chains.
+In his work, he proposes a way of avoiding a 51\% attack in the network,
+using two-phase proof of work.
+
+Orestis Melkonian \cite{melkonian2019formalizing} in his masters have done the formal specification
+of BitML (smart contract language) in Agda.
+This language can be compiled to Script, the smart contract language of Bitcoin. 
+
+Kosba \cite{kosba2016hawk} in his work made a programming language called Hawk for smart contracts.
+This language uses formal methods to verify privacy using zero-knowledge proofs.
+Using this language, the programmer does not have to worry about implementing the cryptography,
+because the compiler generates automatically an efficient one.
+
+Bhargavan \cite{bhargavan2016formal} translated Solidity and Ethereum bytecode into F*.
+He verified that the Ethereum DAO bug was caught in its translation.
+Nowadays, they have an implementation of Ethereum Virtual Machine (EVM) and Solidity in OCaml,
+but they want to have a full implementation of EVM in F* too.
+
+Luu \cite{luu2016making} built a symbolic execution tool named OYENTE to look for potential bugs.
+In his work, he found a lot of contracts with real bugs.
+One of these bugs was TheDAO bug, that caused a loss of 60 million dollars.
+He used Z3 to find a potentially dangerous path of code.
+
+Anton Setzer \cite{setzer2018modelling} also contributed to modeling Bitcoin.
+He coded in Agda the definitions of transactions and
+transactions tree of Bitcoin.
+Orestis Melkonian start to formalize Bitcoin Script.
+
+My work tries to extend Anton Setzer model and makes it possible to use the Bitcoin protocol
+from inputs and outputs from plain text.
+For example, the user sends a transaction in plain text to the software and it validates if it is correct.
+To use the Anton Setzer model, the user has to send the data and the proof that are both valid.
+
+\subsection{Agda Introduction}
+Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology
+as his Ph.D. Thesis.
+The current version of Agda is Agda 2.
+
+  \subsubsection{Syntax}
+  In Agda, \emph{Set} is equal to type.
+  In languages with dependent types, it is possible to create a function that returns a type.
+
+  \agda{agdaExamples}{funcType}
+
+  After the function name, it is two colon (\emph{:}) and the arguments of the function.
+  It is closed by \emph{(name\_of\_argument : type\_of\_argument)}.
+  After all, there is one arrow and the type of the result of the function.
+  This ``if, then, else'' is not a function built-in in Agda.
+  It is a function defined this way \emph{if\_then\_else\_} .
+
+  So it is possible to use this function in the default way.
+
+  \agda{agdaExamples}{funcTypeUnd}
+
+  Or use the arguments inside the underscore.
+
+  \agda{agdaExamples}{funcType2}
+
+  The same notation can be done using just arrows without naming the arguments.
+
+  Because of dependent types, it is possible to have a type that depends on the input.
+
+  \agda{agdaExamples}{dependentType}
+
+  It is possible in Agda to do pattern match.
+  So it breaks the input in cases.
+
+  \agda{agdaExamples}{patternMatch}
+
+  To create a new type with a different pattern match, it is used the data constructor.
+
+  \agda{agdaExamples}{dataConstructor}
+
+  This is another example of \emph{Data Set}, but it depends on the argument.
+
+  \agda{agdaExamples}{vector}
+
+  \emph{Vector zero} is a type of a vector of size zero, so the only option to construct it is the empty vector.
+  It is constructed from the first constructor.
+  Other types of vectors like \emph{Vector 1} (vector of size one), \emph{Vector 2}, ... can only be constructed by
+  the second constructor.
+  It takes as argument a natural number and a vector and returns a vector with the size of the last vector
+  plus one.
+
+  Records are data types with just one case of pattern match.
+
+  \agda{agdaExamples}{record}
+
+  The constructor is the name of the data constructor.
+
+  Implicits terms are elements that the compiler is smart enough to deduce it.
+  So it is not necessary to put it as an argument of the function.
+
+  \agda{agdaExamples}{id}
+
+  Implicits arguments are inside \emph{\{\}}.
+  In this example, the name of the Set (\emph{A}) can not be omitted
+  (like the second function version of boolean to set),
+  because it is used to say that \emph{x} is of type \emph{A}.
+
+  In the case of the function \emph{id}, the type of input can be deduced by the compiler.
+  For example, the only type that \emph{zero} can be is Natural.
+
+  \agda{agdaExamples}{idNat}
+
+  Functions in Agda can be defined in two ways
+
+  \agda{agdaExamples}{funcs}
+
+  In the first case, the arguments are before equal sign (\emph{=}).
+  In the second way, it is used the lambda abstraction that means the same thing.
+
+  \subsubsection{Lambda Calculus}
+  Lambda Calculus is a minimalist Turing complete programming language with the concept of abstraction,
+  application using binding and substitution. For example, \emph{x} is a variable, $(\lambda x.M)$
+  is an Abstraction and (\emph{M N}) is an Application.
+
+  In Lambda Calculus, there are two types of conversions $\alpha$-conversion and $\beta$-reduction.
+  In $\alpha$-conversion, $(\lambda x.M[x]) \rightarrow (\lambda y.M[y])$.
+  So in every free variable in \emph{M} will be renamed from \emph{x} to \emph{y}.
+  For \emph{M[x] = x}, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
+
+  A free variable is every variable that is not bound outside.
+  For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$.
+  The \textcolor{blue}{blue x} is binded for the \textcolor{green}{green x},
+  but the \textcolor{red}{red x}
+  is not binded for any function. So the \textcolor{red}{red x} is a free variable.
+
+  In $\beta$-reduction, it replaces the all free for the expression in the application.
+  The $\beta$-reduction of this expression $((\lambda x.M) N) \rightarrow (M[x := N])$ .
+  So if $M = x$, the $\beta$-reduction will be $((\lambda x.x) N) \rightarrow N$.
+  If $M = (\lambda x.x) x$, the $\beta$-reduction will be
+  $(\lambda x.((\lambda x.x)x))N \rightarrow (\lambda x.x)N$.
+
+  Agda uses typed lambda calculus.
+  So in an application \emph{(M N)}, \emph{M} has to be of type $A \Rightarrow B$ and N has to be of type A.
+  $(\lambda (x : A) . x)$ is of type $A \Rightarrow A$, because \emph{x} is of type \emph{A}.
+
+  \agda{lambdaCalculus}{Id}
+  The simplest function is the identity function made in Agda.
+
+  \agda{lambdaCalculus}{Id2}
+  This is another way of writing the same function.
+
+  \agda{lambdaCalculus}{trueFalse}
+  This is how true and false are encoded in lambda calculus.
+
+  \agda{lambdaCalculus}{naturals}
+  This is how naturals numbers are defined in lambda calculus.
+  Look that the definition of zero looks like the definition of false.
+
+  \agda{lambdaCalculus}{isZero}
+  Defining natural numbers in this way, it is possible to say if a natural number is zero or not.
+
+  \agda{lambdaCalculus}{plus}
+  Plus is defined this way using lambda calculus.
+
+  \agda{lambdaCalculus}{onePone}
+  This is one example of the calculation of one plus one in Lambda Calculus.
+
+  \agda{lambdaCalculus}{list}
+  This is how lists are defined in Lambda Calculus.
+
+  \agda{lambdaCalculus}{sumList}
+  Substituting the cons operation of list per plus and nil list to zero, it is possible to calculate
+  the sum of the list.
+
+  \agda{lambdaCalculus}{either}
+  In this way, it is possible to define \emph{Either}.
+  It is one way to create a type that can be a Natural or a Boolean.
+
+  \agda{lambdaCalculus}{eitherExamples}
+  In these examples, it is defined zero, one in left and false, true in right.
+
+  \agda{lambdaCalculus}{eitherRes}
+  \emph{Either} is useful when defining one function that works for left and another that works for the right.
+  The function chosen for left was if a natural number is zero and
+  the function chosen for right was if the identity function.
+
+  \agda{lambdaCalculus}{tuple}
+  This way is how tuple is defined in Lambda Calculus.
+
+  \agda{lambdaCalculus}{tupleExamples}
+  This is how is defined the tuple zero false and the tuple one true.
+
+  \agda{lambdaCalculus}{tupleAdd}
+  This is one way of defining a function that adds one to the argument
+  if the first element of the tuple is true.
+
+
+  \subsubsection{Martin-Löf type theory}
+  Agda also provides proof assistants based on the intentional Martin-Löf type theory.
+
+    In Martin-Löf type theory, there are 3 finite types and 5 constructors types.
+    The 0 type contain 0 terms, it is called empty type and it is written bot.
+    \agda{agdaExamples}{botType}
+
+    The 1 type is the type with just 1 canonical term and it represents existence.
+    It is called unit type and it is written top.
+    \agda{agdaExamples}{trivialType}
+
+    The 2 type contains 2 canonical terms. It represents a choice between two values.
+    \agda{agdaExamples}{eitherType}
+
+    The Boolean type is defined using the Trivial type and the Either type.
+    \agda{agdaExamples}{boolType}
+
+    If statement is defined using booleans.
+    \agda{agdaExamples}{ifThenElse}
+
+
+    \subsubsection{Types Constructors}
+    The sum-types contain an ordered pair.
+    The second type can depend on the first type.
+    It has the same meaning of exist.
+    \agda{agdaExamples}{sumType}
+
+    The $\pi$-types contain functions.
+    So given an input type, it will return an output type.
+    It has the same meaning as a function:
+    \agda{agdaExamples}{piType}
+
+    In Inductive types, it is a self-referential type.
+    Naturals numbers are examples of that:
+    \agda{agdaExamples}{Nat}
+    Other data structs like linked list of natural numbers, trees, graphs are inductive types too.
+
+    Proofs in inductive types are made by induction.
+    \agda{agdaExamples}{NatElim}
+
+    Universe types are created to allow proofs written in all types.
+    For example, the type of \emph{Nat} is \emph{U0}.
+
+
+It looks like CoQ, but does not have tactics.
+Agda is a total language, so it is guaranteed that the code always terminal and coverage all inputs.
+Agda needs it to be a consistent language.
+
+Agda has inductive data types that are similar to algebraic data types in non-dependently
+typed programming language.
+The definition of Peano numbers in Agda is:
+
+\agda{agdaExamples}{Nat}
+
+Definitions in Agda are done using induction.
+For example, the sum of two numbers in Agda:
+
+\agda{agdaExamples}{sum}
+
+In Agda, because of dependent types, it is possible to make some restrictions in types that are not
+possible in other languages.
+For example, get the first element of a vector.
+For it, it is necessary to specify in the type that the vector should have at size greater or equal
+then that one.
+
+\agda{agdaExamples}{vecHead}
+
+Another good example is that in the sum of two matrices, they should have the same dimensions.
+
+\agda{agdaExamples}{matrixSum}
+
+
+\subsection{Bitcoin}
+
+The Bitcoin was made to be a peer to peer electronic cash.
+It was made in one way that users can save and verify transactions without the need of a trusted party.
+Because of that no authority or government can block the Bitcoin.
+
+\incimg{transactions1}{png}{Transaction}
+%% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
+
+Transactions in Bitcoins (like in FIG1) are an array of input of
+previous transactions and an array of outputs.
+Each input and output is an address, each address is made from a public key
+that is made from a private key.
+
+\incimg{privatekey}{png}{Bitcoin account}
+%% https://coinsutra.com/bitcoin-private-key/
+
+A private key is a big number.
+It is so big that it is almost impossible to generate two identicals private keys.
+
+The public key is generated from the private key (like in FIG2 where account number is f(p)), 
+but a private key can not be generated from a public key.
+
+The mining transaction does require an input.
+For each input of the transaction, it is necessary a signature signed with a private key
+(like in FIG2 where signature is f(p,t))
+to prove the ownership of the Bitcoins.
+With the message and the signature, it is possible to know that the owner of the private key
+that generates the public key signed this message.
+
+With the signature and the public key, it is not possible to know the private key.
+In FIG2, the checker is a f(t,s,a).
+So because of that, the owner of the private key can sign several messages without anyone knows
+his private key.
+
+\incimg{transactions2}{jpg}{Verification and signature of transactions}
+%% https://en.wikipedia.org/wiki/Bitcoin_network
+
+Transactions (shown in FIG3) are grouped in a block (shown in FIG4).
+Each block contains in its header the timestamp of its creation, the hash of the block,
+the previous hash and a nonce.
+A nonce is an arbitrary value that the miner has to choose to make the hash of the block respect some
+specific characteristics.
+
+\incimg{blockchain}{png}{Blockchain}
+%% https://bitcoin.stackexchange.com/questions/12427/can-someone-explain-how-the-bitcoin-blockchain-works/13347
+%% https://i.stack.imgur.com/HrKX0.png
+
+Each block has a size limit of 1 MB.
+Because of that, Bitcoin forms a blockchain (a chain of blocks).
+Each block should be created in an average of 10 minutes.
+This time was chosen because 10 minutes is enough to propagate the block throughout the world.
+To make the blockchain tamper-proof, there is a concept called proof of work in Bitcoin.
+So the miner has chosen a random value as nonce that makes the hash of the block less
+then a certain value.
+This value is chosen in a way that each block should be generated on 10 minutes in average.
+If the value is too low, miners will take more time to find a nonce that make the hash block
+less than it.
+If it is too high, it will be easier to find a nonce and they will find it faster.
+
+When two blocks are mined in nearly the same time, there are two valid blockchains.
+It is because the last block in both blockchains are valid but different.
+Because of this problem, in the Bitcoin protocol, the largest chain is always the right chain.
+While two valid chains have the same size, it is not possible to know which chain is the right.
+This situation is called fork and when it happens, it is necessary to wait to see in which chain
+the new block will be.
+
+In Bitcoin, there is a possibility of a 51\% attack.
+It happens when some miner, with more power than all network, mine secretly the blocks.
+So if the main network has 50 blocks, the miner could produce hidden blocks from 46 to 55
+and he would have 10 hidden blocks from the network.
+When he shows their hidden blocks, his chain become the valid chain, because it is bigger.
+So all transactions from previous blockchain from 46 to 50 blocks become invalid.
+Because of that, when someone makes a big transaction in the blockchain, it is a good idea
+to wait more time.
+So it is becoming harder and harder to make a 51\% with more time.
+Bitcoin has the highest market value nowadays, so attacking the Bitcoin network is very expensive.
+Nowadays, this kind of attack is more common in new altcoins.
+
+\incimgdiv{wallet}{png}{Wallet}{2}
+%% https://trustwallet.com/buy-bitcoin/
+
+Wallet (shown in \ref{fig:account}) is software that tracks all transactions 
+that the users received and sent.
+It also makes new transactions from previously received transactions.
+
+\subsection{Ethereum}
+
+Ethereum differs from Bitcoin in having an Ethereum Virtual Machine (EVM) to run script code.
+EVM is a stack machine and Turing complete while Bitcoin Script is not
+(it is impossible to do loops and recursion in Bitcoin).
+
+Transactions in Bitcoin are all stored in the blockchain.
+In Ethereum, just the hash of it is stored in it.
+So it is saved in the off-chain database.
+Because of that, it is possible to save more information in Ethereum Blockchain.
+
+In Bitcoin, the creator of the contract to pay the amount proportional to its size.
+In Ethereum, it is different, there is a concept of gas.
+Each smart contract in Ethereum is made by a series of instructions.
+Each instruction consumes different computational effort.
+Because of that, in Ethereum, there is a concept of gas, that measure how much computational effort
+each instruction needs.
+So in each smart contract, it is well know how much computational effort will be necessary to run it
+and it is measured in gas.
+Because computational effort is a scarce resource, to execute the smart contract, it is necessary to
+pay an amount in Ether for each gas to the miner run it.
+Smart contracts that pay more ether per gas run first because the miner will want to have the best
+profit and they will pick them.
+If the amount of ether per gas paid is not high enough, the contract will not be executed,
+because some other contracts pay more that will be executed instead of this one.
+
+Because Ethereum has its EVM with more instructions than Bitcoin and it is Turing Complete,
+it is considered less secure.
+Ethereum has its high-level programming language called Solidity that looks like Javascript.

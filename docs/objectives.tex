@@ -1,0 +1,43 @@
+\section{Objectives}
+
+\subsection{History}
+
+Cryptocurrencies are used as money and used in smart contracts in a decentralized way.
+Because of that, it is not possible to revert a transaction or undo the creation of the smart contract.
+There is no legal framework or agent to solve a problem in case of the existence of a bug.
+Because of that, the formal proofs are necessary in the cryptocurrency protocol.
+So it can avoid big financial loss.
+
+In the case of Bitcoin, if there is some problem in the source code,
+it is possible to fix it using soft or hard forks.
+In soft fork, there is an upgrade in the software that is compatible with the old software.
+So it is possible the existence of old and new nodes in the same Bitcoin network.
+In hard forks, all the nodes should be upgraded at the same time.
+Because the newer version is not compatible with the older one.
+So it is very dangerous to do this kind of fork.
+Therefore in Bitcoin, this kind of fork never happened.
+
+For example, in Bitcoin, the uniqueness of transaction IDs were not guaranteed.
+To fix this problem, it should put the block number in the coinbase transaction.
+This kind of change was solved in a soft fork named SegWit.
+
+In Ethereum, there was a bug in DAO smart contract.
+Because of that, malicious users exploited a vulnerability in it.
+The total loss of this exploit was 150 million dollars on this day.
+There was a hard fork to undo most of the transactions that exploited this contract.
+This kind of hard fork violates the principle that smart contracts should be ruled just by
+algorithms without any human intervention.
+Because of that, the Ethereum blockchain that has not done the fork becomes the Ethereum classic.
+It is the version of Ethereum that has never done a hard fork before.
+
+\subsection{Proposes}
+
+The objective of this work is to give a formal definition of what a cryptocurrency should be.
+There are some different definitions of a cryptocurrency in this work,
+but there are some formal proofs that they are the same.
+
+In this work, it is possible to generate proofs transactions from transactions without proofs.
+This means that a user can send a simple transaction without he worried to have to prove that
+the transaction is right to put in the blockchain.
+In Bitcoin, it happened in the same way.
+Because the node has to verify the transactions.
