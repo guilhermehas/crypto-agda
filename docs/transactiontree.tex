@@ -1,6 +1,6 @@
-\section{Transaction Tree}
+\subsection{Transaction Tree}
 
-\subsection{Definition}
+\subsubsection{Definition}
 
 The transaction tree is one of the most important data structures in Bitcoin.
 In the transaction tree, there are all unspent transaction outputs (UTXO).
@@ -74,7 +74,7 @@ the output of this transaction plus the last fee of previous transactions.
 \emph{outFee+RewardBlock} is proof that the amount of output transactions is equal to total fees of
 other transactions plus the block reward.
 
-\subsection{Raw Transaction Tree}
+\subsubsection{Raw Transaction Tree}
 
 The raw transaction tree is the tree without the explicit types.
 Here, the definition:
@@ -111,7 +111,7 @@ with news outputs equal to the outputs of this transaction plus the outputs of t
 minus the inputs.
 In case of an invalid transaction, it returns nothing.
 
-\subsection{Proofs}
+\subsubsection{Proofs}
 
 One of the important proofs is that each output of \emph{outputs transaction} is distinct.
 This is very important because it guarantees that each input in the transaction could be
