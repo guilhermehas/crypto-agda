@@ -2,19 +2,18 @@
 
 \subsection{Literature Review}
 
-Before this work, there was some research in this field.
 Beukema \cite{beukema2014formalising} was one of the first to try
 to define a formal specification of Bitcoin.
-In this work, he defines functions interfaces of Bitcoin and what they should do.
+In this works, functions interfaces of Bitcoin and what they should do were defined.
 Most of these functions define how the Bitcoin Network protocol should be.
-In his work, he does not utilize any programming language with dependent types like Agda or CoQ.
-He uses mCRL2, a specification programming language.
+In this work, he does not utilize any programming language with dependent types like Agda or CoQ.
+mCRL2, a specification programming language, was used.
 
-Chaudhary \cite{chaudhary2015modeling} and his team have created a model of Bitcoin blockchain
+Chaudhary and his team \cite{chaudhary2015modeling} have created a model of Bitcoin blockchain
 in the model checker UPPAAL.
-In his work, he calculates the probability of a malicious attack to succeed in doing a double spend.
+In his work, they calculate the probability of a malicious attack to succeed in doing a double spend.
 For a small number of blocks, it is easier to do this attack.
-Because of that, it is usually recommended that the user wait more blocks confirmations
+Because of that, it is usually recommended that the user wait for more blocks confirmations
 after a big transaction.
 
 Bastiaan \cite{bastiaan2015preventing} showed a stochastic model of Bitcoin using
@@ -44,7 +43,7 @@ He used Z3 to find a potentially dangerous path of code.
 Anton Setzer \cite{setzer2018modelling} also contributed to modeling Bitcoin.
 He coded in Agda the definitions of transactions and
 transactions tree of Bitcoin.
-Orestis Melkonian start to formalize Bitcoin Script.
+Orestis Melkonian starts to formalize Bitcoin Script.
 
 My work tries to extend Anton Setzer model and makes it possible to use the Bitcoin protocol
 from inputs and outputs from plain text.
@@ -128,7 +127,7 @@ The current version of Agda is Agda 2.
   \agda{agdaExamples}{funcs}
 
   In the first case, the arguments are before equal sign (\emph{=}).
-  In the second way, it is used the lambda abstraction that means the same thing.
+  In the second case, it is used the lambda abstraction that means the same thing.
 
   \subsubsection{Lambda Calculus}
   Lambda Calculus is a minimalist Turing complete programming language with the concept of abstraction,
@@ -194,8 +193,8 @@ The current version of Agda is Agda 2.
 
   \agda{lambdaCalculus}{eitherRes}
   \emph{Either} is useful when defining one function that works for left and another that works for the right.
-  The function chosen for left was if a natural number is zero and
-  the function chosen for right was if the identity function.
+  If the natural number is zero, the function chosen is the left and
+  if it is an identity, the function chosen is the right. 
 
   \agda{lambdaCalculus}{tuple}
   This way is how tuple is defined in Lambda Calculus.
@@ -232,7 +231,7 @@ The current version of Agda is Agda 2.
     \subsubsection{Types Constructors}
     The sum-types contain an ordered pair.
     The second type can depend on the first type.
-    It has the same meaning of exist.
+    It has the same meaning to exist.
     \agda{agdaExamples}{sumType}
 
     The $\pi$-types contain functions.
@@ -243,7 +242,7 @@ The current version of Agda is Agda 2.
     In Inductive types, it is a self-referential type.
     Naturals numbers are examples of that:
     \agda{agdaExamples}{Nat}
-    Other data structs like linked list of natural numbers, trees, graphs are inductive types too.
+    Other data structs like a linked list of natural numbers, trees, graphs are inductive types too.
 
     Proofs in inductive types are made by induction.
     \agda{agdaExamples}{NatElim}
@@ -270,7 +269,7 @@ For example, the sum of two numbers in Agda:
 In Agda, because of dependent types, it is possible to make some restrictions in types that are not
 possible in other languages.
 For example, get the first element of a vector.
-For it, it is necessary to specify in the type that the vector should have at size greater or equal
+For it, it is necessary to specify in the type that the vector should have a size greater or equal
 then that one.
 
 \agda{agdaExamples}{vecHead}
@@ -331,18 +330,18 @@ specific characteristics.
 
 Each block has a size limit of 1 MB.
 Because of that, Bitcoin forms a blockchain (a chain of blocks).
-Each block should be created in an average of 10 minutes.
+Each block should be created at an average of 10 minutes.
 This time was chosen because 10 minutes is enough to propagate the block throughout the world.
 To make the blockchain tamper-proof, there is a concept called proof of work in Bitcoin.
 So the miner has chosen a random value as nonce that makes the hash of the block less
 then a certain value.
-This value is chosen in a way that each block should be generated on 10 minutes in average.
-If the value is too low, miners will take more time to find a nonce that make the hash block
+This value is chosen in a way that each block should be generated on 10 minutes on average.
+If the value is too low, miners will take more time to find a nonce that makes the hash block
 less than it.
 If it is too high, it will be easier to find a nonce and they will find it faster.
 
 When two blocks are mined in nearly the same time, there are two valid blockchains.
-It is because the last block in both blockchains are valid but different.
+It is because the last block in both blockchains is valid but different.
 Because of this problem, in the Bitcoin protocol, the largest chain is always the right chain.
 While two valid chains have the same size, it is not possible to know which chain is the right.
 This situation is called fork and when it happens, it is necessary to wait to see in which chain
@@ -352,8 +351,8 @@ In Bitcoin, there is a possibility of a 51\% attack.
 It happens when some miner, with more power than all network, mine secretly the blocks.
 So if the main network has 50 blocks, the miner could produce hidden blocks from 46 to 55
 and he would have 10 hidden blocks from the network.
-When he shows their hidden blocks, his chain become the valid chain, because it is bigger.
-So all transactions from previous blockchain from 46 to 50 blocks become invalid.
+When he shows their hidden blocks, his chain becomes the valid chain, because it is bigger.
+So all transactions from the previous blockchain from 46 to 50 blocks become invalid.
 Because of that, when someone makes a big transaction in the blockchain, it is a good idea
 to wait more time.
 So it is becoming harder and harder to make a 51\% with more time.
