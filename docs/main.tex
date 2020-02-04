@@ -81,7 +81,7 @@
 
 In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
 This cryptocurrency use RSA blind signatures \cite{chaum1983blind} to spend transactions.
-Later, in 1989, David Chaum found an eletronic money corporation called DigiCash Inc.
+Later, in 1989, David Chaum found an electronic money corporation called DigiCash Inc.
 It was declared bankruptcy in 1998.
 
 Adam Back developed a proof-of-work (PoW) scheme for spam control, Hashcash \cite{back2002hashcash}.
@@ -177,9 +177,37 @@ Most of these functions define how Bitcoin Network protocol should be.
 In his work, he does not utilize any programming language with dependent types like Agda or CoQ.
 He uses mCRL2, a specification programming language.
 
+Chaudhary \cite{chaudhary2015modeling} and his team have created a model of Bitcoin blockchain
+in the model checker UPPAAL.
+In his work, he calculates the probability of a malicious attack to succed doing a double spend.
+For a small quantity of blocks, it is easier to do this attack.
+Because of that, it is usually recommended that the user wait more blocks confirmations
+after a big transaction.
+
+Bastiaan \cite{bastiaan2015preventing} showed a stochastic model of Bitcoin using
+continuous Markov chains.
+In his work, he proposes a way of avoiding a 51\% attack in the network,
+using two phase proof of work.
+
 Orestis Melkonian \cite{melkonian2019formalizing} in his masters has done the formal specification
 of BitML (smart contract language) in Agda.
 This language can be compiled to Script, the smart contract language of Bitcoin. 
+
+Kosba \cite{kosba2016hawk} in his work made a programming language called Hawk for smart contracts.
+This language uses formal methods to verify privacy using zero knowledge proofs.
+Using this language, the programmer does not have to worry about implementing the criptography,
+because the compiler generates automatically an eficient one.
+
+Bhargavan \cite{bhargavan2016formal} translated Solidity and Ethereum bytecode into F*.
+He verified that Ethereum DAO bug was caught in its translation.
+Nowadays, they have an implementation of Ethereum Virtual Machine (EVM) and Solidity in OCaml,
+but they want to have a full implementation of EVM in F* too.
+
+Luu \cite{luu2016making} built a symbolic execution tool named OYENTE to look for potential bugs.
+In his work, he found a lot of contracts with real bugs.
+One of these bugs were TheDAO bug, that caused a loss of 60 millions of dollars.
+He used Z3
+to find potential dangerous path of code.
 
 Antom Setzel \cite{setzer2018modelling} also contributed for modeling Bitcoin.
 He coded in Agda the definitions of transactions and
