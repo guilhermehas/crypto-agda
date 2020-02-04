@@ -4,7 +4,7 @@ module proofsTXTree where
 open import Prelude
 open import Prelude.Nat.Properties
 open import Utils
-open import Cripto
+open import Crypto
 open import Transactions
 open import TXTree
 

@@ -1,5 +1,5 @@
 \begin{code}
-module Cripto where
+module Crypto where
 
 open import Prelude
 open import Utils
@@ -40,7 +40,7 @@ data Msg : Set where
 infixr 5 _+msg_
 \end{code}
 
-%<*criptoPostulates>
+%<*cryptoPostulates>
 \begin{code}
 postulate _priv≡pub_ : PrivateKey → PublicKey → Set
 postulate publicKey2Address : PublicKey → Address
@@ -58,7 +58,7 @@ record SignedWithSigPbk (msg : Msg)(address : Address) : Set where
     signed      :  Signed msg publicKey signature
 
 \end{code}
-%</criptoPostulates>
+%</cryptoPostulates>
 
 \begin{code}
 private

@@ -4,7 +4,7 @@ module Transactions where
 open import Prelude
 open import Prelude.Nat.Properties
 open import Utils
-open import Cripto
+open import Crypto
 \end{code}
 
 %<*TXField>

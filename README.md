@@ -1,10 +1,10 @@
 # crypto-agda
 
-[![Build Status](https://travis-ci.com/guilhermehas/cripto-agda.svg?branch=master)](https://travis-ci.com/guilhermehas/cripto-agda)
+[![Build Status](https://travis-ci.com/guilhermehas/crypto-agda.svg?branch=master)](https://travis-ci.com/guilhermehas/crypto-agda)
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 
 ## Link for download
-[PDF in GitHub Pages](https://guilhermehas.github.io/cripto-agda/thesis.pdf)
+[PDF in GitHub Pages](https://guilhermehas.github.io/crypto-agda/thesis.pdf)
 
 # Description
 Cryptocurrency made in agda
@@ -24,22 +24,22 @@ nix-build
 # Build with docker
 Create docker image
 ```bash
-docker build --tag cripto-agda .
+docker build --tag crypto-agda .
 ```
 
 Create the container
 ```bash
-docker run --name cripto cripto-agda
+docker run --name crypto crypto-agda
 ```
 
 Copy the pdf
 ```bash
-docker cp cripto:/cripto/thesis.pdf .
+docker cp crypto:/crypto/thesis.pdf .
 ```
 
 Copy tex files
 ```bash
-docker cp cripto:/cripto/tex .
+docker cp crypto:/crypto/tex .
 mv tex/* docs
 rm -rf tex
 ```

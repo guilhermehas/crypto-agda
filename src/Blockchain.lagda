@@ -3,7 +3,7 @@ module Blockchain where
 
 open import Prelude
 open import Utils
-open import Cripto
+open import Crypto
 open import Transactions
 open import TXTree
 \end{code}

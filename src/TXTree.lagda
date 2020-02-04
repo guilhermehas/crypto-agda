@@ -3,7 +3,7 @@ module TXTree where
 
 open import Prelude
 open import Utils
-open import Cripto
+open import Crypto
 open import Transactions
 
 totalQtSub1 : Nat

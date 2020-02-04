@@ -10,4 +10,4 @@ RUN nix-channel --update
 RUN nix-env -i git
 RUN nix-build
 
-RUN cp -Lpr result /cripto
+RUN cp -Lpr result /crypto

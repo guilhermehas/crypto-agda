@@ -3,7 +3,7 @@ module examples where
 
 open import Prelude
 open import Utils
-open import Cripto
+open import Crypto
 open import RawTransactions
 open import Transactions
 open import TXTree
@@ -53,7 +53,7 @@ txTree1El : TypeEl $ addTransactionTree txTree tx0
 txTree1El =
   el (just (record
               { time = nat 1
-              ; block = 1
+              ; block = 0
               ; outputs = [ txfieldid (nat zero) zero 100 (nat zero) ]
               ; totalFees = zero
               ; qtTransactions = zero
@@ -76,7 +76,7 @@ txTree2El = el (
   just
   (record
   { time = nat 2
-  ; block = 2
+  ; block = 1
   ; outputs =
       txfieldid (nat 0) 0 100 (nat 0) ∷
       [ txfieldid (nat 1) 0 100 (nat 0) ]
