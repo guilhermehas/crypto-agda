@@ -289,7 +289,7 @@ Because of that no authority or government can block the Bitcoin.
 \incimg{transactions1}{png}{Transaction}
 %% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
 
-Transactions in Bitcoins (like in FIG1) are an array of input of
+Transactions in Bitcoins (like in \ref{fig:transactions1}) are an array of input of
 previous transactions and an array of outputs.
 Each input and output is an address, each address is made from a public key
 that is made from a private key.
@@ -300,7 +300,8 @@ that is made from a private key.
 A private key is a big number.
 It is so big that it is almost impossible to generate two identicals private keys.
 
-The public key is generated from the private key (like in FIG2 where account number is f(p)), 
+The public key is generated from the private key
+(like in \ref{fig:privatekey} where account number is f(p)),
 but a private key can not be generated from a public key.
 
 The mining transaction does require an input.
@@ -318,7 +319,7 @@ his private key.
 \incimg{transactions2}{jpg}{Verification and signature of transactions}
 %% https://en.wikipedia.org/wiki/Bitcoin_network
 
-Transactions (shown in FIG3) are grouped in a block (shown in FIG4).
+Transactions (shown in \ref{fig:transactions2}) are grouped in a block (shown in \ref{fig:blockchain}).
 Each block contains in its header the timestamp of its creation, the hash of the block,
 the previous hash and a nonce.
 A nonce is an arbitrary value that the miner has to choose to make the hash of the block respect some
@@ -362,7 +363,7 @@ Nowadays, this kind of attack is more common in new altcoins.
 \incimgdiv{wallet}{png}{Wallet}{2}
 %% https://trustwallet.com/buy-bitcoin/
 
-Wallet (shown in \ref{fig:account}) is software that tracks all transactions 
+Wallet (shown in \ref{fig:wallet}) is software that tracks all transactions 
 that the users received and sent.
 It also makes new transactions from previously received transactions.
 
