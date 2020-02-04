@@ -210,15 +210,15 @@ The current version of Agda is Agda 2.
   \subsubsection{Martin-Löf type theory}
   Agda also provides proof assistants based on the intentional Martin-Löf type theory.
 
-    In Martin-Löf type theory, there are 3 finite types and 5 constructors types.
-    The 0 type contain 0 terms, it is called empty type and it is written bot.
+    In Martin-Löf type theory, there are three finite types and five constructors types.
+    The zero type contain zero terms. It is called empty type and it is written bot.
     \agda{agdaExamples}{botType}
 
-    The 1 type is the type with just 1 canonical term and it represents existence.
+    The first type is the type with just one canonical term and it represents existence.
     It is called unit type and it is written top.
     \agda{agdaExamples}{trivialType}
 
-    The 2 type contains 2 canonical terms. It represents a choice between two values.
+    The second type contains two canonical terms. It represents a choice between two values.
     \agda{agdaExamples}{eitherType}
 
     The Boolean type is defined using the Trivial type and the Either type.
@@ -288,7 +288,7 @@ Because of that no authority or government can block the Bitcoin.
 \incimg{transactions1}{png}{Transaction}
 %% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
 
-Transactions in Bitcoins (like in \ref{fig:transactions1}) are an array of input of
+Transactions in Bitcoins (like in \figref{transactions1}) are an array of input of
 previous transactions and an array of outputs.
 Each input and output is an address, each address is made from a public key
 that is made from a private key.
@@ -300,25 +300,25 @@ A private key is a big number.
 It is so big that it is almost impossible to generate two identicals private keys.
 
 The public key is generated from the private key
-(like in \ref{fig:privatekey} where account number is f(p)),
+(like in \figref{privatekey} where account number is f(p)),
 but a private key can not be generated from a public key.
 
 The mining transaction does require an input.
 For each input of the transaction, it is necessary a signature signed with a private key
-(like in FIG2 where signature is f(p,t))
+(like in \figref{privatekey} where signature is f(p,t))
 to prove the ownership of the Bitcoins.
 With the message and the signature, it is possible to know that the owner of the private key
 that generates the public key signed this message.
 
 With the signature and the public key, it is not possible to know the private key.
-In FIG2, the checker is a f(t,s,a).
+In \figref{privatekey}, the checker is a f(t,s,a).
 So because of that, the owner of the private key can sign several messages without anyone knows
 his private key.
 
 \incimg{transactions2}{jpg}{Verification and signature of transactions}
 %% https://en.wikipedia.org/wiki/Bitcoin_network
 
-Transactions (shown in \ref{fig:transactions2}) are grouped in a block (shown in \ref{fig:blockchain}).
+Transactions (shown in \figref{transactions2}) are grouped in a block (shown in \figref{blockchain}).
 Each block contains in its header the timestamp of its creation, the hash of the block,
 the previous hash and a nonce.
 A nonce is an arbitrary value that the miner has to choose to make the hash of the block respect some
@@ -362,7 +362,7 @@ Nowadays, this kind of attack is more common in new altcoins.
 \incimgdiv{wallet}{png}{Wallet}{2}
 %% https://trustwallet.com/buy-bitcoin/
 
-Wallet (shown in \ref{fig:wallet}) is software that tracks all transactions 
+Wallet (shown in \figref{wallet}) is software that tracks all transactions 
 that the users received and sent.
 It also makes new transactions from previously received transactions.
 

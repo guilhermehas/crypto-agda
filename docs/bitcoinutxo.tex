@@ -7,7 +7,7 @@ of data structures to model accounts records and savings states.
 %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
 In the account model, it is saved the address and the balance of each address
-(like in \ref{fig:account}).
+(like in \figref{account}).
 For example, the data structure will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
 So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of balance.
 In this way, it is possible to easily know how much balance each address has,
@@ -17,7 +17,7 @@ but it is not possible to know how they got in this state.
   %% https://bitcoin.org/
   %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
-In the UTXO model (shown in \ref{fig:utxo}), each transaction is saved in the transaction tree.
+In the UTXO model (shown in \figref{utxo}), each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
 But all inputs have to never been spent before.
 
