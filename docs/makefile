@@ -9,6 +9,7 @@ pdf:
 prepare: clean
 	cd .. && nix-build
 	cp -Lr ../result/tex/* .
+	chmod +w latex
 
 local:
 	latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=. main.tex
