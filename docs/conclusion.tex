@@ -1,9 +1,22 @@
 \section{Conclusion}
 
-This text has shown the definition of Bitcoin protocol.
-Definitions of transactions, transactions tree, block, and blockchain.
-In this work, it was also made the code that transforms raw transactions in a possible valid transaction,
-to incorporate it in the transaction tree.
+Formal methods in cryptocurrency space are growing significantly.
+Companies like \gls{iohk}, creator of Cardano, and Tezos are investing a lot in it.
+This work contributes to the formal specification and definition of Bitcoin.
+
+A good way of defining Bitcoin is by creating a model of it in a language with dependent types.
+Agda looks like a good language for it, but other languages like CoQ, Lean can do this work too.
+
+In this work, we define a lot of functionalities about Bitcoin.
+There were definitions of transactions, transactions tree, block, and blockchain.
+Most of the model definition was in transaction tree
+because of the state of Bitcoin changes after every transaction.
+There are other ways of doing the same thing,
+but I thought that this way is easier to define.
+
+Some part of this code is not just for modeling the Bitcoin,
+but to validates inputs that can be wrong.
+For example, transforming raw transactions into possible valid transactions.
 
 \subsection{Future work}
 
