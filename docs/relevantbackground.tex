@@ -31,13 +31,13 @@ Using this language, the programmer does not have to worry about implementing th
 because the compiler generates automatically an efficient one.
 
 Bhargavan \cite{bhargavan2016formal} translated Solidity and Ethereum bytecode into F*.
-He verified that the Ethereum DAO bug was caught in its translation.
-Nowadays, they have an implementation of Ethereum Virtual Machine (EVM) and Solidity in OCaml,
-but they want to have a full implementation of EVM in F* too.
+He verified that the Ethereum \gls{dao} bug was caught in its translation.
+Nowadays, they have an implementation of \gls{evm} and Solidity in OCaml,
+but they want to have a full implementation of \gls{evm} in F* too.
 
 Luu \cite{luu2016making} built a symbolic execution tool named OYENTE to look for potential bugs.
 In his work, he found a lot of contracts with real bugs.
-One of these bugs was TheDAO bug, that caused a loss of 60 million dollars.
+One of these bugs was \gls{dao} bug, that caused a loss of 60 million dollars.
 He used Z3 to find a potentially dangerous path of code.
 
 Anton Setzer \cite{setzer2018modelling} also contributed to modeling Bitcoin.
@@ -368,8 +368,8 @@ It also makes new transactions from previously received transactions.
 
 \subsection{Ethereum}
 
-Ethereum differs from Bitcoin in having an Ethereum Virtual Machine (EVM) to run script code.
-EVM is a stack machine and Turing complete while Bitcoin Script is not
+Ethereum differs from Bitcoin in having an \gls{evm} to run script code.
+\gls{evm} is a stack machine and Turing complete while Bitcoin Script is not
 (it is impossible to do loops and recursion in Bitcoin).
 
 Transactions in Bitcoin are all stored in the blockchain.
@@ -392,6 +392,6 @@ profit and they will pick them.
 If the amount of ether per gas paid is not high enough, the contract will not be executed,
 because some other contracts pay more that will be executed instead of this one.
 
-Because Ethereum has its EVM with more instructions than Bitcoin and it is Turing Complete,
+Because Ethereum has its \gls{evm} with more instructions than Bitcoin and it is Turing Complete,
 it is considered less secure.
 Ethereum has its high-level programming language called Solidity that looks like Javascript.

@@ -1,0 +1,13 @@
+\newcommand{\agda}[2]{\ExecuteMetaData[latex/#1.tex]{#2}}
+\newcommand{\incgraph}[2]{\includegraphics[width=\columnwidth/#2]{imgs/#1}}
+\newcommand{\incimgdiv}[4]{
+  \begin{figure}
+    \incgraph{#1.#2}{#4}
+    \caption{#3}
+    \label{fig:#1}
+  \end{figure}
+}
+\newcommand{\incimg}[3]{\incimgdiv{#1}{#2}{#3}{1}}
+\newcommand{\figref}[1]{Figure \ref{fig:#1}}
+\newcommand{\subtitle}[1]{{\large \textbf{#1}}}
+\newcommand{\initial}[2]{\textbf{#1:} #2 \\}

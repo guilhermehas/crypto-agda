@@ -1,10 +1,10 @@
 \subsection{Bitcoin UTXO}
 
-The UTXO model used in Bitcoin and the account model used in Ethereum are the two most used kinds
-of data structures to model accounts records and savings states.
-
 \incimg{account}{jpeg}{Record account}
 %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
+
+The \gls{utxo} model used in Bitcoin and the account model used in Ethereum are the two most used kinds
+of data structures to model accounts records and savings states.
 
 In the account model, it is saved the address and the balance of each address
 (like in \figref{account}).
@@ -17,16 +17,16 @@ but it is not possible to know how they got in this state.
   %% https://bitcoin.org/
   %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
-In the UTXO model (shown in \figref{utxo}), each transaction is saved in the transaction tree.
+In the \gls{utxo} model (shown in \figref{utxo}), each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
 But all inputs have to never been spent before.
 
-Because of that, in the UTXO model, it is easy to make a new transaction from the previous one,
+Because of that, in the \gls{utxo} model, it is easy to make a new transaction from the previous one,
 but it is harder to know how much each one has.
 The wallet that calculate how much balance each address has.
 
-In the account model, there could be one kind of vulnerability that is less probable to happen in UTXO
-model.
+In the account model, there could be one kind of vulnerability
+that is less probable to happen in \gls{utxo} model.
 Because there is an undesirable intermediary state that there is some address without balance while
 another has not already received his money.
 
@@ -38,5 +38,5 @@ aliceBalance += 1
 }
 
 In the account model, it is straight forward to know how much balance each address has.
-In the UTXO model, this calculation is made off-chain. It can be a good thing,
+In the \gls{utxo} model, this calculation is made off-chain. It can be a good thing,
 because each user has more privacy.

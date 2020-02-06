@@ -19,23 +19,13 @@
 \graphicspath{{images/}}
 \usepackage{parskip}
 \usepackage{fancyhdr}
+\usepackage[acronym]{glossaries}
 
 \usepackage{vmargin}
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+\input{macros}
 
-\newcommand{\agda}[2]{\ExecuteMetaData[latex/#1.tex]{#2}}
-\newcommand{\incgraph}[2]{\includegraphics[width=\columnwidth/#2]{imgs/#1}}
-\newcommand{\incimgdiv}[4]{
-  \begin{figure}
-    \incgraph{#1.#2}{#4}
-    \caption{#3}
-    \label{fig:#1}
-  \end{figure}
-}
-\newcommand{\incimg}[3]{\incimgdiv{#1}{#2}{#3}{1}}
-\newcommand{\figref}[1]{Figure \ref{fig:#1}}
-\newcommand{\subtitle}[1]{{\large \textbf{#1}}}
-\newcommand{\initial}[2]{\textbf{#1:} #2 \\}
+\input{initials}
 
 \title{A Simplified version of Bitcoin, implemented in Agda}
 
@@ -69,14 +59,15 @@
 
 \firstpage
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{abstract}
 \include{resumo}
-\include{initials}
+
+\printnoidxglossaries
+\pagebreak
 
 \listoffigures
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+
 \tableofcontents
 \pagebreak
 
@@ -88,7 +79,7 @@
 \include{relevantbackground}
 
 \section{Development}
-  \include{bitcoinutxo}
+  \input{bitcoinutxo}
   \include{criptofunctions}
   \include{transactions}
   \include{transactiontree}
