@@ -1,13 +1,18 @@
-default: pdf
+default: pdf slides
 
 pdf:
 	mkdir -p docs/res
 	cd docs && latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=res main.tex
 
+slides:
+	mkdir -p slides/res
+	cd slides && latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=res main.tex
+
 install:
 	mkdir -p $(out)/tex/latex
 	bash copylatexout.bash $(out)/tex/latex $(out)/tex
 	cp docs/res/main.pdf $(out)/thesis.pdf
+	cp slides/res/main.pdf $(out)/slides.pdf
 
 clean:
 	rm -rf docs/main.pdf; \

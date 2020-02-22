@@ -11,6 +11,8 @@
 *.dvi
 *.lof
 *.out
+*.nav
+*.snm
 docs/tex
 docs/latex
 docs/agda.sty
