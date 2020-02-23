@@ -1,10 +1,10 @@
-default: pdf slides
+default: pdf slide
 
 pdf:
 	mkdir -p docs/res
 	cd docs && latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=res main.tex
 
-slides:
+slide:
 	mkdir -p slides/res
 	cd slides && latexmk -interaction=nonstopmode -f -pdf -use-make -outdir=res main.tex
 
@@ -30,3 +30,4 @@ clean:
 	rm -f docs/*.ptb; \
 	rm -f docs/*.bbl; \
 	rm -f docs/*.blg; \
+	rm -rf slides/res; \
