@@ -16,4 +16,5 @@ install:
 
 clean:
 	rm -rf {slides,docs}/{main.pdf,res,latex,agda.sty}
-	for ext in {log,aux,latexmk,toc,fls,ptb,bbl,blg}; do rm -f {slides,docs}/*.$$ext ; done
+	for ext in {log,aux,latexmk,toc,fls,ptb,bbl,blg,fdb_latexmk,nav,out,snm}; \
+	do rm -f {slides,docs}/*.$$ext ; done

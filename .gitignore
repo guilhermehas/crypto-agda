@@ -16,6 +16,8 @@
 docs/tex
 docs/latex
 docs/agda.sty
+slides/latex
+slides/agda.sty
 tex
 
 *ignoregit*

@@ -22,7 +22,8 @@
 
  
 %Information to be included in the title page:
-\title{Qualificação}
+\title{Uma versão simplificada do Bitcoin, \\
+  implementada em Agda}
 \author[Guilherme, Flávio]{Guilherme Horta Alvares da Silva \\
   Orientador: Flávio Codeço Coelho}
 \institute{Fundação Getulio Vargas}
@@ -34,7 +35,7 @@
 \frame{\titlepage}
 
 \begin{frame}
-  \frametitle{Programação de uma criptomoeda em linguagem Agda}
+  \frametitle{Uma versão simplificada do Bitcoin, implementada em Agda}
 \begin{itemize}
   \item Objetivo
   \item Justificativa
@@ -56,19 +57,71 @@
 \frametitle{Objetivo}
 \begin{itemize}
   \item Programar uma criptomoeda (similar ao Bitcoin) em Agda, que é uma linguagem com tipos dependentes.
-    %% \includegraphics[width=8cm, height=5cm]{TwoBitcoins}
+    \includegraphics[width=8cm, height=5cm]{TwoBitcoins}
 \end{itemize}
 \end{frame}
  
 \section{Justificativa}
 
- \begin{frame}
+\begin{frame}
 \frametitle{Justificativa}
 \begin{itemize}
     \item Programar um protocólo de criptomoedas livre de erros (bugs)
     \item Utilizar Agda permite, além da programação da criptomoeda, especificar como ela deve funcionar
       \cite{norell2008dependently}
 \end{itemize}
+\end{frame}
+
+\section{Linguagem Funcional}
+
+\begin{frame}
+\frametitle{Linguagem Funcional}
+\begin{itemize}
+  \item Em linguagens funcionais, toda função retorna o mesmo output para o mesmo input.
+  \item Em Agda, toda função é total e ela sempre termina.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Efeitos Colaterais}
+\begin{itemize}
+  \item Para Agda ser utilizada como um programa, ela tem que lidar com o sistema operacional.
+    Operação chamada de IO (Input Output).
+  \item Várias pesquisas estão sendo feitas para minimizar os efeitos colaterais do IO.
+  \item Lógica linear para lidar com recursos, como abrir arquivos.
+  \item Efeitos algébricos são utilizados para distinguir os diferentes tipos de efeitos
+    que a linguagem pode fazer no sistema operacional.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Efeitos Colaterais}
+\begin{itemize}
+  \item Frontend e backend de serviços estão sendo programados na mesma linguagem funcional
+    para minimizar os efeitos colaterais.
+  \item Haxl, usado no Facebook, é uma ferramenta que faz o cache das operações IO para
+    fácil debug, log e teste.
+  \item Facebook também faz Hot Swapping de forma funcional.
+    Ou seja, ele não reinicia o processo para iniciar um novo.
+    Algo que já era comum em Lisp
+  \item Sistemas distribuidos já estão sendo completamente descritos por meio de linguagens funcionais.
+    Whatsapp utiliza Elixir como linguagem.
+\end{itemize}
+\end{frame}
+
+\section{Industria}
+
+\begin{frame}
+  \frametitle{Beneficios}
+  \begin{itemize}
+    \item Por causa dos inúmeros benefícios das linguagens funcionais,
+      elas estão sendo cada vez mais utilizadas na indústria.
+    \item Garantem corretude de software.
+      É de fácil reproducibilidade, testabilidade e é mais fácil de debugar.
+    \item Entretanto, elas são mais difíceis de serem aprendidas.
+      Necessitam alto grau de abstração e
+      é mais difícil de encontrar mão de obra.
+  \end{itemize}
 \end{frame}
 
 \section{Criptomoedas}
@@ -85,17 +138,17 @@
 
 \begin{frame}
 \frametitle{Blockchain}
-%% \includegraphics[width=11cm, height=8cm]{blockchain1}
+\includegraphics[width=11cm, height=8cm]{blockchain1}
 \end{frame}
 
 \begin{frame}
 \frametitle{Blockchain}
-%% \includegraphics[width=11cm, height=8cm]{blockchain2}
+\includegraphics[width=11cm, height=8cm]{blockchain2}
 \end{frame}
 
 \begin{frame}
 \frametitle{Blockchain}
-%% \includegraphics[width=11cm, height=8cm]{blockchain3}
+\includegraphics[width=11cm, height=8cm]{blockchain3}
 \end{frame}
  
 \section{Agda}
@@ -217,8 +270,8 @@
 \section{Bibliografia}
 
  \begin{frame}{Livros}
-    %% \includegraphics[width=4cm, height=6cm]{TDD}
-    %% \includegraphics[width=4cm, height=6cm]{ProgrammingBitcoin}
+    \includegraphics[width=4cm, height=6cm]{TDD}
+    \includegraphics[width=4cm, height=6cm]{ProgrammingBitcoin}
  \end{frame}
   
 
