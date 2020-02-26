@@ -76,17 +76,20 @@ one+one = res (λ suc z → suc (suc z))
 
 %<*list>
 \begin{code}
-emptyList : {A List : Set} → (A → List → List) → List → List
+emptyList : {A List : Set}
+  → (A → List → List) → List → List
 emptyList _::_ nil = nil
 
-natList : {A List : Set} → (((A → A) → A → A) → List → List) → List → List
+natList : {A List : Set}
+  → (((A → A) → A → A) → List → List) → List → List
 natList _::_ nil = one :: (two :: nil)
 \end{code}
 %</list>
 
 %<*sumList>
 \begin{code}
-sumList : {A List : Set} → Result (natList {A} {(A → A) → A → A} _+_ zero)
+sumList : {A List : Set}
+  → Result (natList {A} {(A → A) → A → A} _+_ zero)
 sumList = res (λ suc z → suc (suc (suc z)))
 \end{code}
 %</sumList>
@@ -103,32 +106,40 @@ right x f g = g x
 
 %<*eitherExamples>
 \begin{code}
-zero-left : {A B C : Set} → (((A → A) → A → A) → C) → (B → C) → C
+zero-left : ∀ {A B C}
+  → (((A → A) → A → A) → C) → (B → C) → C
 zero-left = left zero
 
-one-left : {A B C : Set} → (((A → A) → A → A) → C) → (B → C) → C
+one-left : ∀ {A B C}
+  → (((A → A) → A → A) → C) → (B → C) → C
 one-left = left one
 
-false-right : {A B C : Set} → (A → C) → ((B → B → B) → C) → C
+false-right : ∀ {A B C}
+  → (A → C) → ((B → B → B) → C) → C
 false-right = right false
 
-true-right : {A B C : Set} → (A → C) → ((B → B → B) → C) → C
+true-right :  ∀ {A B C}
+  → (A → C) → ((B → B → B) → C) → C
 true-right = right true
 \end{code}
 %</eitherExamples>
 
 %<*eitherRes>
 \begin{code}
-zero-isZero : {A : Set} → Result (zero-left {A} isZero id)
+zero-isZero : ∀ {A}
+  → Result (zero-left {A} isZero id)
 zero-isZero = res (λ true false → true)
 
-one-isZero : {A : Set} → Result (one-left {A} isZero id)
+one-isZero : ∀ {A}
+  → Result (one-left {A} isZero id)
 one-isZero = res (λ true false → false)
 
-false-id : {A : Set} → Result (false-right {(A → A) → A → A} isZero id)
+false-id : ∀ {A}
+  → Result (false-right {(A → A) → A → A} isZero id)
 false-id = res (λ true false → false)
 
-true-id : {A : Set} → Result (false-right {(A → A) → A → A} isZero id)
+true-id : ∀ {A}
+  → Result (false-right {(A → A) → A → A} isZero id)
 true-id = res (λ true false → false)
 \end{code}
 %</eitherRes>
@@ -142,23 +153,28 @@ tuple x y f = f x y
 
 %<*tupleExamples>
 \begin{code}
-zero-false : {A B C : Set} → (((A → A) → A → A) → (B → B → B) → C) → C
+zero-false : {A B C : Set} → (((A → A) → A → A)
+  → (B → B → B) → C) → C
 zero-false = tuple zero false
 
-one-true : {A B C : Set} → (((A → A) → A → A) → (B → B → B) → C) → C
+one-true : {A B C : Set} → (((A → A) → A → A)
+  → (B → B → B) → C) → C
 one-true = tuple one true
 \end{code}
 %</tupleExamples>
 
 %<*tupleAdd>
 \begin{code}
-add-true : {A : Set} → ((A → A) → A → A) → (A → A → A) → ((A → A) → A → A)
+add-true : {A : Set} → ((A → A) → A → A)
+  → (A → A → A) → ((A → A) → A → A)
 add-true n b suc z = b (suc (n suc z)) (n suc z)
 
-add-zero-false : {A : Set} → Result (zero-false {(A → A) → A → A} add-true)
+add-zero-false : {A : Set}
+  → Result (zero-false {(A → A) → A → A} add-true)
 add-zero-false = res (λ suc z → z)
 
-add-one-true : {A : Set} → Result (one-true {(A → A) → A → A} add-true)
+add-one-true : ∀ {A}
+  → Result (one-true {(A → A) → A → A} add-true)
 add-one-true = res (λ suc z → suc (suc z))
 \end{code}
 %</tupleAdd>

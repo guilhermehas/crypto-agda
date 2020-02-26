@@ -88,9 +88,9 @@
   \item Para Agda ser utilizada como um programa, ela tem que lidar com o sistema operacional.
     Operação chamada de IO (Input Output).
   \item Várias pesquisas estão sendo feitas para minimizar os efeitos colaterais do IO.
-  \item Lógica linear para lidar com recursos, como abrir arquivos.
+  \item Lógica linear é usada para lidar com recursos, como abrir arquivos.
   \item Efeitos algébricos são utilizados para distinguir os diferentes tipos de efeitos
-    que a linguagem pode fazer no sistema operacional.
+    relacionados ao sistema operacional.
 \end{itemize}
 \end{frame}
 
@@ -103,7 +103,7 @@
     fácil debug, log e teste.
   \item Facebook também faz Hot Swapping de forma funcional.
     Ou seja, ele não reinicia o processo para iniciar um novo.
-    Algo que já era comum em Lisp
+    Algo que já era comum em Lisp.
   \item Sistemas distribuidos já estão sendo completamente descritos por meio de linguagens funcionais.
     Whatsapp utiliza Elixir como linguagem.
 \end{itemize}
@@ -122,6 +122,22 @@
       Necessitam alto grau de abstração e
       é mais difícil de encontrar mão de obra.
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Empresas}
+    \includegraphics[width=2.5cm, height=2.5cm]{companies/Galois}
+    \includegraphics[width=2cm, height=2cm]{companies/barclays}
+    \includegraphics[width=2cm, height=2cm]{companies/fb}
+    \includegraphics[width=2cm, height=2cm]{companies/whatsapp}
+    \includegraphics[width=6cm, height=2cm]{companies/jane_street}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Criptomoedas}
+    \includegraphics[width=6cm, height=4cm]{crypto/cardano}
+    \includegraphics[width=4cm, height=4cm]{crypto/rchain}
+    \includegraphics[width=6cm, height=4cm]{crypto/t3-tezos}
 \end{frame}
 
 \section{Criptomoedas}
@@ -168,13 +184,69 @@
      \item Tipos em Agda são uma generalização de tipos de dados algébricos encontrados em Haskell e ML
  \end{itemize}
  \end{frame}
+
+\section{Lambda Calculus}
+
+ \begin{frame}{Identidade}
+  \begin{itemize}
+    \item Agda utiliza alguns conceitos do Lamdba Calculus.
+    \ExecuteMetaData[latex/lambdaCalculus.tex]{Id}
+    \ExecuteMetaData[latex/lambdaCalculus.tex]{Id2}
+  \end{itemize}
+ \end{frame}
  
- \begin{frame}{Agda --- III}
-\begin{itemize}
-  \item Definição dos números naturais como axiomas de Peano:
-           %% \ExecuteMetaData[latex/Code.tex]{nat}
- \end{itemize}
-\end{frame}
+ \begin{frame}{Booleanos}
+  \begin{itemize}
+    \item Definição de booleanos
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{trueFalse}
+  \end{itemize}
+  \end{frame}
+
+ \begin{frame}{Números naturais}
+  \begin{itemize}
+    \item Definição de números naturais
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{naturals}
+  \end{itemize}
+  \end{frame}
+
+ \begin{frame}{Zero}
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{isZero}
+  \end{frame}
+
+ \begin{frame}{Soma}
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{plus}
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{onePone}
+  \end{frame}
+
+ \begin{frame}{Lista}
+    \ExecuteMetaData[latex/lambdaCalculus.tex]{list}
+    \ExecuteMetaData[latex/lambdaCalculus.tex]{sumList}
+  \end{frame}
+
+ \begin{frame}{Soma}
+  \begin{itemize}
+    \item Definição de tipos de soma
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{either}
+  \end{itemize}
+  \end{frame}
+
+ \begin{frame}{Tipo soma}
+    \ExecuteMetaData[latex/lambdaCalculus.tex]{eitherRes}
+  \end{frame}
+
+ \begin{frame}{Tuplas}
+  \begin{itemize}
+    \item Definição de tupla
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{tuple}
+      \ExecuteMetaData[latex/lambdaCalculus.tex]{tupleExamples}
+  \end{itemize}
+  \end{frame}
+
+ \begin{frame}{Adição de tuplas}
+    \ExecuteMetaData[latex/lambdaCalculus.tex]{tupleAdd}
+  \end{frame}
+
+\section{Agda}
 
 \begin{frame}{Agda --- IV}
  \begin{itemize}
