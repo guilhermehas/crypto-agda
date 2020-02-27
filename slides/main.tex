@@ -11,6 +11,8 @@
 \usepackage[autostyle=true,french=guillemets,maxlevel=3]{csquotes}
 
 \graphicspath{ {images/} }
+
+\newcommand{\agda}[2]{\ExecuteMetaData[latex/#1.tex]{#2}}
  
 \usetheme{Frankfurt}
 
@@ -20,7 +22,6 @@
 	{\textquotedblleft\em}
 	{\em\textquotedblright}
 
- 
 %Information to be included in the title page:
 \title{Uma versão simplificada do Bitcoin, \\
   implementada em Agda}
@@ -190,22 +191,22 @@
  \begin{frame}{Identidade}
   \begin{itemize}
     \item Agda utiliza alguns conceitos do Lamdba Calculus.
-    \ExecuteMetaData[latex/lambdaCalculus.tex]{Id}
-    \ExecuteMetaData[latex/lambdaCalculus.tex]{Id2}
+    \agda{lambdaCalculus}{Id}
+    \agda{lambdaCalculus}{Id2}
   \end{itemize}
  \end{frame}
  
  \begin{frame}{Booleanos}
   \begin{itemize}
     \item Definição de booleanos
-      \ExecuteMetaData[latex/lambdaCalculus.tex]{trueFalse}
+      \agda{lambdaCalculus}{trueFalse}
   \end{itemize}
   \end{frame}
 
  \begin{frame}{Números naturais}
   \begin{itemize}
     \item Definição de números naturais
-      \ExecuteMetaData[latex/lambdaCalculus.tex]{naturals}
+      \agda{lambdaCalculus}{naturals}
   \end{itemize}
   \end{frame}
 
@@ -214,36 +215,36 @@
   \end{frame}
 
  \begin{frame}{Soma}
-      \ExecuteMetaData[latex/lambdaCalculus.tex]{plus}
-      \ExecuteMetaData[latex/lambdaCalculus.tex]{onePone}
+      \agda{lambdaCalculus}{plus}
+      \agda{lambdaCalculus}{onePone}
   \end{frame}
 
  \begin{frame}{Lista}
-    \ExecuteMetaData[latex/lambdaCalculus.tex]{list}
-    \ExecuteMetaData[latex/lambdaCalculus.tex]{sumList}
+    \agda{lambdaCalculus}{list}
+    \agda{lambdaCalculus}{sumList}
   \end{frame}
 
  \begin{frame}{Soma}
   \begin{itemize}
     \item Definição de tipos de soma
-      \ExecuteMetaData[latex/lambdaCalculus.tex]{either}
+      \agda{lambdaCalculus}{either}
   \end{itemize}
   \end{frame}
 
  \begin{frame}{Tipo soma}
-    \ExecuteMetaData[latex/lambdaCalculus.tex]{eitherRes}
+    \agda{lambdaCalculus}{eitherRes}
   \end{frame}
 
  \begin{frame}{Tuplas}
   \begin{itemize}
     \item Definição de tupla
-      \ExecuteMetaData[latex/lambdaCalculus.tex]{tuple}
-      \ExecuteMetaData[latex/lambdaCalculus.tex]{tupleExamples}
+      \agda{lambdaCalculus}{tuple}
+      \agda{lambdaCalculus}{tupleExamples}
   \end{itemize}
   \end{frame}
 
  \begin{frame}{Adição de tuplas}
-    \ExecuteMetaData[latex/lambdaCalculus.tex]{tupleAdd}
+    \agda{lambdaCalculus}{tupleAdd}
   \end{frame}
 
 \section{Agda}
@@ -252,7 +253,7 @@
  \begin{itemize}
    \item Adição em Agda:
  \end{itemize}
- %% \ExecuteMetaData[latex/Code.tex]{plus}
+ %% \agda{Code}{plus}
 \end{frame}
 
 \begin{frame}{Agda --- V}
@@ -260,15 +261,15 @@
    \item Um tipo é dependente se este depende de um valor.
    \item Exemplo --- Listas indexadas por seu tamanho:
  \end{itemize}
- %% \ExecuteMetaData[latex/Code.tex]{vector}
+ %% \agda{Code}{vector}
 \end{frame}
 
 \begin{frame}{Agda --- VI}
  \begin{itemize}
    \item Modo seguro de remover primeiro elemento do vetor:
-     %% \ExecuteMetaData[latex/Code.tex]{vectorhead}
+     %% \agda{Code}{vectorhead}
    \item Função zip com 2 vetores de mesmo tamanho:
-     %% \ExecuteMetaData[latex/Code.tex]{zipWith}
+     %% \agda{Code}{zipWith}
  \end{itemize}
 \end{frame}
 
@@ -297,21 +298,35 @@
 
 \section{Trabalho executado}
 
-\begin{frame}{Trabalho já executado}
+\begin{frame}
+  \frametitle{Funções criptográficas}
   \begin{itemize}
-    \item A criptomoeda já foi programada em Python
-    \item Parte da \foreignquote{english}{blockchain} já foi programada em Agda
-    \item As transações já foram descritas na literatura: UTXO (\foreignquote{english}{Unspent transaction output}) \\
-      \cite{setzer2018modelling}
+    \item No bitcoin, existe a chave privada e a pública.
+    \item A chave privada serve para assinar a transação.
+    \item A chave pública, derivada da chave pública,
+      serve para demonstrar que você é o dono da chave privada.
+    \item Essas funções utilizam como base a função hash SHA-256.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Blockchain em Agda}
-  \begin{adjustwidth}{-3.5em}{-2em} \fontsize{8}{11}
-     %% \ExecuteMetaData[latex/Code.tex]{blockchain}
-  \end{adjustwidth}
+\begin{frame}
+  \frametitle{Função hash}
+  \begin{itemize}
+    \item Uma função hash é uma função que serve para comprimir dados grandes, como um vídeo,
+      em um número pequeno.
+      De forma que dois arquivos diferentes sempre terão hashes diferentes (injetividade)
+    \item Pelo princípio da casa dos pombos, isso é impossível.
+      Porém, nunca foi encontrado nenhum dois arquivos que possuem o mesmo hash.
+    \item O Google encontrou dois arquivos que possuiam o mesmo hash no SHA-1.
+      Logo em seguida, essa função hash parou de ser usada.
+  \end{itemize}
 \end{frame}
-  
+
+\begin{frame}
+  \frametitle{Funções criptográficas}
+    \agda{Crypto}{cryptoPostulates}
+\end{frame}
+
 \section{Próximos Passos}
 
 \begin{frame}{Próximos passos}

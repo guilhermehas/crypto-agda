@@ -45,12 +45,14 @@ infixr 5 _+msg_
 postulate _priv≡pub_ : PrivateKey → PublicKey → Set
 postulate publicKey2Address : PublicKey → Address
 postulate Signed : Msg → PublicKey → Signature → Set
-postulate Signed? : (msg : Msg) (pk : PublicKey) (sig : Signature)
-           → Dec $ Signed msg pk sig
+postulate Signed? : (msg : Msg) (pk : PublicKey)
+            (sig : Signature) → Dec $ Signed msg pk sig
 postulate hashMsg : Msg → Hashed
-postulate hash-inj : ∀ m n → hashMsg m ≡ hashMsg n → m ≡ n
+postulate hash-inj : ∀ m n → hashMsg m ≡ hashMsg n
+            → m ≡ n
 
-record SignedWithSigPbk (msg : Msg)(address : Address) : Set where
+record SignedWithSigPbk (msg : Msg)(address : Address)
+  : Set where
   field
     publicKey   :  PublicKey
     pbkCorrect  :  publicKey2Address publicKey ≡ address
