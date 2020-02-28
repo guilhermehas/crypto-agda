@@ -358,6 +358,64 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Transações}
+  \agda{Transactions}{TXSigned}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Modelo de transações}
+  \begin{itemize}
+    \item O Bitcoin utiliza o modelo de transações não gastas enquanto o Ethereum utiliza
+      o tradicional modelo bancário.
+    \item No modelo bancario, cada conta possui um saldo.
+      E em toda transação, o saldo da pessoa que enviou é subtraido e o saldo da pessoa que
+      recebeu é incrementado.
+    \item Nesse modelo tradicional, é fácil verificar o saldo de cada um.
+      Porém é difícil saber como se chegou nesse estado final.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Modelo de transações não gastas}
+  \begin{itemize}
+    \item No modelo de transações não gastas, toda transação é adicionada à árvore de transações.
+    \item Para saber o saldo de uma conta é necessário olhar todas as transações não gastas
+      foram enviadas para essa conta.
+    \item Para transacionar a moeda é necessário utilizar como entrada as saídas das outras
+      transações não gastas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bitcoin UTXO}
+    \includegraphics[width=11cm, height=7cm]{utxo}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Árvores de transação}
+  \begin{itemize}
+    \item A ideia da árvore de transação é reunir todas as transações em uma árvore.
+    \item Dessa forma, é possível sintetizar a informação de todas as transações
+      calculando apenas o hash dela.
+    \item Com a propriedade da injetividade do hash, é possível verificar que duas árvores
+      são iguais em complexidade de tempo constante.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Árvore de transação}
+    \includegraphics[width=10cm, height=5cm]{blockchain}
+\end{frame}
+
+\begin{frame}
+  \begin{scriptsize} \agda{TXTree}{TXTree} \end{scriptsize}
+\end{frame}
+
+\begin{frame}
+  \begin{scriptsize} \agda{TXTree}{TX} \end{scriptsize}
+\end{frame}
+
 \section{Próximos Passos}
 
 \begin{frame}{Próximos passos}
