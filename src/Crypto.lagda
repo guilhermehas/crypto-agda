@@ -49,7 +49,7 @@ postulate Signed? : (msg : Msg) (pk : PublicKey)
             (sig : Signature) → Dec $ Signed msg pk sig
 postulate hashMsg : Msg → Hashed
 postulate hash-inj : ∀ m n → hashMsg m ≡ hashMsg n
-            → m ≡ n0
+            → m ≡ n
 
 record SignedWithSigPbk (msg : Msg)(address : Address)
   : Set where
