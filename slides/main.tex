@@ -439,43 +439,75 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \begin{scriptsize} \agda{Blockchain}{block} \end{scriptsize}
+\end{frame}
+
+
 \section{Próximos Passos}
 
-\begin{frame}{Próximos passos}
+\begin{frame}{Ressalvas}
   \begin{itemize}
-    \item Anexar a \foreignquote{english}{blockchain} às transações já programadas em Agda
-    \item Provar alguns teoremas relacionados à criptomoeda
+    \item Nesse trabalho, todas as especificações foram colocadas nos tipos.
+    \item Em outros trabalhos, a abordagem pode ser diferente.
+      Ou seja, sem nenhuma informação nos tipos e todas as provas serem feitas de forma separada.
+    \item Essa abordagem não foi escolhida, pois é muito mais simples de entender o código
+      quando os tipos são mais expressivos.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Teoremas}
+\begin{frame}{Detalhes do que falta}
   \begin{itemize}
-    \item Se uma transação tem algum \foreignquote{english}{output} que não foi usado em nenhuma outra transação, 
-      então ela deve estar na lista de \foreignquote{english}{outputs transactions} não usados
-    \item Se uma transação tem algum \foreignquote{english}{output} que foi gasto, ele não pode ser usado novamente
-      \item Provar que transações e mensagens ids são únicos
+    \item Fazer o cálculo do hash do bloco e o campo nounce do bloco.
+    \item Mudar o protocolo para receber o bloco inteiro ao invés de transações individuais
+    \item Adicionar o caso de existir uma blockchain de tamanho maior que a do que a do servidor.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{O que não será realizado}
+\begin{frame}{Partes mais complexas de adicionar}
   \begin{itemize}
-    \item Modelo de criptomoeda em que é possível algum tipo de \foreignquote{english}{fork}.
-      Por exemplo, no bitcoin, é possível que exista algum tipo de \foreignquote{english}{fork} temporário
-    \item \foreignquote{english}{Pool} de transações.
-      Sua utilidade é apenas para guardar as transações que ainda não foram adicionadas a \foreignquote{english}{blockchain}
-      Isso pode ser feito fora do protocolo principal
-    \item Otimização e protocolos RPC (\foreignquote{english}{Remote Procedure Call}).
-      O objetivo do projeto é definir as propriedades da criptomoeda, não como ela será implementada e usada
+    \item Fazer a modelagem formal da cadeia de blocos como um sistema distribuido.
+    \item Criar código do cliente para interagir com os nós.
+    \item Especificar o protocolo entre cliente e nó e entre nó com nó.
+      Entretanto, a parte mais difícil já foi codificada, que é adicionar as provas
+      ao dado puro que o cliente envia.
   \end{itemize}
 \end{frame}
+
+\begin{frame}{Partes mais complexas de adicionar}
+  \begin{itemize}
+    \item Fazer a modelagem formal da cadeia de blocos como um sistema distribuido.
+    \item Criar código do cliente para interagir com os nós.
+    \item Especificar o protocolo entre cliente e nó e entre nó com nó.
+    \item Adicionar uma linguagem de script na criptomoeda.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Outras ideias}
+  \begin{itemize}
+    \item Melhorar o sistema de tipos.
+    Por enquanto, está se usando tipos dependentes, mas seria interessante utilizar tipos lineares
+    para evitar o coletor de lixo ou usar \foreignquote{english}{Cubical Type Theory} por ser mais expressivo.
+  \item
+    \includegraphics[width=5cm, height=3cm]{homotopy}
+    \includegraphics[width=4cm, height=4cm]{kleinBottle}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Outras ideias}
+  \begin{itemize}
+  \item  Utilizar outros provadores de teoremas.
+    O Lean 4 e CoQ possui tatics, algo que Agda não possui.
+    O Idris 2 possui tipos lineares. 
+  \item Utilizar teorias das categorias para deixar o código mais abstrato e conciso.
+    Além de poder utilizar as bibliotecas já implementadas da linguagem.
+  \item Utilizar bibliotecas para facilitar a transferência de mensagens entre nós diferentes.
+    Cloud Haskell já facilita bastante esse processo.
+  \end{itemize}
+\end{frame}
+
 
 \section{Bibliografia}
-
- \begin{frame}{Livros}
-    \includegraphics[width=4cm, height=6cm]{TDD}
-    \includegraphics[width=4cm, height=6cm]{ProgrammingBitcoin}
- \end{frame}
-  
 
 \begin{frame}{Referências Bibliográficas}
   \bibliographystyle{apacite}
