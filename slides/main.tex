@@ -67,7 +67,7 @@
 \begin{frame}
 \frametitle{Justificativa}
 \begin{itemize}
-    \item Programar um protocólo de criptomoedas livre de erros (bugs)
+    \item Programar um protocolo de criptomoedas livre de erros (bugs)
     \item Utilizar Agda permite, além da programação da criptomoeda, especificar como ela deve funcionar
       \cite{norell2008dependently}
 \end{itemize}
@@ -105,7 +105,7 @@
   \item Facebook também faz Hot Swapping de forma funcional.
     Ou seja, ele não reinicia o processo para iniciar um novo.
     Algo que já era comum em Lisp.
-  \item Sistemas distribuidos já estão sendo completamente descritos por meio de linguagens funcionais.
+  \item Sistemas distribuídos já estão sendo completamente descritos por meio de linguagens funcionais.
     Whatsapp utiliza Elixir como linguagem.
 \end{itemize}
 \end{frame}
@@ -118,7 +118,7 @@
     \item Por causa dos inúmeros benefícios das linguagens funcionais,
       elas estão sendo cada vez mais utilizadas na indústria.
     \item Garantem corretude de software.
-      É de fácil reproducibilidade, testabilidade e é mais fácil de debugar.
+      É de fácil reprodutibilidade, testabilidade e é mais fácil de debugar.
     \item Entretanto, elas são mais difíceis de serem aprendidas.
       Necessitam alto grau de abstração e
       é mais difícil de encontrar mão de obra.
@@ -163,7 +163,7 @@
 
  \begin{frame}{Identidade}
   \begin{itemize}
-    \item Agda utiliza alguns conceitos do Lamdba Calculus.
+    \item Agda utiliza alguns conceitos do Lambda Calculus.
     \agda{lambdaCalculus}{Id}
     \agda{lambdaCalculus}{Id2}
   \end{itemize}
@@ -378,7 +378,7 @@
       De forma que dois arquivos diferentes sempre terão hashes diferentes (injetividade)
     \item Pelo princípio da casa dos pombos, isso é impossível.
       Porém, nunca foi encontrado nenhum dois arquivos que possuem o mesmo hash.
-    \item O Google encontrou dois arquivos que possuiam o mesmo hash no SHA-1.
+    \item O Google encontrou dois arquivos que possuíam o mesmo hash no SHA-1.
       Logo em seguida, essa função hash parou de ser usada.
   \end{itemize}
 \end{frame}
@@ -413,7 +413,7 @@
     \item Na transação do bitcoin, deve ser especificado as transações anteriormente não gastas.
       No caso da transação do minerador, isso não deve ser especificado.
       Além do mais, deve ser especificado quem deve receber o dinheiro dessas transações e
-      também a trasanção deve ter uma assinatura gerada a partir da chave privada comprovando
+      também a transação deve ter uma assinatura gerada a partir da chave privada comprovando
       que o usuário da chave pública aceitou fazer aquela transação.
   \end{itemize}
 \end{frame}
@@ -429,7 +429,7 @@
     \item O Bitcoin utiliza o modelo de transações não gastas enquanto o Ethereum utiliza
       o tradicional modelo bancário.
     \item No modelo bancario, cada conta possui um saldo.
-      E em toda transação, o saldo da pessoa que enviou é subtraido e o saldo da pessoa que
+      E em toda transação, o saldo da pessoa que enviou é subtraído e o saldo da pessoa que
       recebeu é incrementado.
     \item Nesse modelo tradicional, é fácil verificar o saldo de cada um.
       Porém é difícil saber como se chegou nesse estado final.
@@ -484,7 +484,7 @@
       O primeiro bloco é chamado de \foreignquote{english}{genesis block} e
       a cada 10 minutos em média, um novo bloco é incorporado a essa cadeia de blocos.
     \item Existe um limite de transações que cada bloco pode possuir (no Bitcoin, é 10 MB de dados).
-      Por isso, é importante pagar uma taxa de transação para que essa transação seja incluida na
+      Por isso, é importante pagar uma taxa de transação para que essa transação seja incluída na
       cadeia de blocos.
     \item Se existirem duas blockchains em computadores diferentes, é considerado
       como a cadeia de blocos válida aquela que tiver mais blocos.
@@ -543,7 +543,7 @@
 
 \begin{frame}{Partes mais complexas de adicionar}
   \begin{itemize}
-    \item Fazer a modelagem formal da cadeia de blocos como um sistema distribuido.
+    \item Fazer a modelagem formal da cadeia de blocos como um sistema distribuído.
     \item Criar código do cliente para interagir com os nós.
     \item Especificar o protocolo entre cliente e nó e entre nó com nó.
       Entretanto, a parte mais difícil já foi codificada, que é adicionar as provas
@@ -553,7 +553,7 @@
 
 \begin{frame}{Partes mais complexas de adicionar}
   \begin{itemize}
-    \item Fazer a modelagem formal da cadeia de blocos como um sistema distribuido.
+    \item Fazer a modelagem formal da cadeia de blocos como um sistema distribuído.
     \item Criar código do cliente para interagir com os nós.
     \item Especificar o protocolo entre cliente e nó e entre nó com nó.
     \item Adicionar uma linguagem de script na criptomoeda.
@@ -574,7 +574,7 @@
 \begin{frame}{Outras ideias}
   \begin{itemize}
   \item  Utilizar outros provadores de teoremas.
-    O Lean 4 e CoQ possui tatics, algo que Agda não possui.
+    O Lean 4 e CoQ possuem táticas, algo que Agda não possui.
     O Idris 2 possui tipos lineares. 
   \item Utilizar teorias das categorias para deixar o código mais abstrato e conciso.
     Além de poder utilizar as bibliotecas já implementadas da linguagem.
