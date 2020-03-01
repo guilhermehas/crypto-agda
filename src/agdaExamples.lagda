@@ -232,3 +232,19 @@ id-nat' : ℕ → ℕ
 id-nat' = λ x → x
 \end{code}
 %</funcs>
+
+\begin{code}
+Rel : Set → Set₁
+Rel A = A → A → Set
+\end{code}
+
+%<*wf>
+\begin{code}
+module WF {A : Set} (_<_ : Rel A) where
+  data Acc (x : A) : Set where
+    acc : (∀ y → y < x → Acc y) → Acc x
+
+  Well-founded : Set
+  Well-founded = ∀ x → Acc x
+\end{code}
+%</wf>
