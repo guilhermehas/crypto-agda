@@ -13,10 +13,13 @@ data ℕ : Set where
 
 %<*NatElim>
 \begin{code}
-ℕ-elim : (target : ℕ) (motive : (ℕ → Set)) (base : motive zero)
-  (step : (n : ℕ) → motive n → motive (suc n) ) → motive target
+ℕ-elim : (target : ℕ) (motive : (ℕ → Set))
+  (base : motive zero)
+  (step : (n : ℕ) → motive n → motive (suc n) )
+  → motive target
 ℕ-elim zero motive base step = base
-ℕ-elim (suc target) motive base step = step target (ℕ-elim target motive base step)
+ℕ-elim (suc target) motive base step =
+  step target (ℕ-elim target motive base step)
 \end{code}
 %</NatElim>
 
@@ -57,7 +60,8 @@ data Either {l : Level} (A : Set l) (B : Set l) : Set l where
   left  : (l : A) → Either A B
   right : (r : B) → Either A B
 
-Either-elim : {l l2 : Level} {A B : Set l} {motive : (eab : Either A B) → Set l2}
+Either-elim : {l l2 : Level} {A B : Set l}
+  {motive : (eab : Either A B) → Set l2}
   (target : Either A B)
   (on-left  : (l : A) → (motive (left  l)))
   (on-right : (r : B) → (motive (right r)))
@@ -77,8 +81,10 @@ Bool = Either ⊤ ⊤
 
 %<*ifThenElse>
 \begin{code}
-if_then_else_ : {l : Level} {A : Set l} (b : Bool) (tRes fRes : A) → A
-if b then tRes else fRes = Either-elim b (λ _ → tRes) λ _ → fRes
+if_then_else_ : {l : Level} {A : Set l}
+  (b : Bool) (tRes fRes : A) → A
+if b then tRes else fRes =
+  Either-elim b (λ _ → tRes) λ _ → fRes
 \end{code}
 %</ifThenElse>
 
