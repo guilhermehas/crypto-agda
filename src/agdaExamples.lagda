@@ -236,6 +236,10 @@ id-nat' = λ x → x
 \begin{code}
 Rel : Set → Set₁
 Rel A = A → A → Set
+
+_∘_ : ∀ {A B C : Set} → (A → B) → (B → C) → (A → C)
+_∘_ f g x = g (f x)
+
 \end{code}
 
 %<*wf>
@@ -248,3 +252,16 @@ module WF {A : Set} (_<_ : Rel A) where
   Well-founded = ∀ x → Acc x
 \end{code}
 %</wf>
+
+%<*category>
+\begin{code}
+record Category (C : Set → Set → Set) : Set₁ where
+  constructor cat
+  field
+    idc : {a : Set} → C a a
+    comp : {a b c : Set} → C a b → C b c → C a c
+
+catFunc : Category λ x y → (x → y)
+catFunc = cat id _∘_
+\end{code}
+%</category>
