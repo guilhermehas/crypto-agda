@@ -113,15 +113,15 @@
 \section{Industria}
 
 \begin{frame}
-  \frametitle{Beneficios}
+  \frametitle{Benefícios}
   \begin{itemize}
     \item Por causa dos inúmeros benefícios das linguagens funcionais,
       elas estão sendo cada vez mais utilizadas na indústria.
     \item Garantem corretude de software.
       É de fácil reprodutibilidade, testabilidade e é mais fácil de debugar.
     \item Entretanto, elas são mais difíceis de serem aprendidas.
-      Necessitam alto grau de abstração e
-      é mais difícil de encontrar mão de obra.
+      Necessitam alto grau de abstração.
+      Portanto, é mais difícil de encontrar mão de obra que saiba utilizá-la.
   \end{itemize}
 \end{frame}
 
@@ -345,7 +345,7 @@
 \begin{itemize}
     \item Uma criptomoeda é um meio de troca descentralizado que se utiliza da tecnologia
       de blockchain e da criptografia para assegurar a validade das transações e a criação de novas unidades da moeda.
-    \item O bitcoin é considerado a primeira moeda digital mundial descentralizada,
+    \item O Bitcoin é considerado a primeira moeda digital mundial descentralizada,
       constituindo um sistema econômico alternativo (\foreignquote{english}{peer-to-peer electronic cash system})
       e responsável pelo ressurgimento do sistema bancário livre.
       \cite{nakamoto2008bitcoin}
@@ -359,7 +359,7 @@
 \section{Bug}
 
  \begin{frame}
-   \frametitle{Maleabilidade de transacao}
+   \frametitle{Maleabilidade de transação}
 \begin{itemize}
   \item Nesse tipo de bug, é possível alterar o hash da transação depois que ela foi enviada.
   \item Todos os dados para calcular o hash não eram previamente calculados. Assim, o minerador poderia alterar o hash da transação.
@@ -391,7 +391,7 @@
       em um número pequeno.
       De forma que dois arquivos diferentes sempre terão hashes diferentes (injetividade).
     \item Pelo princípio da casa dos pombos, isso é impossível.
-      Porém, nunca foi encontrado nenhum dois arquivos que possuem o mesmo hash.
+      Porém, nunca foi encontrado nenhum dois arquivos que possuem o mesmo hash no SHA-256.
     \item O Google encontrou dois arquivos que possuíam o mesmo hash no SHA-1.
       Logo em seguida, essa função hash parou de ser usada.
   \end{itemize}
@@ -400,9 +400,9 @@
 \begin{frame}
   \frametitle{Funções criptográficas}
   \begin{itemize}
-    \item No bitcoin, existe a chave privada e a pública.
+    \item No Bitcoin, existe a chave privada e a pública.
     \item A chave privada serve para assinar a transação.
-    \item A chave pública, derivada da chave pública,
+    \item A chave pública, derivada da chave privada,
       serve para demonstrar que você é o dono da chave privada.
     \item Essas funções utilizam como base a função hash SHA-256.
   \end{itemize}
@@ -415,16 +415,16 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Conta do bitcoin}
+  \frametitle{Conta do Bitcoin}
     \includegraphics[width=11cm, height=7cm]{privatekey}
 \end{frame}
 
 \begin{frame}
   \frametitle{Transações}
   \begin{itemize}
-    \item A partir de transações, é possível enviar bitcoins de uma conta para outra.
+    \item A partir de transações, é possível enviar Bitcoins de uma conta para outra.
     \item Transações são como um cheque. O indivíduo especifica um valor e assina a transação.
-    \item Na transação do bitcoin, deve ser especificado as transações anteriormente não gastas.
+    \item Na transação do Bitcoin, as transações anteriormente não gastas devem ser especificadas.
       No caso da transação do minerador, isso não deve ser especificado.
       Além do mais, deve ser especificado quem deve receber o dinheiro dessas transações e
       também a transação deve ter uma assinatura gerada a partir da chave privada comprovando
