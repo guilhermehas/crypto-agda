@@ -1,6 +1,7 @@
 \begin{code}
 open import Agda.Primitive as Prim
 open import Agda.Builtin.String
+open import Prelude using (_≡_ ; List)
 \end{code}
 
 %<*Nat>
@@ -22,6 +23,44 @@ data ℕ : Set where
   step target (ℕ-elim target motive base step)
 \end{code}
 %</NatElim>
+
+\begin{code}
+infix 0 _≃_
+
+\end{code}
+%<*isomorphism>
+\begin{code}
+record _≃_ (A B : Set) : Set where
+  field
+    to   : A → B
+    from : B → A
+    from∘to : ∀ (x : A) → from (to x) ≡ x
+    to∘from : ∀ (y : B) → to (from y) ≡ y
+\end{code}
+%</isomorphism>
+
+\begin{code}
+open _≃_
+
+infix 8 1#_
+\end{code}
+
+%<*bin>
+\begin{code}
+data Bit : Set where
+  0# : Bit
+  1# : Bit
+
+Bin⁺ : Set
+Bin⁺ = List Bit
+
+data Bin : Set where
+  0#  : Bin
+  1#_ : (bs : Bin⁺) → Bin
+
+postulate Bin≃ℕ : Bin ≃ ℕ
+\end{code}
+%</bin>
 
 %<*sumElim>
 \begin{code}
