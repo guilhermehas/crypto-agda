@@ -139,8 +139,8 @@ false-id : ∀ {A}
 false-id = res (λ true false → false)
 
 true-id : ∀ {A}
-  → Result (false-right {(A → A) → A → A} isZero id)
-true-id = res (λ true false → false)
+  → Result (true-right {(A → A) → A → A} isZero id)
+true-id = res (λ true false → true)
 \end{code}
 %</eitherRes>
 
