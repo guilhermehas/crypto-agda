@@ -40,13 +40,20 @@
 \begin{itemize}
   \item Objetivo
   \item Justificativa
-  \item Introdução
+  \item Linguagem funcional e Agda
   \begin{itemize}
-    \item Criptomoedas
+    \item Linguagem Funcional
+    \item Lambda Calculus
     \item Agda
-    \item Bugs em criptomoedas
   \end{itemize}
-  \item Trabalho executado
+  \item Criptomoedas
+  \begin{itemize}
+    \item Definição
+    \item Funções criptográficas
+    \item Transações e árvore de transações
+    \item Blocos e cadeia de blocos
+    \item Bugs
+  \end{itemize}
   \item Próximos passos
   \item Referências Bibliográficas
 \end{itemize}
@@ -370,33 +377,6 @@
     \end{itemize}
 \end{frame}
 
-\section{Bug}
-
- \begin{frame}
-   \frametitle{Maleabilidade de transação}
-\begin{itemize}
-  \item Nesse tipo de bug, é possível alterar o hash da transação depois que ela foi enviada.
-  \item Todos os dados para calcular o hash não eram previamente calculados. Assim, o minerador poderia alterar o hash da transação.
-  \item O ataque consistiria de um usuário enviar uma transação e ela não ser confirmada pelo sistema.
-    Logo em seguida, esse mesmo usuário enviaria uma outra transação. Dessa forma, ele faria duas transações com a mesma moeda.
-  \item Esse tipo de BUG pode ser evitado usando tipos dependentes.
-    Colocando como característica da transação, o fato de seu ID ser único.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{DAO Bug}
-  \begin{itemize}
-    \item \foreignquote{english}{Bug} que aconteceu em um cripto-contrato da rede Ethereum com um prejuízo de mais do que 250 milhões de dólares.
-      \cite{wood2014ethereum}
-    \item No cripto-contrato, existia uma função recursiva que não terminava.
-      Ou seja, o usuário enviava uma quantidade de ethereum,
-      depois acontecia um \foreignquote{english}{loop} infinito e só depois era feito a atualização do seu balanço.
-    \item Em Agda, esse tipo de bug seria evitado, pois é necessário provar que a função termina.
-      Logo, \foreignquote{english}{loops} infinitos não são possíveis em Agda.
-  \end{itemize}
-\end{frame}
-
 \section{Criptomoedas}
 \begin{frame}
   \frametitle{Função hash}
@@ -542,6 +522,33 @@
 
 \begin{frame}
   \begin{scriptsize} \agda{Blockchain}{block} \end{scriptsize}
+\end{frame}
+
+\section{Bug}
+
+ \begin{frame}
+   \frametitle{Maleabilidade de transação}
+\begin{itemize}
+  \item Nesse tipo de bug, é possível alterar o hash da transação depois que ela foi enviada.
+  \item Todos os dados para calcular o hash não eram previamente calculados. Assim, o minerador poderia alterar o hash da transação.
+  \item O ataque consistiria de um usuário enviar uma transação e ela não ser confirmada pelo sistema.
+    Logo em seguida, esse mesmo usuário enviaria uma outra transação. Dessa forma, ele faria duas transações com a mesma moeda.
+  \item Esse tipo de BUG pode ser evitado usando tipos dependentes.
+    Colocando como característica da transação, o fato de seu ID ser único.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DAO Bug}
+  \begin{itemize}
+    \item \foreignquote{english}{Bug} que aconteceu em um cripto-contrato da rede Ethereum com um prejuízo de mais do que 250 milhões de dólares.
+      \cite{wood2014ethereum}
+    \item No cripto-contrato, existia uma função recursiva que não terminava.
+      Ou seja, o usuário enviava uma quantidade de ethereum,
+      depois acontecia um \foreignquote{english}{loop} infinito e só depois era feito a atualização do seu balanço.
+    \item Em Agda, esse tipo de bug seria evitado, pois é necessário provar que a função termina.
+      Logo, \foreignquote{english}{loops} infinitos não são possíveis em Agda.
+  \end{itemize}
 \end{frame}
 
 
