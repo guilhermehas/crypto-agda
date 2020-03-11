@@ -125,10 +125,10 @@
     \item Por causa dos inúmeros benefícios das linguagens funcionais,
       elas estão sendo cada vez mais utilizadas na indústria.
     \item Garantem corretude de software.
-      É de fácil reprodutibilidade, testabilidade e é mais fácil de debugar.
+      São de fácil reprodutibilidade, testabilidade e mais fáceis de debugar.
     \item Entretanto, elas são mais difíceis de serem aprendidas.
       Necessitam alto grau de abstração.
-      Portanto, é mais difícil de encontrar mão de obra que saiba utilizá-la.
+      Portanto, é mais difícil de encontrar mão de obra que saiba utilizá-las.
   \end{itemize}
 \end{frame}
 
@@ -161,7 +161,7 @@
  \begin{frame}{Agda}
  \begin{itemize}
      \item A linguagem não possui \foreignquote{english}{Built-in} como em Python.
-     \item Tipos como inteiros, ponto flutuantes, \foreignquote{english}{strings} e vetores devem ser definidos pelo próprio usuário.
+     \item Tipos como inteiros, pontos flutuantes, \foreignquote{english}{strings} e vetores devem ser definidos pelo próprio usuário.
      \item Tipos em Agda são uma generalização de tipos de dados algébricos encontrados em Haskell e ML.
  \end{itemize}
  \end{frame}
@@ -305,7 +305,7 @@
 
 \begin{frame}{Agda}
  \begin{itemize}
-  \item Tipo soma:
+  \item Tipo multiplicação:
   \item \agda{agdaExamples}{sumType}
  \end{itemize}
 \end{frame}
@@ -381,13 +381,14 @@
 \begin{frame}
   \frametitle{Função hash}
   \begin{itemize}
-    \item Uma função hash é uma função que serve para comprimir dados grandes, como um vídeo,
-      em um número pequeno.
-      De forma que dois arquivos diferentes sempre terão hashes diferentes (injetividade).
-    \item Pelo princípio da casa dos pombos, isso é impossível.
-      Porém, nunca foi encontrado dois arquivos que possuem o mesmo hash no SHA-256.
+    \item Uma função hash serve para comprimir dados grandes em dados pequenos.
+    \item Assume-se que dois arquivos diferentes sempre terão hashes diferentes (injetividade),
+      pois a probabilidade de dois arquivos terem o mesmo hash é desprezível.
+    \item Pelo princípio da casa dos pombos, a injetividade do hash é impossível.
+      Porém, nunca foram encontrados dois arquivos que possuem o mesmo hash no SHA-256.
     \item O Google encontrou dois arquivos que possuíam o mesmo hash no SHA-1.
       Logo, em seguida, essa função hash parou de ser usada.
+    \item Também não deve ser possível calcular a inversa da função hash.
   \end{itemize}
 \end{frame}
 
@@ -397,14 +398,14 @@
     \item No Bitcoin, existe a chave privada e a pública.
     \item A chave privada serve para assinar a transação.
     \item A chave pública, derivada da chave privada,
-      serve para demonstrar que você é o dono da chave privada.
+      serve para demonstrar que o usuário é o dono da chave privada.
     \item Essas funções utilizam como base a função hash SHA-256.
   \end{itemize}
 \end{frame}
 
 
 \begin{frame}
-  \frametitle{Funções criptográficas}
+  \frametitle{Funções criptográficas em Agda}
     \agda{Crypto}{cryptoPostulates}
 \end{frame}
 
@@ -427,7 +428,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Transações}
+  \frametitle{Transações em Agda}
   \agda{Transactions}{TXSigned}
 \end{frame}
 
@@ -488,7 +489,7 @@
   \frametitle{Blocos e cadeia de blocos}
   \begin{itemize}
     \item As transações são incorporadas em blocos aonde são armazenadas.
-    \item No Bitcoin, existe uma cadeia de bloco chamada de blockchain.
+    \item No Bitcoin, existe uma cadeia de blocos chamada de blockchain.
       O primeiro bloco é chamado de \foreignquote{english}{genesis block} e
       a cada 10 minutos em média, um novo bloco é incorporado a essa cadeia de blocos.
     \item Existe um limite de transações que cada bloco pode possuir (no Bitcoin, é 10 MB de dados).
@@ -526,18 +527,6 @@
 
 \section{Bug}
 
- \begin{frame}
-   \frametitle{Maleabilidade de transação}
-\begin{itemize}
-  \item Nesse tipo de bug, é possível alterar o hash da transação depois que ela foi enviada.
-  \item Todos os dados para calcular o hash não eram previamente calculados. Assim, o minerador poderia alterar o hash da transação.
-  \item O ataque consistiria de um usuário enviar uma transação e ela não ser confirmada pelo sistema.
-    Logo em seguida, esse mesmo usuário enviaria uma outra transação. Dessa forma, ele faria duas transações com a mesma moeda.
-  \item Esse tipo de BUG pode ser evitado usando tipos dependentes.
-    Colocando como característica da transação, o fato de seu ID ser único.
-\end{itemize}
-\end{frame}
-
 \begin{frame}
   \frametitle{DAO Bug}
   \begin{itemize}
@@ -554,7 +543,7 @@
 
 \section{Próximos Passos}
 
-\begin{frame}{Ressalvas}
+\begin{frame}{Conclusões}
   \begin{itemize}
     \item Nesse trabalho, todas as especificações foram colocadas nos tipos.
     \item Em outros trabalhos, a abordagem pode ser diferente.
