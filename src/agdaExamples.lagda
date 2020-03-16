@@ -1,7 +1,7 @@
 \begin{code}
 open import Agda.Primitive as Prim
 open import Agda.Builtin.String
-open import Prelude using (_≡_ ; List)
+open import Prelude using (_≡_ ; List ; [] ; _∷_ ; _×_ ; _,_ ; refl)
 \end{code}
 
 %<*Nat>
@@ -304,3 +304,52 @@ catFunc : Category λ x y → (x → y)
 catFunc = cat id _∘_
 \end{code}
 %</category>
+
+%<*caseOf>
+\begin{code}
+case_of_ : ∀ {a b} {A : Set a} {B : Set b} → A → (A → B) → B
+case x of f = f x
+\end{code}
+%</caseOf>
+
+%<*filter>
+\begin{code}
+filter : {A : Set} → (A → Boolean) → List A → List A
+filter p [] = []
+filter p (x ∷ xs) =
+  case p x of
+  λ { true  → x ∷ filter p xs
+    ; false → filter p xs
+    }
+\end{code}
+%</filter>
+
+%<*filterWith>
+\begin{code}
+filter' : {A : Set} → (A → Boolean) → List A → List A
+filter' p [] = []
+filter' p (x ∷ xs) with p x
+... | true = x ∷ filter' p xs
+... | false = filter p xs
+\end{code}
+%</filterWith>
+
+%<*postulate>
+\begin{code}
+postulate someBot : ⊥
+\end{code}
+%</postulate>
+
+%<*and>
+\begin{code}
+_and_ : {A B : Set} → A → B → A × B
+a and b = a , b
+\end{code}
+%</and>
+
+%<*equality>
+\begin{code}
+eq : ∀ {A : Set} (x : A) → x ≡ x
+eq x = refl {_} {_} {x}
+\end{code}
+%</equality>

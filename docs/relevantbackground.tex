@@ -129,6 +129,26 @@ The current version of Agda is Agda 2.
   In the first case, the arguments are before equal sign (\emph{=}).
   In the second case, it is used the lambda abstraction that means the same thing.
 
+  \agda{agdaExamples}{caseOf}
+
+  \agda{agdaExamples}{filter}
+
+  Filter is a function that filter all elements that has some property already defined.
+  In this definition of filter, the lambda abstraction can pattern match
+  in the two possibilities of \emph{p x}, that are \emph{true} or \emph{false}
+
+  \agda{agdaExamples}{filterWith}
+
+  The \emph{with} abstraction is the same thing of the \emph{case of}.
+  Before the \emph{=}, there are the possibilities of \emph{p x} (\emph{true} or \emph{false}).
+
+  \agda{agdaExamples}{postulate}
+
+  In Agda, \emph{postulate} assume that there is one element of a given type without defining it.
+  In this example, \emph{someBot} is an element of empty type.
+  Postulate can be dangerous, because it assumes that some element of a given type exists,
+  but it can not (like in the example).
+
   \subsubsection{Lambda Calculus}
   Lambda Calculus is a minimalist Turing complete programming language with the concept of abstraction,
   application using binding and substitution. For example, \emph{x} is a variable, $(\lambda x.M)$
@@ -158,14 +178,20 @@ The current version of Agda is Agda 2.
   \agda{lambdaCalculus}{Id}
   The simplest function is the identity function made in Agda.
 
+  \phantomsection
+  \label{id2}
   \agda{lambdaCalculus}{Id2}
-  This is another way of writing the same function.
+  This is another way of writing the \hyperref[id2]{same} function.
 
+  \phantomsection
+  \label{truefalse}
   \agda{lambdaCalculus}{trueFalse}
-  This is how true and false are encoded in lambda calculus.
+  \hyperref[truefalse]{This} is how true and false are encoded in lambda calculus.
 
+  \phantomsection
+  \label{naturals}
   \agda{lambdaCalculus}{naturals}
-  This is how naturals numbers are defined in lambda calculus.
+  \hyperref[naturals]{This} is how naturals numbers are defined in lambda calculus.
   Look that the definition of zero looks like the definition of false.
 
   \agda{lambdaCalculus}{isZero}
@@ -278,6 +304,34 @@ Another good example is that in the sum of two matrices, they should have the sa
 
 \agda{agdaExamples}{matrixSum}
 
+\subsubsection{Preposition as Types}
+
+In Agda, types can be seen as prepositions and terms of this given type like a proof.
+For example, \emph{x} can be a term of the type \emph{A}.
+So \emph{x} is a proof that \emph{A} holds.
+
+\agda{agdaExamples}{id}
+
+In the function \emph{id},
+if there is a proof \emph{x} that \emph{A} holds,
+so \emph{A} holds.
+The function \emph{id} is a proof of $A \rightarrow A$.
+
+\agda{agdaExamples}{and}
+
+In the function \emph{and}, \emph{a} is a proof that \emph{A} holds and
+\emph{b} is a proof that \emph{B} holds,
+so \emph{a , b} is a proof of $A \times B$
+
+\agda{agdaExamples}{equality}
+
+Equality function can be seen as
+``For all elements of \emph{x} in the Set \emph{A}, $x \equiv x$''.
+If there is a term of this type, so this preposition is true.
+In this case, the term is a function that given a term \emph{x} of type \emph{A},
+it returns \emph{refl \{\_\} \{\_\} \{x\}}.
+\emph{refl} is a constructor of equality, so \emph{refl \{\_\} \{\_\} \{x\}}
+returns a term of type $x \equiv x$.
 
 \subsection{Bitcoin}
 
