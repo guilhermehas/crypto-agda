@@ -42,8 +42,7 @@ So who receives the amount from this transaction can spend it after.
 \emph{TxSigned} is the signature that proves that every owner of each input approve this transaction.
 In \emph{TxSigned}, there is proof that the output amount is greater than the input amount too.
 
-\phantomsection
-\label{iscoinbase}
+\plabel{iscoinbase}
 \agda{TXTree}{isCoinBase}
 
 \hyperref[iscoinbase]{This function} just returns trivial type if coinbase and bot type if not.
@@ -53,8 +52,7 @@ In \emph{TxSigned}, there is proof that the output amount is greater than the in
 If it is a normal transaction, the block continues the same.
 If it is a coinbase transaction, the next transaction will be in a new block.
 
-\phantomsection
-\label{incqttx}
+\plabel{incqttx}
 \agda{TXTree}{incQtTx}
 
 \hyperref[incqttx]{This function} is to increment the number of transactions in the block.
@@ -64,8 +62,7 @@ So it is guaranteed that the number of transactions will never be greater than t
 If it is a coinbase transaction, it will be a new block.
 So the number of transactions starts being zero.
 
-\phantomsection
-\label{incfees}
+\plabel{incfees}
 \agda{TXTree}{incFees}
 
 \hyperref[incfees]{IncFees} is a function that increments how much fee the miner will receive.
