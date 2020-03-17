@@ -2,8 +2,6 @@
 
 \subsubsection{Definition}
 
-Block is a chain of transactions that is added in Bitcoin blockchain in every ten minutes.
-Each block consists of several transactions and a miner transaction.
 This is how a block is defined in this work:
 
 \agda{Blockchain}{block}
@@ -25,12 +23,16 @@ In the second case, the blockchain is an addition of a valid block from a previo
 
 \subsubsection{Creation}
 
+In this section, there will be explanation of how blockchain is created from blocks
+and how blocks are created from transaction trees.
 To create a blockchain, it is first needed to create the last block.
 From the last block, it is possible to create all the chain.
 
+\plabel{blockblockchain}
 \agda{Blockchain}{blockblockchain}
 
-In this proof, if the first transaction tree of the block is a genesis tree,
+In this \hyperref[blockblockchain]{function}, if the first transaction tree of the block
+is a genesis tree,
 it will return a blockchain of just one block.
 If it is a regular tree, it tries to find the first transaction tree of this block.
 Using a recursive definition of block to blockchain,
@@ -93,7 +95,8 @@ To define what it means of one tree is next to another:
 
 \agda{Blockchain}{nexttree}
 
-There are two cases. If both trees are the same, they are next to each other.
+Both trees (\emph{txTree1} and \emph{txTree2}) can be equal or different.
+If both trees are the same, they are next to each other.
 If there is a proof that both trees are next to each other and
 if there is one tree that was generated from the last one,
 so the first tree is next to the last one.

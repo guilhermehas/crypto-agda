@@ -26,7 +26,7 @@ outputsTimeLess genesisTree = []
 outputsTimeLess {_} {_} {_} {totalFees} {qtTransactions}
   (txtree {block} {time} {amount} {outSize} {outputs} {outVec} txTree tx _) =
   allJoin (inputsTX tx) (VectorOutput→List outVec)
-  (inputs≤→inputsTX tx $ outputsTimeLess txTree)
+  (inputsTree→inputsTXtx tx $ outputsTimeLess txTree)
   $ vecOutTimeLess outVec
   where
     vecOutTimeLess : {time : Time}
@@ -53,24 +53,24 @@ outputsTimeLess {_} {_} {_} {totalFees} {qtTransactions}
         eqTimeNat {nat zero} = refl
         eqTimeNat {nat (suc x)} = refl
 
-    inputs≤→inputsTX : {inputs : List TXFieldWithId}
+    inputsTree→inputsTXtx : {inputs : List TXFieldWithId}
       {totalFees : Amount}
       {qtTransactions : Fin totalQt}
       {tree : TXTree time block inputs totalFees qtTransactions}
       (tx : TX tree outVec)
       (allInps : All (λ output → output out<time time) inputs)
       → All (λ input → input out<time sucTime time) (inputsTX tx)
-    inputs≤→inputsTX {[]} (normalTX tr [] outVec txSigned) [] = []
-    inputs≤→inputsTX {[]} (coinbase tr outputs _) [] = []
-    inputs≤→inputsTX {input ∷ inputs} (normalTX tr (input ¬∷ SubInputs)
+    inputsTree→inputsTXtx {[]} (normalTX tr [] outVec txSigned) [] = []
+    inputsTree→inputsTXtx {[]} (coinbase tr outputs _) [] = []
+    inputsTree→inputsTXtx {input ∷ inputs} (normalTX tr (input ¬∷ SubInputs)
       outVec txSigned) (pt ∷ allInps) =
       ≤timeSuc {input} {time} pt ∷ allProofFG (λ y pf → ≤timeSuc {y} {time} pf)
       (allList→allSub SubInputs allInps)
-    inputs≤→inputsTX {input ∷ inputs} (normalTX tr (input ∷ SubInputs)
+    inputsTree→inputsTXtx {input ∷ inputs} (normalTX tr (input ∷ SubInputs)
       outVec txSigned) (x ∷ allInps) =
       allProofFG (λ y pf → ≤timeSuc {y} {time} pf)
       (allList→allSub SubInputs allInps)
-    inputs≤→inputsTX {input ∷ inputs} (coinbase tr outVec _)
+    inputsTree→inputsTXtx {input ∷ inputs} (coinbase tr outVec _)
       (pt ∷ allInps) = ≤timeSuc {input} {time} pt
       ∷ allProofFG (λ y pf → ≤timeSuc {y} {time} pf) allInps
 \end{code}
@@ -142,19 +142,19 @@ allDistincts {time} {(x ∷ _)} {vec≡} (p< ∷ all<) all≡ =
       (suc m) (suc n)) → m ≡ n
     sucRemove refl = refl
 
-    ⊥-k+ : (k n : Nat) → ¬ (n ≡ suc k + n)
-    ⊥-k+ k zero ()
-    ⊥-k+ k (suc n) eqs = ⊥-k+ k n let eq = sucRemove eqs in
+    ¬n≡suck+n : (k n : Nat) → ¬ (n ≡ suc k + n)
+    ¬n≡suck+n k zero ()
+    ¬n≡suck+n k (suc n) eqs = ¬n≡suck+n k n let eq = sucRemove eqs in
       trans eq (add-suc-r k n)
 
-    ⊥-< : {n : Nat} → ¬ (n < n)
-    ⊥-< {n} (diff k eq) = ⊥-k+ k n eq
+    ¬n<n : {n : Nat} → ¬ (n < n)
+    ¬n<n {n} (diff k eq) = ¬n≡suck+n k n eq
 
     distinctLess : {vec≡ : List TXFieldWithId}
       (all≡ : All (λ tx → TXFieldWithId.time tx ≡ time) vec≡)
       → isDistinct x vec≡
     distinctLess [] = unit
-    distinctLess (refl ∷ all≡) = (λ{ refl → ⊥-< p<}) , (distinctLess all≡)
+    distinctLess (refl ∷ all≡) = (λ{ refl → ¬n<n p<}) , (distinctLess all≡)
 \end{code}
 %</alldists>
 
