@@ -37,7 +37,7 @@ listOuts = el
                { time = nat zero
                ; outSize = 1
                ; vecOut =
-                   el
+                   fstEl
                    (record
                     { time = nat zero
                     ; position = zero
@@ -58,7 +58,7 @@ txTree1El =
               ; totalFees = zero
               ; qtTransactions = zero
               ; txTree = txtree genesisTree (coinbase genesisTree
-                (el (txfieldid (nat zero) zero 100 (nat zero)) refl refl) refl) (right unit)
+                (fstEl (txfieldid (nat zero) zero 100 (nat zero)) refl refl) refl) (right unit)
               }))
 
 txTree1 = fromJust $ getElFromType txTree1El
@@ -86,14 +86,14 @@ txTree2El = el (
       txtree
       (txtree genesisTree
         (coinbase genesisTree
-        (el (txfieldid (nat 0) 0 100 (nat 0)) refl refl) refl)
+        (fstEl (txfieldid (nat 0) 0 100 (nat 0)) refl refl) refl)
         (right unit))
       (coinbase
         (txtree genesisTree
         (coinbase genesisTree
-          (el (txfieldid (nat 0) 0 100 (nat 0)) refl refl) refl)
+          (fstEl (txfieldid (nat 0) 0 100 (nat 0)) refl refl) refl)
         (right unit))
-        (el (txfieldid (nat 1) 0 100 (nat 0)) refl refl) refl)
+        (fstEl (txfieldid (nat 1) 0 100 (nat 0)) refl refl) refl)
       (right unit)
   }))
 \end{code}

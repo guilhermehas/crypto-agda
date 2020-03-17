@@ -35,7 +35,7 @@ outputsTimeLess {_} {_} {_} {totalFees} {qtTransactions}
       (vecOut : VectorOutput time outSize amount)
       → All (λ output → output out<time (sucTime time))
       (VectorOutput→List vecOut)
-    vecOutTimeLess (el tx refl elStart) =
+    vecOutTimeLess (fstEl tx refl elStart) =
       (diff zero (timeToNatSuc {TXFieldWithId.time tx})) ∷ []
     vecOutTimeLess (cons {time} vecOut tx refl elStart) =
       (diff zero (timeToNatSuc {time})) ∷ (vecOutTimeLess vecOut)
@@ -122,7 +122,7 @@ allVecOutSameTime : {time : Time}
   {outAmount : Amount}
   (vecOut : VectorOutput time size outAmount) →
   All (λ tx → TXFieldWithId.time tx ≡ time) (VectorOutput→List vecOut)
-allVecOutSameTime (el tx sameId elStart) = sameId ∷ []
+allVecOutSameTime (fstEl tx sameId elStart) = sameId ∷ []
 allVecOutSameTime (cons vecOut tx sameId elStart) =
   sameId ∷ allVecOutSameTime vecOut
 \end{code}

@@ -168,7 +168,7 @@ createVecOutsize : (tx : TXFieldWithId) → Maybe $ RawVecOutput (tx ∷ [])
 createVecOutsize tx with TXFieldWithId.position tx == zero
 ... | no ¬p    = nothing
 ... | yes refl = just $ record { time = time ; outSize = 1 ;
-  vecOut = el tx refl refl ; proof = refl }
+  vecOut = fstEl tx refl refl ; proof = refl }
   where open TXFieldWithId tx
 \end{code}
 %</createVecOutsize>
@@ -248,12 +248,12 @@ TXRaw→TXSig {inputs} {outputs} {_} {_} {outAmount} vecOut out≡vec
       (vecOut    : VectorOutput time outSize outAmount)
       (out≡vec   : VectorOutput→List vecOut ≡ outputs)
       → outAmount ≡ txFieldList→TotalAmount outputs
-    vecOut≡ListAmount [] (el tx sameId elStart) ()
+    vecOut≡ListAmount [] (fstEl tx sameId elStart) ()
     vecOut≡ListAmount [] (cons vecOut tx sameId elStart) ()
     vecOut≡ListAmount _
-      (el record { time = time ; position = position ; amount = zero ;
+      (fstEl record { time = time ; position = position ; amount = zero ;
       address = address } sameId elStart) refl = refl
-    vecOut≡ListAmount _ (el record { time = time ;
+    vecOut≡ListAmount _ (fstEl record { time = time ;
       position = position ; amount = (suc amount) ;
       address = address } sameId elStart) refl = refl
     vecOut≡ListAmount _ (cons vecOut tx sameId elStart) refl =
@@ -274,8 +274,8 @@ TXRaw→TXSig {inputs} {outputs} {_} {_} {outAmount} vecOut out≡vec
       (out≡vec   : VectorOutput→List vecOut ≡ outputs)
       → txEls→Msg input outputs (nonEmptyInp , nonNilOut) ≡
         txEls→MsgVecOut input vecOut
-    sameMessage _ _ outNotNil (el tx sameId elStart) refl = refl
-    sameMessage _ _ outNotNil (cons (el tx₁ sameId₁ elStart₁)
+    sameMessage _ _ outNotNil (fstEl tx sameId elStart) refl = refl
+    sameMessage _ _ outNotNil (cons (fstEl tx₁ sameId₁ elStart₁)
       tx sameId elStart) refl = refl
     sameMessage _ input unit (cons (cons vecOut tx₂ sameId₂ elStart₂)
       tx₁ sameId₁ elStart₁) refl =
