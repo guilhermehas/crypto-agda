@@ -67,7 +67,7 @@ incrementList order (tx ∷ txs) =  TXFieldWithId.position tx ≡ order × incre
 %<*VectorOutput>
 \begin{code}
 data VectorOutput : (time : Time) (size : Nat) (amount : Amount) → Set where
-  el : ∀ {time : Time}
+  fstEl : ∀ {time : Time}
     (tx : TXFieldWithId)
     (sameId : TXFieldWithId.time tx ≡ time)
     (elStart : TXFieldWithId.position tx ≡ zero)
@@ -91,19 +91,19 @@ vecOutTime {time} _ = time
 VectorOutput→List : ∀ {time : Time} {size : Nat} {amount : Amount}
   (outs : VectorOutput time size amount)
   → List TXFieldWithId
-VectorOutput→List (el tx sameId elStart) = tx ∷ []
+VectorOutput→List (fstEl tx sameId elStart) = tx ∷ []
 VectorOutput→List (cons outs tx sameId elStart) = tx ∷ VectorOutput→List outs
 
 nonNilVecOut : {time : Time} {size : Nat} {amount : Amount}
   (vecOut : VectorOutput time size amount)
   → NonNil (VectorOutput→List vecOut)
-nonNilVecOut (el tx sameId elStart) = unit
+nonNilVecOut (fstEl tx sameId elStart) = unit
 nonNilVecOut (cons vecOut tx sameId elStart) = unit
 
 vecOutDist : {time : Time} {size : Nat} {amount : Amount}
   (vecOut : VectorOutput time size amount)
   → Distinct $ VectorOutput→List vecOut
-vecOutDist (el tx sameId elStart) = cons tx [] unit
+vecOutDist (fstEl tx sameId elStart) = cons tx [] unit
 vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
   = cons tx (vecOutDist vecOut) (isDistSizeBelow size (diff! zero) vecOut)
   where
@@ -131,7 +131,7 @@ vecOutDist {time} (cons {_} {size} vecOut tx sameId elStart)
       (lessThan : lenVecOut < suc size)
       (vOut : VectorOutput time lenVecOut amount)
       → isDistinct tx (VectorOutput→List vOut)
-    isDistSizeBelow _ lessThan (el txOut sameId elStart2) =
+    isDistSizeBelow _ lessThan (fstEl txOut sameId elStart2) =
       (λ { refl → ineq≢eq (trans (sym elStart2) elStart) (removeSuc< lessThan) }) , unit
     isDistSizeBelow (suc sizeVec) lessThan (cons vOut txOut sameId elStart2) =
       (λ { refl → ineq≢eq (trans (sym elStart2) elStart) (removeSuc< lessThan)}) ,
@@ -173,7 +173,7 @@ txEls→MsgVecOut :
   (input     : TXFieldWithId)
   (outputs   : VectorOutput time outSize outAmount)
    → Msg
-txEls→MsgVecOut input (el tx sameId elStart) = TX→Msg (removeId tx) +msg TXId→Msg input
+txEls→MsgVecOut input (fstEl tx sameId elStart) = TX→Msg (removeId tx) +msg TXId→Msg input
 txEls→MsgVecOut input (cons outputs tx sameId elStart) =
   TX→Msg (removeId tx) +msg txEls→MsgVecOut input outputs
 

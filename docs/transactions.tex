@@ -12,7 +12,8 @@ Each block has just one of this transaction.
 \agda{Transactions}{VectorOutput}
 
 Vector output is the vector of outputs transactions.
-It is a non-empty vector.
+It is a non-empty vector, because it already starts with one element \emph{fstStart}
+or it is an union from one transaction with another vector.
 In its representation, it is possible to know in what time it was created (time is the position of
 they in all transactions),
 what is his size (quantity of outputs fields)

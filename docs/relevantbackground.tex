@@ -28,7 +28,7 @@ BitML can be compiled to Script, the smart contract language of Bitcoin.
 Kosba \cite{kosba2016hawk} in his work made a programming language called Hawk for smart contracts.
 This language uses formal methods to verify privacy using zero-knowledge proofs.
 Using this language, the programmer does not have to worry about implementing the cryptography,
-because the compiler generates automatically an efficient one.
+because the compiler generates automatically an effective one.
 
 Bhargavan \cite{bhargavan2016formal} translated Solidity and Ethereum bytecode into F*.
 He verified that the Ethereum \gls{dao} bug was caught in its translation.
@@ -311,8 +311,7 @@ For example, the sum of two numbers in Agda:
 In Agda, because of dependent types, it is possible to make more expressive types that are not
 possible in other languages.
 For example, get the first element of a vector.
-For it, it is necessary to specify in the type that the vector should have a size greater or equal
-then that one.
+For it, it is necessary to specify in the type that the vector should have a size greater than zero.
 
 \agda{agdaExamples}{vecHead}
 
