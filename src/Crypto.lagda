@@ -17,7 +17,10 @@ timeToNatSuc : {time : Time} → timeToNat (sucTime time) ≡ suc (timeToNat tim
 timeToNatSuc {nat x} = refl
 
 ID = Nat
+\end{code}
 
+%<*cryptoTypes>
+\begin{code}
 data PublicKey : Set where
   nat : Nat → PublicKey
 
@@ -36,7 +39,10 @@ data Hashed : Set where
 data Msg : Set where
   nat : (n : Nat) → Msg
   _+msg_ : (m n : Msg) → Msg
+\end{code}
+%</cryptoTypes>
 
+\begin{code}
 infixr 5 _+msg_
 \end{code}
 

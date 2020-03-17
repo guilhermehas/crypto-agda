@@ -107,9 +107,10 @@ The current version of Agda is Agda 2.
 
   The constructor is the name of the data constructor.
 
-  Implicits terms are elements that the compiler is smart enough to deduce it.
+  \hyperref[id]{Implicits terms} are elements that the compiler is smart enough to deduce it.
   So it is not necessary to put it as an argument of the function.
 
+  \plabel{id}
   \agda{agdaExamples}{id}
 
   Implicits arguments are inside \emph{\{\}}.
@@ -118,7 +119,9 @@ The current version of Agda is Agda 2.
   because it is used to say that \emph{x} is of type \emph{A}.
 
   In the case of the function \emph{id}, the type of input can be deduced by the compiler.
-  For example, the only type that \emph{zero} can be is Natural.
+  For example, \emph{id} function should be a function from Natural to Natural because
+  \emph{zeroN} is already of type Natural.
+  In this example, the compiler could figured out the term \emph{A} (Natural) of type \emph{Set}.
 
   \agda{agdaExamples}{idNat}
 
@@ -149,14 +152,21 @@ The current version of Agda is Agda 2.
   Postulate can be dangerous, because it assumes that some element of a given type exists,
   but it can not (like in the example).
 
+  \agda{agdaExamples}{rewrite}
+
+  In Agda, \emph{rewrite} means changing the returned type of the result.
+  Because $a + b ≡ b + a$, returning an element of the type $P (a + b)$ is the
+  same thing that returning an element of the type $P (b + a)$.
+
   \subsubsection{Lambda Calculus}
   Lambda Calculus is a minimalist Turing complete programming language with the concept of abstraction,
   application using binding and substitution. For example, \emph{x} is a variable, $(\lambda x.M)$
   is an Abstraction and (\emph{M N}) is an Application.
 
-  In Lambda Calculus, there are two types of conversions $\alpha$-conversion and $\beta$-reduction.
+  In Lambda Calculus, there are two types of computational conversions $\alpha$-conversion
+  and $\beta$-reduction.
   In $\alpha$-conversion, $(\lambda x.M[x]) \rightarrow (\lambda y.M[y])$.
-  So in every free variable in \emph{M} will be renamed from \emph{x} to \emph{y}.
+  So in every free variable \emph{x} in \emph{M} will be renamed to \emph{y}.
   For \emph{M[x] = x}, an $\alpha$-conversion is $(\lambda x.x) \rightarrow (\lambda y.y)$
 
   A free variable is every variable that is not bound outside.
@@ -239,7 +249,7 @@ The current version of Agda is Agda 2.
   Agda also provides proof assistants based on the intentional Martin-Löf type theory.
 
     In Martin-Löf type theory, there are three finite types and five constructors types.
-    The zero type contain zero terms. It is called empty type and it is written bot.
+    The zero type contain zero terms. It is called empty type and it is written $\bot$.
     \agda{agdaExamples}{botType}
 
     The first type is the type with just one canonical term and it represents existence.
@@ -257,10 +267,14 @@ The current version of Agda is Agda 2.
 
 
     \subsubsection{Types Constructors}
-    The sum-types contain an ordered pair.
+    The product-types contain an ordered pair.
     The second type can depend on the first type.
-    It has the same meaning to exist.
-    \agda{agdaExamples}{sumType}
+    \agda{agdaExamples}{mulType}
+
+    \agda{agdaExamples}{mulEx}
+    In the function $\exists-vec$, the product-type has the same meaning of exists.
+    This type mean that
+    ``Exists a natural number \emph{n} that there is one element of type \emph{Vector A n}''
 
     The $\pi$-types contain functions.
     So given an input type, it will return an output type.
@@ -279,9 +293,9 @@ The current version of Agda is Agda 2.
     For example, the type of \emph{Nat} is \emph{U0}.
 
 
-It looks like CoQ, but does not have tactics.
-Agda is a total language, so it is guaranteed that the code always terminal and coverage all inputs.
-Agda needs it to be a consistent language.
+Agda has dependent types like in CoQ, but does not have tactics.
+Agda is a total language, so it is guaranteed that the code always finish
+(impossible infinite loops) and coverage all inputs.
 
 Agda has inductive data types that are similar to algebraic data types in non-dependently
 typed programming language.
@@ -294,7 +308,7 @@ For example, the sum of two numbers in Agda:
 
 \agda{agdaExamples}{sum}
 
-In Agda, because of dependent types, it is possible to make some restrictions in types that are not
+In Agda, because of dependent types, it is possible to make more expressive types that are not
 possible in other languages.
 For example, get the first element of a vector.
 For it, it is necessary to specify in the type that the vector should have a size greater or equal
@@ -335,11 +349,11 @@ it returns \emph{refl \{\_\} \{\_\} \{x\}}.
 \emph{refl} is a constructor of equality, so \emph{refl \{\_\} \{\_\} \{x\}}
 returns a term of type $x \equiv x$.
 
-\subsection{Bitcoin}
+\subsection{Bitcoin Overview}
 
 The Bitcoin was made to be a peer to peer electronic cash.
 It was made in one way that users can save and verify transactions without the need of a trusted party.
-Because of that no authority or government can block the Bitcoin.
+Because of that no authority or government can shutdown the Bitcoin.
 
 \incimg{transactions1}{png}{Transaction}
 %% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
@@ -359,14 +373,20 @@ The public key is generated from the private key
 (like in \figref{privatekey} where account number is f(p)),
 but a private key can not be generated from a public key.
 
-The mining transaction does require an input.
-For each input of the transaction, it is necessary a signature signed with a private key
+In Bitcoin, the miner is someone that calculate a value \emph{nounce} for each block.
+Because of that, he receive all transactions fees of this block plus a block reward.
+The mining transaction (made for the miner) does require an input.
+For each input transaction, it is necessary a signature signed with a private key
 (like in \figref{privatekey} where signature is f(p,t))
 to prove the ownership of the Bitcoins.
 With the message and the signature, it is possible to know that the owner of the private key
-that generates the public key signed this message.
+that generates the public key signed the message.
 
-With the signature and the public key, it is not possible to know the private key.
+Signature is created from a function that receives as inputs the private key and the message.
+There is no analytical form of inverse of this function.
+Because of that, the only way of finding an element \emph{x} that this function \emph{f} so
+that $f(x) = y$ for a given \emph{y} is trying for random different values of \emph{x}.
+So it is almost impossible to find the private key from a message, a signature and the public key.
 In \figref{privatekey}, the checker is a f(t,s,a).
 So because of that, the owner of the private key can sign several messages without anyone knows
 his private key.
@@ -387,23 +407,32 @@ specific characteristics.
 Each block has a size limit of 1 MB.
 Because of that, Bitcoin forms a blockchain (a chain of blocks).
 Each block should be created at an average of 10 minutes.
-This time was chosen because 10 minutes is enough to propagate the block throughout the world.
-To make the blockchain tamper-proof, there is a concept called proof of work in Bitcoin.
-So the miner has chosen a random value as nonce that makes the hash of the block less
-then a certain value.
+The advantages of using a short average time of block creation is that it will propagates transactions
+faster in the blockchain.
+But the disadvantages is that it increase the probability of creating orphan blocks.
+To make the blockchain tamper-proof (nobody can alter an existing block),
+there is a concept called proof of work in Bitcoin.
+To create a new block, the creator (called miner) has to choose a random value as nonce that makes
+the hash of the block less then a certain value.
 This value is chosen in a way that each block should be generated on 10 minutes on average.
+If the value is for example 100 and the total possibilities of results are 10.000 (counterdomain),
+the probability of finding \emph{x} so that $hash(x) \leqslant 100$ is 1\% $100/10.000$.
+Because of that, in this example, the miner has to calculate in average 100 hashes before finding
+the right one.
+
 If the value is too low, miners will take more time to find a nonce that makes the hash block
 less than it.
 If it is too high, it will be easier to find a nonce and they will find it faster.
 
-When two blocks are mined in nearly the same time, there are two valid blockchains.
-It is because the last block in both blockchains is valid but different.
+When two differrent blocks are created in nearly the same time, there are two valid blockchains.
+It is because the last block in both blockchains are valid but different.
 Because of this problem, in the Bitcoin protocol, the largest chain is always the right chain.
 While two valid chains have the same size, it is not possible to know which chain is the right.
 This situation is called fork and when it happens, it is necessary to wait to see in which chain
 the new block will be.
 
-In Bitcoin, there is a possibility of a 51\% attack.
+If miners have more than 50\% of the hash rates of Bitcoin, they can do an attack called 
+51\% attack.
 It happens when some miner, with more power than all network, mine secretly the blocks.
 So if the main network has 50 blocks, the miner could produce hidden blocks from 46 to 55
 and he would have 10 hidden blocks from the network.
@@ -418,14 +447,10 @@ Nowadays, this kind of attack is more common in new altcoins.
 \incimgdiv{wallet}{png}{Wallet}{2}
 %% https://trustwallet.com/buy-bitcoin/
 
-Wallet (shown in \figref{wallet}) is software that tracks all transactions 
-that the users received and sent.
-It also makes new transactions from previously received transactions.
-
 \subsection{Ethereum}
 
 Ethereum differs from Bitcoin in having an \gls{evm} to run script code.
-\gls{evm} is a stack machine and Turing complete while Bitcoin Script is not
+\gls{evm} is a stack machine and Turing complete \cite{turing1936computable} while Bitcoin Script is not
 (it is impossible to do loops and recursion in Bitcoin).
 
 Transactions in Bitcoin are all stored in the blockchain.
@@ -433,15 +458,17 @@ In Ethereum, just the hash of it is stored in it.
 So it is saved in the off-chain database.
 Because of that, it is possible to save more information in Ethereum Blockchain.
 
+Contracts in the blockchain are the script program that comes with the transaction.
 In Bitcoin, the creator of the contract to pay the amount proportional to its size.
-In Ethereum, it is different, there is a concept of gas.
+In Ethereum, it is different.
 Each smart contract in Ethereum is made by a series of instructions.
 Each instruction consumes different computational effort.
 Because of that, in Ethereum, there is a concept of gas, that measure how much computational effort
 each instruction needs.
 So in each smart contract, it is well know how much computational effort will be necessary to run it
 and it is measured in gas.
-Because computational effort is a scarce resource, to execute the smart contract, it is necessary to
+Because computational effort of each node in Ethereum network is a scarce resource,
+to execute the smart contract, it is necessary to
 pay an amount in Ether for each gas to the miner run it.
 Smart contracts that pay more ether per gas run first because the miner will want to have the best
 profit and they will pick them.

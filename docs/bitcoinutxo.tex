@@ -19,16 +19,20 @@ but it is not possible to know how they got in this state.
 
 In the \gls{utxo} model (shown in \figref{utxo}), each transaction is saved in the transaction tree.
 Every transaction is composed of multiples inputs and multiples outputs.
-But all inputs have to never been spent before.
+But all inputs have to come from outputs that have never been spent before.
 
 Because of that, in the \gls{utxo} model, it is easy to make a new transaction from the previous one,
 but it is harder to know how much each one has.
-The wallet that calculate how much balance each address has.
+To know how much someone has, it is necessary to calculate the sum of all unspent transactions outputs
+destined for his addresses.
 
 In the account model, there could be one kind of vulnerability
 that is less probable to happen in \gls{utxo} model.
-Because there is an undesirable intermediary state that there is some address without balance while
-another has not already received his money.
+Changing both addresses balances is not an atomic operation.
+Because there are two instructions, subtracting the balance of the sender
+and incrementing the balance of the receiver.
+If something bad happens between these two instructions, the final state
+will become an invalid state.
 
 For example: \\
 \textbf{

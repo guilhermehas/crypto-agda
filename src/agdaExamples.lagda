@@ -138,7 +138,7 @@ if b then tRes else fRes =
 \end{code}
 %</piType>
 
-%<*sumType>
+%<*mulType>
 \begin{code}
 data ∑ (A : Set) (B : A → Set) : Set where
   ⟨_,_⟩ : (x : A) → B x → ∑ A B
@@ -150,7 +150,7 @@ data ∑ (A : Set) (B : A → Set) : Set where
   → C
 ∑-elim f ⟨ x , y ⟩ = f x y
 \end{code}
-%</sumType>
+%</mulType>
 
 \begin{code}
 infixr 5 _::_
@@ -226,6 +226,13 @@ vec-one : Vec (suc zero)
 vec-one = zero :: nil
 \end{code}
 %</vector>
+
+%<*mulEx>
+\begin{code}
+∃-vec : {A : Set} → ∑ ℕ (λ n → Vector A n)
+∃-vec = ⟨ zero , [] ⟩
+\end{code}
+%</mulEx>
 
 %<*patternMatch>
 \begin{code}
@@ -353,3 +360,13 @@ eq : ∀ {A : Set} (x : A) → x ≡ x
 eq x = refl {_} {_} {x}
 \end{code}
 %</equality>
+
+%<*rewrite>
+\begin{code}
+postulate P : ℕ → Set
+postulate plus-commute : (a b : ℕ) → a + b ≡ b + a
+
+thm : (a b : ℕ) → P (a + b) → P (b + a)
+thm a b t rewrite plus-commute a b = t
+\end{code}
+%</rewrite>

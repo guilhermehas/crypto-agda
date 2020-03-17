@@ -6,9 +6,8 @@ In Bitcoin, there are some transactions.
 In each transaction, there are multiple inputs and outputs.
 Each input is named TXFieldWithId.
 The input of one transaction is the output of another transaction.
-Firsts outputs are generated from coinbase transaction (there is just one of this transaction at
-each block).
-Coinbase transactions are the miner reward.
+Firsts outputs are generated from coinbase transaction (created by the miner).
+Each block has just one of this transaction.
 
 \agda{Transactions}{VectorOutput}
 
@@ -19,15 +18,16 @@ they in all transactions),
 what is his size (quantity of outputs fields)
 and the total amount spent in this transaction,
 
-\emph{elStart} is proof that the position of TXFieldWithId is the last one.
+\emph{elStart} is a proof that the position of TXFieldWithId is the last one,
+because its position in the vector is the same as the last position (size) of the vector.
 It is used after to specify which input is in the transaction.
 
 \agda{Transactions}{TXSigned}
 
 A signed transaction is composed of a non-empty list of inputs and outputs.
 For each input, there is a signature that confirms that he accepted every output in the list of outputs.
-And in the transaction, there is proof that the total amount of money in all inputs are bigger than
-the total amount of outputs.
+And in the transaction, there is proof ($in \geq out$) that the total amount of money
+in all inputs are bigger than the total amount of outputs.
 The remainder will be used by the miner.
 
 \subsubsection{Raw Transaction}
@@ -39,6 +39,10 @@ Here the definition of \emph{raw signed transaction}:
 
 \emph{Raw signed transactions} is a record with \emph{inputs}, \emph{outputs}
 and the signature of \emph{inputs} and \emph{outputs}.
+
+The definition of some important types:
+
+\agda{Crypto}{cryptoTypes}
 
 The definition of \emph{Raw Input}:
 
@@ -77,7 +81,8 @@ The definition of the record that every input transaction is signed in a given t
 It has the size of vector output, the sublist of all inputs, the total amount,
 the \emph{vector output} and a proof that all sublist of inputs are signed.
 
-To get the proof that the transaction is signed from the raw transaction:
+$rawTXSigned \to TXSigAll$ returns a signed transaction of all inputs in a given time
+if \emph{rawTXSigned} has valid signatures for all these inputs:
 
 \agda{RawTransactions}{rawtxSigToTxsigAll}
 
@@ -89,20 +94,21 @@ of the time of this transaction.
 If all conditions match, it returns a proven signed transaction.
 If not, it returns nothing.
 
-This function transforms a \emph{raw transaction} into a \emph{signed transaction}:
+\hyperref[rawToTX]{This function} transforms a \emph{raw transaction} into a \emph{signed transaction}:
 
+\plabel{rawToTX}
 \agda{RawTransactions}{txrawToTxsig}
 
-The first function returns a proof that the \emph{vector output} is equal to the total amount of
-the \emph{list of transactions}.
+The function $vecOut \equiv ListAmount$ returns a proof that the \emph{vector output} is equal
+to the total amount of the \emph{list of transactions}.
 It is impossible that the \emph{vector output} is equal to an empty list.
 In case that the list has just one element, it just has to return \emph{refl}.
 The another case, it is done recursively.
 
 The proof that the amount of input transaction is greater than the amount of output
-is just a rewrite from the previous proof.
+is just a rewrite from the previous proof ($vecOut≡ListAmount outputs vecOut out≡vec$).
 
-The function of \emph{same message} returns a proof that the message of \emph{raw transaction}
+The function \emph{sameMessage} returns a proof that the message of \emph{raw transaction}
 is the same as the message of the \emph{vector output}.
 In case that \emph{vector output} has just size one or two, it is a trivial case.
 The other cases are doing it recursively.
@@ -125,7 +131,7 @@ If all validations are right, it returns the vector output.
 If it is not, it returns nothing.
 
 The definition of the function that transform a \emph{raw transaction} into a
-\emph{signed transaction}:
+\emph{raw signed transaction}:
 
 \agda{RawTransactions}{rawtoTXSigned}
 
