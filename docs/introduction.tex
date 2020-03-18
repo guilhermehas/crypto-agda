@@ -76,16 +76,21 @@ algorithms without any human intervention.
 The old Ethereum blockchain that has not done the fork became the Ethereum Classic.
 It is the version of Ethereum that has never done a hard fork before.
 
-
 The objective of this work is to give a formal definition of what a cryptocurrency should be.
 There are some different definitions of a cryptocurrency in this work,
 but there are some formal proofs that they are the same.
 
-In this work, it is possible to generate proofs transactions from transactions without proofs.
-This means that a user can send a simple transaction without he worried to have to prove that
-the transaction is right to put in the blockchain.
-In Bitcoin, it happened in the same way.
-Because the node has to verify the transactions.
+Given that cryptocurrencies and smart contracts should have guarantees of their correctness,
+it is very important to verify their protocols.
+The creation of formal methods for Bitcoin protocol and the proof of it correctness are
+the objective of this work.
+
+So we are proposing a model of Bitcoin using an interactive theorem prover and dependently
+typed programming language Agda.
+We include a formalization of transactions, transactions tree, blocks, blockchain and
+how messages are signed.
+In this work, we also include functions that transform raw transactions (made with simple types like
+lists, naturals) to transactions with dependent types.
 
 \subsection{Literature Review}
 
