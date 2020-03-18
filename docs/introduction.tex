@@ -1,6 +1,6 @@
 \section{Introduction}
 
-\subsection{Context} 
+\subsection{History} 
 
 In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
 This cryptocurrency use \gls{rsa} blind signatures \cite{chaum1983blind} to spend transactions.
@@ -11,8 +11,7 @@ Adam Back developed a \gls{pow} scheme for spam control, Hashcash \cite{back2002
 To send an email, the hash of the content of this email plus a nonce has to have a numerical value
 smaller than a defined target.
 So, to create a valid email, the sender (miner) has to spend a considerable \gls{cpu} resource on it.
-Because hash functions produce practically random values, so the miner has to guess a lot of nonce
-values before finding some nonce that makes the hash of the email less than the target value.
+Miners should calculate a lot of hash values before finding one that is valid.
 This idea is used in Bitcoin proof of work because each block has a nonce guessed by the miner and
 the hash of the block has to be less than the target value.
 
@@ -36,7 +35,7 @@ transaction data structure.
 It uses Solidity as its programming language for smart contracts which resembles Javascript,
 so it is easier to program in it than in the stack machine programming language of Bitcoin.
 Ethereum is now transitioning from proof of work (used in Bitcoin) to proof of stake
-which will be the default proof mechanism of Ethereum 2.0 and will be released in
+which will be the default proof mechanism of Ethereum 2.0 and was released in
 3 of January of 2020.
 
 Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy and decentralization.
@@ -45,14 +44,12 @@ but nobody can tell the source, amount or destination.
 Zcash uses the concept of zero-knowledge proof called \gls{kzsnark},
 which guarantee privacy for its users.
 
-\section{Objectives}
-
-\subsection{History}
+\subsection{Objectives}
 
 Cryptocurrencies are used as money and used in smart contracts in a decentralized way.
 Because of that, it is not possible to revert a transaction or undo the creation of the smart contract.
 There is no legal framework or agent to solve a problem in case of the existence of a bug.
-Because of that, the formal proofs are necessary in the cryptocurrency protocol.
+Because of that, the formal proofs are desirable in the cryptocurrency protocol.
 So it can avoid big financial loss.
 
 In the case of Bitcoin, if there is some problem in the source code,
@@ -71,15 +68,14 @@ To fix this problem, it should put the block number in the coinbase transaction.
 This kind of change was solved in a soft fork named SegWit.
 
 In Ethereum, there was a bug in \gls{dao} smart contract.
-Because of that, malicious users exploited a vulnerability in it.
-The total loss of this exploit was 150 million dollars on this day.
+Malicious users exploited a vulnerability in it with
+total loss of this exploit was 150 million dollars.
 There was a hard fork to undo most of the transactions that exploited this contract.
 This kind of hard fork violates the principle that smart contracts should be ruled just by
 algorithms without any human intervention.
-Because of that, the Ethereum blockchain that has not done the fork becomes the Ethereum classic.
+The old Ethereum blockchain that has not done the fork became the Ethereum Classic.
 It is the version of Ethereum that has never done a hard fork before.
 
-\subsection{Proposes}
 
 The objective of this work is to give a formal definition of what a cryptocurrency should be.
 There are some different definitions of a cryptocurrency in this work,
@@ -90,3 +86,53 @@ This means that a user can send a simple transaction without he worried to have 
 the transaction is right to put in the blockchain.
 In Bitcoin, it happened in the same way.
 Because the node has to verify the transactions.
+
+\subsection{Literature Review}
+
+Beukema \cite{beukema2014formalising} was one of the first to try
+to define a formal specification of Bitcoin.
+In this works, functions interfaces of Bitcoin and what they should do were defined.
+Most of these functions define how the Bitcoin Network protocol should be.
+In this work, he does not utilize any programming language with dependent types like Agda or CoQ.
+mCRL2, a specification programming language, was used.
+
+Chaudhary and his team \cite{chaudhary2015modeling} have created a model of Bitcoin blockchain
+in the model checker UPPAAL.
+In his work, they calculate the probability of a malicious attack to succeed in doing a double spend.
+For a small number of blocks, it is easier to do this attack.
+Because of that, it is usually recommended that the user wait for more blocks confirmations
+after a big transaction.
+
+Bastiaan \cite{bastiaan2015preventing} showed a stochastic model of Bitcoin using
+continuous Markov chains.
+In his work, he proposes a way of avoiding a 51\% attack in the network,
+using two-phase proof of work.
+
+Orestis Melkonian \cite{melkonian2019formalizing} in his masters have done the formal specification
+of BitML (smart contract language) in Agda.
+BitML can be compiled to Script, the smart contract language of Bitcoin. 
+
+Kosba \cite{kosba2016hawk} in his work made a programming language called Hawk for smart contracts.
+This language uses formal methods to verify privacy using zero-knowledge proofs.
+Using this language, the programmer does not have to worry about implementing the cryptography,
+because the compiler generates automatically an effective one.
+
+Bhargavan \cite{bhargavan2016formal} translated Solidity and Ethereum bytecode into F*.
+He verified that the Ethereum \gls{dao} bug was caught in its translation.
+Nowadays, they have an implementation of \gls{evm} and Solidity in OCaml,
+but they want to have a full implementation of \gls{evm} in F* too.
+
+Luu \cite{luu2016making} built a symbolic execution tool named OYENTE to look for potential bugs.
+In his work, he found a lot of contracts with real bugs.
+One of these bugs was \gls{dao} bug, that caused a loss of 60 million dollars.
+He used Z3 to find a potentially dangerous path of code.
+
+Anton Setzer \cite{setzer2018modelling} also contributed to modeling Bitcoin.
+He coded in Agda the definitions of transactions and
+transactions tree of Bitcoin.
+Orestis Melkonian starts to formalize Bitcoin Script.
+
+My work tries to extend Anton Setzer model and makes it possible to use the Bitcoin protocol
+from inputs and outputs from plain text.
+For example, the user sends a transaction in plain text to the software and it validates if it is correct.
+To use the Anton Setzer model, the user has to send the data and the proof that are both valid.

@@ -1,55 +1,5 @@
 \section{Relevant Background}
 
-\subsection{Literature Review}
-
-Beukema \cite{beukema2014formalising} was one of the first to try
-to define a formal specification of Bitcoin.
-In this works, functions interfaces of Bitcoin and what they should do were defined.
-Most of these functions define how the Bitcoin Network protocol should be.
-In this work, he does not utilize any programming language with dependent types like Agda or CoQ.
-mCRL2, a specification programming language, was used.
-
-Chaudhary and his team \cite{chaudhary2015modeling} have created a model of Bitcoin blockchain
-in the model checker UPPAAL.
-In his work, they calculate the probability of a malicious attack to succeed in doing a double spend.
-For a small number of blocks, it is easier to do this attack.
-Because of that, it is usually recommended that the user wait for more blocks confirmations
-after a big transaction.
-
-Bastiaan \cite{bastiaan2015preventing} showed a stochastic model of Bitcoin using
-continuous Markov chains.
-In his work, he proposes a way of avoiding a 51\% attack in the network,
-using two-phase proof of work.
-
-Orestis Melkonian \cite{melkonian2019formalizing} in his masters have done the formal specification
-of BitML (smart contract language) in Agda.
-BitML can be compiled to Script, the smart contract language of Bitcoin. 
-
-Kosba \cite{kosba2016hawk} in his work made a programming language called Hawk for smart contracts.
-This language uses formal methods to verify privacy using zero-knowledge proofs.
-Using this language, the programmer does not have to worry about implementing the cryptography,
-because the compiler generates automatically an effective one.
-
-Bhargavan \cite{bhargavan2016formal} translated Solidity and Ethereum bytecode into F*.
-He verified that the Ethereum \gls{dao} bug was caught in its translation.
-Nowadays, they have an implementation of \gls{evm} and Solidity in OCaml,
-but they want to have a full implementation of \gls{evm} in F* too.
-
-Luu \cite{luu2016making} built a symbolic execution tool named OYENTE to look for potential bugs.
-In his work, he found a lot of contracts with real bugs.
-One of these bugs was \gls{dao} bug, that caused a loss of 60 million dollars.
-He used Z3 to find a potentially dangerous path of code.
-
-Anton Setzer \cite{setzer2018modelling} also contributed to modeling Bitcoin.
-He coded in Agda the definitions of transactions and
-transactions tree of Bitcoin.
-Orestis Melkonian starts to formalize Bitcoin Script.
-
-My work tries to extend Anton Setzer model and makes it possible to use the Bitcoin protocol
-from inputs and outputs from plain text.
-For example, the user sends a transaction in plain text to the software and it validates if it is correct.
-To use the Anton Setzer model, the user has to send the data and the proof that are both valid.
-
 \subsection{Agda Introduction}
 Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology
 as his Ph.D. Thesis.
@@ -449,6 +399,53 @@ Nowadays, this kind of attack is more common in new altcoins.
 Ledger is a software that tracks how much money each address can spend.
 It can be knowed calculating the sum amount of all unspent output transactions destined
 for each address.
+
+\subsection{Bitcoin UTXO}
+
+\incimg{account}{jpeg}{Record account}
+%% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
+
+The \gls{utxo} model used in Bitcoin and the account model used in Ethereum are the two most used kinds
+of data structures to model accounts records and savings states.
+
+In the account model, it is saved the address and the balance of each address
+(like in \figref{account}).
+For example, the data structure will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
+So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of balance.
+In this way, it is possible to easily know how much balance each address has,
+but it is not possible to know how they got in this state.
+
+  \incimg{utxo}{png}{UTXO transactions}
+  %% https://bitcoin.org/
+  %% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
+
+In the \gls{utxo} model (shown in \figref{utxo}), each transaction is saved in the transaction tree.
+Every transaction is composed of multiples inputs and multiples outputs.
+But all inputs have to come from outputs that have never been spent before.
+
+Because of that, in the \gls{utxo} model, it is easy to make a new transaction from the previous one,
+but it is harder to know how much each one has.
+To know how much someone has, it is necessary to calculate the sum of all unspent transactions outputs
+destined for his addresses.
+
+In the account model, there could be one kind of vulnerability
+that is less probable to happen in \gls{utxo} model.
+Changing both addresses balances is not an atomic operation.
+Because there are two instructions, subtracting the balance of the sender
+and incrementing the balance of the receiver.
+If something bad happens between these two instructions, the final state
+will become an invalid state.
+
+For example: \\
+\textbf{
+bobBalance -= 1 \\
+Intermediary State \\
+aliceBalance += 1
+}
+
+In the account model, it is straight forward to know how much balance each address has.
+In the \gls{utxo} model, this calculation is made off-chain. It can be a good thing,
+because each user has more privacy.
 
 \subsection{Ethereum}
 
