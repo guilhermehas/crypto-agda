@@ -1,6 +1,6 @@
 \section{Introduction}
 
-\subsection{History} 
+\subsection{History of cryptocurrencies} 
 
 In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
 This cryptocurrency use \gls{rsa} blind signatures \cite{chaum1983blind} to spend transactions.
@@ -34,9 +34,8 @@ Ethereum is a cryptocurrency that uses an account model instead of \gls{utxo} us
 transaction data structure.
 It uses Solidity as its programming language for smart contracts which resembles Javascript,
 so it is easier to program in it than in the stack machine programming language of Bitcoin.
-Ethereum is now transitioning from proof of work (used in Bitcoin) to proof of stake
-which will be the default proof mechanism of Ethereum 2.0 and was released in
-3 of January of 2020.
+Ethereum changed from proof of work (used in Bitcoin) to proof of stake
+which is now the default proof mechanism of Ethereum 2.0.
 
 Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy and decentralization.
 Monero uses an obfuscated public ledger, so anyone can send transactions,
@@ -85,14 +84,14 @@ it is very important to verify their protocols.
 The creation of formal methods for Bitcoin protocol and the proof of it correctness are
 the objective of this work.
 
-So we are proposing a model of Bitcoin using an interactive theorem prover and dependently
+So, we are proposing a model of Bitcoin using an interactive theorem prover and dependently
 typed programming language Agda.
 We include a formalization of transactions, transactions tree, blocks, blockchain and
 how messages are signed.
 In this work, we also include functions that transform raw transactions (made with simple types like
 lists, naturals) to transactions with dependent types.
 
-\subsection{Literature Review}
+\subsection{Related Work}
 
 Beukema \cite{beukema2014formalising} was one of the first to try
 to define a formal specification of Bitcoin.

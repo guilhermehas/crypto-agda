@@ -393,21 +393,14 @@ So it is becoming harder and harder to make a 51\% with more time.
 Bitcoin has the highest market value nowadays, so attacking the Bitcoin network is very expensive.
 Nowadays, this kind of attack is more common in new altcoins.
 
-\incimgdiv{wallet}{png}{Wallet}{2}
-%% https://trustwallet.com/buy-bitcoin/
-
 Ledger is a software that tracks how much money each address can spend.
 It can be knowed calculating the sum amount of all unspent output transactions destined
 for each address.
-
-\incimg{account}{jpeg}{Record account}
-%% https://medium.com/@sunflora98/utxo-vs-account-balance-model-5e6470f4e0cf
 
 The \gls{utxo} model used in Bitcoin and the account model used in Ethereum are the two most used kinds
 of data structures to model accounts records and savings states.
 
 In the account model, it is saved the address and the balance of each address
-(like in \figref{account}).
 For example, the data structure will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
 So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of balance.
 In this way, it is possible to easily know how much balance each address has,
