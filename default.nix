@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {} }: with pkgs;
 
 let
-  agdapkg = (import src/default.nix) {};
+  agdapkg = callPackage src/default.nix {};
 in
 stdenv.mkDerivation {
   name = "master-thesis";
