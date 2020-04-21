@@ -10,7 +10,7 @@ Agda looks like a good language for it, but other languages like CoQ, Lean can d
 In this work, we define a lot of functionalities about Bitcoin.
 There were definitions of transactions, transactions tree, block, and blockchain.
 They were all defined in data constructors and records.
-Most of the model definition was in transaction tree
+Most of the model definition was in the transaction tree
 because of the state of Bitcoin changes after every transaction.
 There are other ways of doing the same thing,
 but I thought that this way is easier to define.
@@ -19,7 +19,7 @@ types instead of doing all of it in the transaction tree (what was done in this 
 
 Some part of this code is not just for modeling the Bitcoin,
 but to validates inputs that can be wrong.
-They were functions that transforms terms with simpler types (without dependent types)
+They were functions that transform terms with simpler types (without dependent types)
 to terms with more complex types (with them).
 For example, transforming raw transactions into possible valid transactions.
 
@@ -37,7 +37,7 @@ One thing that can be done is importing these functions from some Agda or Haskel
 In this cryptocurrency, there is no nonce and mining either.
 
 This work does not have any IO operation.
-So it is not possible to add transactions in the blockchain from the command line or from the network.
+So it is not possible to add transactions in the blockchain from the command line or the network.
 
 The cryptocurrency of this work does not have any smart contract.
 It would be good to define some of them in it.

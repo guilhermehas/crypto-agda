@@ -2,7 +2,7 @@
 
 \subsection{History of cryptocurrencies} 
 
-In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic eletronic money.
+In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic electronic money.
 This cryptocurrency use \gls{rsa} blind signatures \cite{chaum1983blind} to spend transactions.
 Later, in 1989, David Chaum found an electronic money corporation called DigiCash Inc.
 It was declared bankruptcy in 1998.
@@ -11,11 +11,11 @@ Adam Back developed a \gls{pow} scheme for spam control, Hashcash \cite{back2002
 To send an email, the hash of the content of this email plus a nonce has to have a numerical value
 smaller than a defined target.
 So, to create a valid email, the sender (miner) has to spend a considerable \gls{cpu} resource on it.
-Miners should calculate a lot of hash values before finding one that is valid.
+Miners should calculate a lot of hash values before finding a valid one.
 This idea is used in Bitcoin proof of work because each block has a nonce guessed by the miner and
 the hash of the block has to be less than the target value.
 
-Wei Dai propose b-money \cite{dai1998b} for the first proposal for distributed digital scarcity.
+Wei Dai proposes b-money \cite{dai1998b} for the first proposal for distributed digital scarcity.
 And Hal Finney created Bit Gold \cite{wallace2011rise}, a reusable proof of work for hash cash for
 its algorithm of proof of work.
 
@@ -37,11 +37,11 @@ so it is easier to program in it than in the stack machine programming language 
 Ethereum changed from proof of work (used in Bitcoin) to proof of stake
 which is now the default proof mechanism of Ethereum 2.0.
 
-Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy and decentralization.
+Monero and ZCash are both cryptocurrencies that focus on fungibility, privacy, and decentralization.
 Monero uses an obfuscated public ledger, so anyone can send transactions,
 but nobody can tell the source, amount or destination.
-Zcash uses the concept of zero-knowledge proof called \gls{kzsnark},
-which guarantee privacy for its users.
+ZCash uses the concept of zero-knowledge proof called \gls{kzsnark},
+which guarantees privacy for its users.
 
 \subsection{Objectives}
 
@@ -59,10 +59,10 @@ In hard forks, all the nodes should be upgraded at the same time.
 Because the newer version is not compatible with the older one.
 So it is very dangerous to do this kind of fork.
 Therefore in Bitcoin, this kind of fork just happened twice by accident.
-It happened in 2013, because of BerkeleyDB issue and it was solved in BIP 0050.
-And happend in 2018, becase of Denial of Service and inflation vulnerability bug.
+It happened in 2013, because of the BerkeleyDB issue and it was solved in BIP 0050.
+And happened in 2018, because of Denial of Service and inflation vulnerability bug.
 
-For example, in Bitcoin, the uniqueness of transaction \gls{id} were not guaranteed.
+For example, in Bitcoin, the uniqueness of transaction \gls{id} was not guaranteed.
 To fix this problem, it should put the block number in the coinbase transaction.
 This kind of change was solved in a soft fork named SegWit.
 
@@ -81,7 +81,7 @@ but there are some formal proofs that they are the same.
 
 Given that cryptocurrencies and smart contracts should have guarantees of their correctness,
 it is very important to verify their protocols.
-The creation of formal methods for Bitcoin protocol and the proof of it correctness are
+The creation of formal methods for Bitcoin protocol and the proof of its correctness are
 the objective of this work.
 
 So, we are proposing a model of Bitcoin using an interactive theorem prover and dependently
@@ -104,7 +104,7 @@ Chaudhary and his team \cite{chaudhary2015modeling} have created a model of Bitc
 in the model checker UPPAAL.
 In his work, they calculate the probability of a malicious attack to succeed in doing a double spend.
 For a small number of blocks, it is easier to do this attack.
-Because of that, it is usually recommended that the user wait for more blocks confirmations
+Because of that, it is usually recommended that the user waits for more blocks confirmations
 after a big transaction.
 
 Bastiaan \cite{bastiaan2015preventing} showed a stochastic model of Bitcoin using
@@ -128,7 +128,7 @@ but they want to have a full implementation of \gls{evm} in F* too.
 
 Luu \cite{luu2016making} built a symbolic execution tool named OYENTE to look for potential bugs.
 In his work, he found a lot of contracts with real bugs.
-One of these bugs was \gls{dao} bug, that caused a loss of 60 million dollars.
+One of these bugs was the \gls{dao} bug, that caused a loss of 60 million dollars.
 He used Z3 to find a potentially dangerous path of code.
 
 Anton Setzer \cite{setzer2018modelling} also contributed to modeling Bitcoin.
@@ -136,7 +136,7 @@ He coded in Agda the definitions of transactions and
 transactions tree of Bitcoin.
 Orestis Melkonian starts to formalize Bitcoin Script.
 
-My work tries to extend Anton Setzer model and makes it possible to use the Bitcoin protocol
+My work tries to extend the Anton Setzer model and makes it possible to use the Bitcoin protocol
 from inputs and outputs from plain text.
 For example, the user sends a transaction in plain text to the software and it validates if it is correct.
 To use the Anton Setzer model, the user has to send the data and the proof that are both valid.

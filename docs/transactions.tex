@@ -28,7 +28,7 @@ It is used after to specify which input is in the transaction.
 A signed transaction is composed of a non-empty list of inputs and outputs.
 For each input, there is a signature that confirms that he accepted every output in the list of outputs.
 And in the transaction, there is proof ($in \geq out$) that the total amount of money
-in all inputs are bigger than the total amount of outputs.
+in all inputs is bigger than the total amount of outputs.
 The remainder will be used by the miner.
 
 \subsubsection{Raw Transaction}
@@ -38,7 +38,7 @@ Here the definition of \emph{raw signed transaction}:
 
 \agda{RawTransactions}{rawtxsigned}
 
-\emph{Raw signed transactions} is a record with \emph{inputs}, \emph{outputs}
+\emph{Raw signed transactions} are a record with \emph{inputs}, \emph{outputs}
 and the signature of \emph{inputs} and \emph{outputs}.
 
 The definition of some important types:
@@ -68,7 +68,7 @@ The definition of \emph{raw transaction coinbase}:
 
 \agda{RawTransactions}{rawCoinbase}
 
-The defintion of \emph{raw Vector Output}: 
+The definition of \emph{raw Vector Output}: 
 
 \agda{RawTransactions}{rawVecOut}
 
@@ -80,7 +80,7 @@ The definition of the record that every input transaction is signed in a given t
 \agda{RawTransactions}{txsigall}
 
 It has the size of vector output, the sublist of all inputs, the total amount,
-the \emph{vector output} and a proof that all sublist of inputs are signed.
+the \emph{vector output} and a proof that all sublists of inputs are signed.
 
 $rawTXSigned \to TXSigAll$ returns a signed transaction of all inputs in a given time
 if \emph{rawTXSigned} has valid signatures for all these inputs:
@@ -120,7 +120,7 @@ It validates it with its public key.
 The last function returns a proof that every input was signed.
 It is done in a recursive way using the function \emph{sigPub}.
 
-This is the function that transforms a list ot transactions into a possible \emph{vector output}:
+This is the function that transforms a list of transactions into a possible \emph{vector output}:
 
 \agda{RawTransactions}{listTXFieldtoVecOut}
 

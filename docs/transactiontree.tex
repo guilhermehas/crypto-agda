@@ -30,7 +30,7 @@ the size greater than the maximum.
 \agda{TXTree}{TX}
 
 TX is related to the transaction done in the cryptocurrency.
-There are two kinds of transaction.
+There are two kinds of transactions.
 Coinbase transaction is the transaction done by the miner.
 In coinbase, they have just outputs and do not have any input.
 \emph{pAmountFee} is proof that the output of the coinbase transaction is equal to the total fees plus
@@ -101,7 +101,7 @@ made this transaction.
 \plabel{addtxtree1}
 \agda{RawTXTree}{addtxtree1}
 
-There are two types of transaction.
+There are two types of transactions.
 The first one is when the transaction is a coinbase transaction.
 \hyperref[addtxtree1]{The function} tries first to transform a list of \emph{TXField} into \emph{VecOut}.
 If it can not transforms, it returns nothing.
@@ -115,9 +115,9 @@ Because it is a coinbase transaction, there are no inputs to be removed.
 \agda{RawTXTree}{addtxtree2}
 
 The second case is when the transaction is regular, looks like the same.
-First, \hyperref[addtxtree2]{The function} validates if the quantity of transaction is less
+First, \hyperref[addtxtree2]{The function} validates if the quantity of transactions is less
 than the maximum allowed.
-Second, it validates if this transactions is a valid signed transaction.
+Second, it validates if this transaction is a valid signed transaction.
 If all these conditions are true, it returns a new transaction tree
 with news outputs equal to the outputs of this transaction plus the outputs of the last transaction tree
 minus the inputs.
@@ -125,7 +125,7 @@ In case of an invalid transaction, \hyperref[addtxtree2]{the function} returns n
 
 \subsubsection{Proofs}
 
-One of the important proofs is that each output of \emph{outputs transaction} is distinct.
+One of the important proofs is that each output of the \emph{outputs transaction} is distinct.
 This is very important because it guarantees that each input in the transaction could be
 just related to just one unspent output.
 This characteristic could be in the type of transaction tree,

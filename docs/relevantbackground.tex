@@ -1,7 +1,7 @@
 \section{Relevant Background}
 
 \subsection{Agda Introduction}
-Agda is a dependently typed functional language developed by Norell at Chalmers University of Technology
+Agda is a dependently typed functional language developed by Norell at the Chalmers University of Technology
 as his Ph.D. Thesis.
 The current version of Agda is Agda 2.
 
@@ -11,7 +11,7 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{funcType}
 
-  After the function name, it is two colon (\emph{:}) and the arguments of the function.
+  After the function name, it is two colons (\emph{:}) and the arguments of the function.
   It is closed by \emph{(name\_of\_argument : type\_of\_argument)}.
   After all, there is one arrow and the type of the result of the function.
   This ``if, then, else'' is not a function built-in in Agda.
@@ -31,7 +31,7 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{dependentType}
 
-  It is possible in Agda to do pattern match.
+  It is possible in Agda to do the pattern match.
   So it breaks the input in cases.
 
   \agda{agdaExamples}{patternMatch}
@@ -57,13 +57,13 @@ The current version of Agda is Agda 2.
 
   The constructor is the name of the data constructor.
 
-  \hyperref[id]{Implicits terms} are elements that the compiler is smart enough to deduce it.
+  \hyperref[id]{Implicit terms} are elements that the compiler is smart enough to deduce it.
   So it is not necessary to put it as an argument of the function.
 
   \plabel{id}
   \agda{agdaExamples}{id}
 
-  Implicits arguments are inside \emph{\{\}}.
+  Implicit arguments are inside \emph{\{\}}.
   In this example, the name of the Set (\emph{A}) can not be omitted
   (like the second function version of boolean to set),
   because it is used to say that \emph{x} is of type \emph{A}.
@@ -71,7 +71,7 @@ The current version of Agda is Agda 2.
   In the case of the function \emph{id}, the type of input can be deduced by the compiler.
   For example, \emph{id} function should be a function from Natural to Natural because
   \emph{zeroN} is already of type Natural.
-  In this example, the compiler could figured out the term \emph{A} (Natural) of type \emph{Set}.
+  In this example, the compiler could figure out the term \emph{A} (Natural) of type \emph{Set}.
 
   \agda{agdaExamples}{idNat}
 
@@ -86,20 +86,20 @@ The current version of Agda is Agda 2.
 
   \agda{agdaExamples}{filter}
 
-  Filter is a function that filter all elements that has some property already defined.
+  Filter is a function that filters all elements that have some property already defined.
   In this definition of filter, the lambda abstraction can pattern match
   in the two possibilities of \emph{p x}, that are \emph{true} or \emph{false}
 
   \agda{agdaExamples}{filterWith}
 
-  The \emph{with} abstraction is the same thing of the \emph{case of}.
+  The \emph{with} abstraction is the same thing as the \emph{case of}.
   Before the \emph{=}, there are the possibilities of \emph{p x} (\emph{true} or \emph{false}).
 
   \agda{agdaExamples}{postulate}
 
-  In Agda, \emph{postulate} assume that there is one element of a given type without defining it.
-  In this example, \emph{someBot} is an element of empty type.
-  Postulate can be dangerous, because it assumes that some element of a given type exists,
+  In Agda, the \emph{postulate} assumes that there is one element of a given type without defining it.
+  In this example, \emph{someBot} is an element of the empty type.
+  Postulate can be dangerous because it assumes that some element of a given type exists,
   but it can not (like in the example).
 
   \agda{agdaExamples}{rewrite}
@@ -121,9 +121,9 @@ The current version of Agda is Agda 2.
 
   A free variable is every variable that is not bound outside.
   For example, $((\lambda\textcolor{green}{x}.\textcolor{blue}{x}) \textcolor{red}{x})$.
-  The \textcolor{blue}{blue x} is binded for the \textcolor{green}{green x},
+  The \textcolor{blue}{blue x} is bonded for the \textcolor{green}{green x},
   but the \textcolor{red}{red x}
-  is not binded for any function. So the \textcolor{red}{red x} is a free variable.
+  is not bonded for any function. So the \textcolor{red}{red x} is a free variable.
 
   In $\beta$-reduction, it replaces the all free for the expression in the application.
   The $\beta$-reduction of this expression $((\lambda x.M) N) \rightarrow (M[x := N])$ .
@@ -199,7 +199,7 @@ The current version of Agda is Agda 2.
   Agda also provides proof assistants based on the intentional Martin-Löf type theory.
 
     In Martin-Löf type theory, there are three finite types and five constructors types.
-    The zero type contain zero terms. It is called empty type and it is written $\bot$.
+    The zero type contains zero terms. It is called the empty type and it is written $\bot$.
     \agda{agdaExamples}{botType}
 
     The first type is the type with just one canonical term and it represents existence.
@@ -223,7 +223,7 @@ The current version of Agda is Agda 2.
 
     \agda{agdaExamples}{mulEx}
     In the function $\exists-vec$, the product-type has the same meaning of exists.
-    This type mean that
+    This type means that
     ``Exists a natural number \emph{n} that there is one element of type \emph{Vector A n}''
 
     The $\pi$-types contain functions.
@@ -234,7 +234,7 @@ The current version of Agda is Agda 2.
     In Inductive types, it is a self-referential type.
     Naturals numbers are examples of that:
     \agda{agdaExamples}{Nat}
-    Other data structs like a linked list of natural numbers, trees, graphs are inductive types too.
+    Other data structures like a linked list of natural numbers, trees, graphs are inductive types too.
 
     Proofs in inductive types are made by induction.
     \agda{agdaExamples}{NatElim}
@@ -243,12 +243,12 @@ The current version of Agda is Agda 2.
     For example, the type of \emph{Nat} is \emph{U0}.
 
 
-Agda has dependent types like in CoQ, but does not have tactics.
+Agda has dependent types like in CoQ but does not have tactics.
 Agda is a total language, so it is guaranteed that the code always finish
 (impossible infinite loops) and coverage all inputs.
 
 Agda has inductive data types that are similar to algebraic data types in non-dependently
-typed programming language.
+typed programming languages.
 The definition of Peano numbers in Agda is:
 
 \agda{agdaExamples}{Nat}
@@ -302,7 +302,7 @@ returns a term of type $x \equiv x$.
 
 The Bitcoin was made to be a peer to peer electronic cash.
 It was made in one way that users can save and verify transactions without the need of a trusted party.
-Because of that no authority or government can shutdown the Bitcoin.
+Because of that no authority or government can shut down the Bitcoin.
 
 \incimg{transactions1}{png}{Transaction}
 %% https://medium.com/coinmonks/bitcoin-transactions-be401b48afe6
@@ -316,26 +316,26 @@ that is made from a private key.
 %% https://coinsutra.com/bitcoin-private-key/
 
 A private key is a big number.
-It is so big that it is almost impossible to generate two identicals private keys.
+It is so big that it is almost impossible to generate two identical private keys.
 
 The public key is generated from the private key
-(like in \figref{privatekey} where account number is f(p)),
+(like in \figref{privatekey} where the account number is f(p)),
 but a private key can not be generated from a public key.
 
-In Bitcoin, the miner is someone that calculate a value \emph{nounce} for each block.
-Because of that, he receive all transactions fees of this block plus a block reward.
+In Bitcoin, the miner is someone that calculates a value \emph{nounce} for each block.
+Because of that, he receives all transaction fees of this block plus a block reward.
 The mining transaction (made for the miner) does require an input.
 For each input transaction, it is necessary a signature signed with a private key
-(like in \figref{privatekey} where signature is f(p,t))
+(like in \figref{privatekey} where the signature is f(p,t))
 to prove the ownership of the Bitcoins.
 With the message and the signature, it is possible to know that the owner of the private key
 that generates the public key signed the message.
 
 Signature is created from a function that receives as inputs the private key and the message.
-There is no analytical form of inverse of this function.
+There is no analytical form of the inverse of this function.
 Because of that, the only way of finding an element \emph{x} that this function \emph{f} so
 that $f(x) = y$ for a given \emph{y} is trying for random different values of \emph{x}.
-So it is almost impossible to find the private key from a message, a signature and the public key.
+So it is almost impossible to find the private key from a message, a signature, and the public key.
 In \figref{privatekey}, the checker is a f(t,s,a).
 So because of that, the owner of the private key can sign several messages without anyone knows
 his private key.
@@ -356,31 +356,31 @@ specific characteristics.
 Each block has a size limit of 1 MB.
 Because of that, Bitcoin forms a blockchain (a chain of blocks).
 Each block should be created at an average of 10 minutes.
-The advantages of using a short average time of block creation is that it will propagates transactions
+The advantage of using a short average time of block creation is that it will propagate transactions
 faster in the blockchain.
-But the disadvantages is that it increase the probability of creating orphan blocks.
+But the disadvantage is that it increases the probability of creating orphan blocks.
 To make the blockchain tamper-proof (nobody can alter an existing block),
 there is a concept called proof of work in Bitcoin.
-To create a new block, the creator (called miner) has to choose a random value as nonce that makes
-the hash of the block less then a certain value.
+To create a new block, the creator (called the miner) has to choose a random value as nonce that makes
+the hash of the block less than a certain value.
 This value is chosen in a way that each block should be generated on 10 minutes on average.
-If the value is for example 100 and the total possibilities of results are 10.000 (counterdomain),
+If the value is for example 100 and the total possibilities of results are 10.000 (codomain),
 the probability of finding \emph{x} so that $hash(x) \leqslant 100$ is 1\% $100/10.000$.
-Because of that, in this example, the miner has to calculate in average 100 hashes before finding
+Because of that, in this example, the miner has to calculate on average 100 hashes before finding
 the right one.
 
 If the value is too low, miners will take more time to find a nonce that makes the hash block
 less than it.
 If it is too high, it will be easier to find a nonce and they will find it faster.
 
-When two differrent blocks are created in nearly the same time, there are two valid blockchains.
+When two different blocks are created in nearly the same time, there are two valid blockchains.
 It is because the last block in both blockchains are valid but different.
 Because of this problem, in the Bitcoin protocol, the largest chain is always the right chain.
 While two valid chains have the same size, it is not possible to know which chain is the right.
 This situation is called fork and when it happens, it is necessary to wait to see in which chain
 the new block will be.
 
-If miners have more than 50\% of the hash rates of Bitcoin, they can do an attack called 
+If miners have more than 50\% of the hash rates of Bitcoin, they can do an attack called a
 51\% attack.
 It happens when some miner, with more power than all network, mine secretly the blocks.
 So if the main network has 50 blocks, the miner could produce hidden blocks from 46 to 55
@@ -394,13 +394,13 @@ Bitcoin has the highest market value nowadays, so attacking the Bitcoin network 
 Nowadays, this kind of attack is more common in new altcoins.
 
 Ledger is a software that tracks how much money each address can spend.
-It can be knowed calculating the sum amount of all unspent output transactions destined
+It can be known when calculating the sum amount of all unspent output transactions destined
 for each address.
 
 The \gls{utxo} model used in Bitcoin and the account model used in Ethereum are the two most used kinds
-of data structures to model accounts records and savings states.
+of data structures to model account records and savings states.
 
-In the account model, it is saved the address and the balance of each address
+In the account model, it is saved the address and the balance of each address.
 For example, the data structure will look like this [(0xabc01, 1.01), (0xabc02, 2.02)].
 So the address 0xabc01 has 1.01a of balance and the address 0xabc02 has 2.02 of balance.
 In this way, it is possible to easily know how much balance each address has,
@@ -416,11 +416,11 @@ But all inputs have to come from outputs that have never been spent before.
 
 Because of that, in the \gls{utxo} model, it is easy to make a new transaction from the previous one,
 but it is harder to know how much each one has.
-To know how much someone has, it is necessary to calculate the sum of all unspent transactions outputs
+To know how much someone has, it is necessary to calculate the sum of all unspent transaction outputs
 destined for his addresses.
 
 In the account model, there could be one kind of vulnerability
-that is less probable to happen in \gls{utxo} model.
+that is less probable to happen in the \gls{utxo} model.
 Changing both addresses balances is not an atomic operation.
 Because there are two instructions, subtracting the balance of the sender
 and incrementing the balance of the receiver.
@@ -435,7 +435,7 @@ aliceBalance += 1
 }
 
 In the account model, it is straight forward to know how much balance each address has.
-In the \gls{utxo} model, this calculation is made off-chain. It can be a good thing,
+In the \gls{utxo} model, this calculation is made off-chain. It can be a good thing
 because each user has more privacy.
 
 \subsection{Ethereum}
@@ -453,14 +453,14 @@ Contracts in the blockchain are the script program that comes with the transacti
 In Bitcoin, the creator of the contract has to pay the amount proportional to its size.
 In Ethereum, it is different.
 Each smart contract in Ethereum is made by a series of instructions.
-Each instruction consumes different computational effort.
+Each instruction consumes different the computational effort.
 Because of that, in Ethereum, there is a concept of gas, that measure how much computational effort
 each instruction needs.
 So in each smart contract, it is well know how much computational effort will be necessary to run it
 and it is measured in gas.
-Because computational effort of each node in Ethereum network is a scarce resource,
+Because computational effort of each node in the Ethereum network is a scarce resource,
 to execute the smart contract, it is necessary to
-pay an amount in Ether for each gas to the miner run it.
+pay an amount in ether for each gas to the miner run it.
 Smart contracts that pay more ether per gas run first because the miner will want to have the best
 profit and they will pick them.
 If the amount of ether per gas paid is not high enough, the contract will not be executed,
@@ -468,4 +468,4 @@ because some other contracts pay more that will be executed instead of this one.
 
 Because Ethereum has its \gls{evm} with more instructions than Bitcoin and it is Turing Complete,
 it is considered less secure.
-Ethereum has its high-level programming language called Solidity that looks like Javascript.
+Ethereum has its high-level programming language called Solidity that looks like JavaScript.
