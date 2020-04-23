@@ -1,6 +1,6 @@
 \section{Introduction}
 
-\subsection{History of cryptocurrencies} 
+\subsection{History of Cryptocurrencies} 
 
 In 1983, David Chaum created ecash \cite{panurach1996money} an anonymous cryptographic electronic money.
 This cryptocurrency use \gls{rsa} blind signatures \cite{chaum1983blind} to spend transactions.
@@ -45,7 +45,7 @@ which guarantees privacy for its users.
 
 \subsection{Objectives}
 
-Cryptocurrencies are used as money and used in smart contracts in a decentralized way.
+Cryptocurrencies are used as money and in smart contracts in a decentralized way.
 Because of that, it is not possible to revert a transaction or undo the creation of the smart contract.
 There is no legal framework or agent to solve a problem in case of the existence of a bug.
 Because of that, the formal proofs are desirable in the cryptocurrency protocol.
@@ -62,13 +62,13 @@ Therefore in Bitcoin, this kind of fork just happened twice by accident.
 It happened in 2013, because of the BerkeleyDB issue and it was solved in BIP 0050.
 And happened in 2018, because of Denial of Service and inflation vulnerability bug.
 
-For example, in Bitcoin, the uniqueness of transaction \gls{id} was not guaranteed.
+In Bitcoin, the uniqueness of transaction \gls{id} was not guaranteed.
 To fix this problem, it should put the block number in the coinbase transaction.
 This kind of change was solved in a soft fork named SegWit.
 
 In Ethereum, there was a bug in \gls{dao} smart contract.
-Malicious users exploited a vulnerability in it with
-total loss of this exploit was 150 million dollars.
+Malicious users exploited a vulnerability in it with a
+total loss of 150 million dollars.
 There was a hard fork to undo most of the transactions that exploited this contract.
 This kind of hard fork violates the principle that smart contracts should be ruled just by
 algorithms without any human intervention.
