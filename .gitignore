@@ -1,5 +1,4 @@
 *.agdai
-*.pdf
 *.log
 *.aux
 *latexmk
