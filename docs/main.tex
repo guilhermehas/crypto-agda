@@ -20,6 +20,7 @@
 \usepackage{parskip}
 \usepackage{fancyhdr}
 \usepackage[acronym]{glossaries}
+\usepackage[final]{pdfpages}
 
 \usepackage{vmargin}
 \setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
@@ -58,6 +59,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \firstpage
+
+\null \thispagestyle{empty} \addtocounter{page}{-1} \newpage
+
+\setboolean{@twoside}{false}
+\includepdf[pages=-, offset=75 -75]{ficha.pdf}
+\includepdf[pages=-, offset=75 -75]{assinaturas.pdf}
 
 \include{abstract}
 \include{resumo}
