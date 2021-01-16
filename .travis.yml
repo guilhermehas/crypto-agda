@@ -1,8 +1,5 @@
 language: nix
-before_install:
-  - nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
-  - nix-channel --add https://nixos.org/channels/nixos-18.09 nixos-18
-  - nix-channel --update
+script: nix-shell -I nixpkgs=channel:nixos-unstable --packages nixFlakes --command "nix build"
 
 deploy:
   provider: pages
