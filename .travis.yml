@@ -1,6 +1,7 @@
 language: nix
 before_install:
-  - nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
+  - nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
+  - nix-channel --add https://nixos.org/channels/nixos-18.09 nixos-18
   - nix-channel --update
 
 deploy:
