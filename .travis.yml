@@ -1,6 +1,5 @@
-before_install:
-  - sudo sh <(curl -L https://github.com/numtide/nix-flakes-installer/releases/download/nix-3.0pre20200804_ed52cf6/install)
-script: sudo nix build --experimental-features 'nix-command flakes'
+language: nix
+script: nix-build -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz -I nixos-18=https://github.com/NixOS/nixpkgs/archive/nixos-18.09.tar.gz
 
 deploy:
   provider: pages
