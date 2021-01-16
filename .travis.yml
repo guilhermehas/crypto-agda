@@ -1,9 +1,5 @@
 language: nix
-before_install:
-  - sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
-  - sudo nix-channel --add https://nixos.org/channels/nixos-18.09 nixos-18
-  - sudo nix-channel --update
-script: nix-build
+script: nix-build -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz -I nixos-18=https://github.com/NixOS/nixpkgs/archive/nixos-18.09.tar.gz
 
 
 deploy:
