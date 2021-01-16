@@ -1,5 +1,10 @@
 language: nix
-script: sudo nix-shell -I nixpkgs=channel:nixos-unstable --packages nixFlakes --command "nix --experimental-features 'nix-command flakes' build"
+before_install:
+  - sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
+  - sudo nix-channel --add https://nixos.org/channels/nixos-18.09 nixos-18
+  - sudo nix-channel --update
+script: nix-build
+
 
 deploy:
   provider: pages
