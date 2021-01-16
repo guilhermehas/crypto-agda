@@ -1,7 +1,5 @@
 language: nix
-before_install:
-  - sudo echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-script: nix-shell -I nixpkgs=channel:nixos-unstable --packages nixFlakes --command "nix build"
+script: nix-build -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz -I nixos-18=https://github.com/NixOS/nixpkgs/archive/nixos-18.09.tar.gz
 
 deploy:
   provider: pages
