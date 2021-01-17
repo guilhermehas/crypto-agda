@@ -13,9 +13,11 @@ jobs:
         - uses: cachix/cachix-action@v8
           with:
             name: guilherme
+            # If you chose signing key for write access
+            signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
             # If you chose API tokens for write access OR if you have a private cache
             authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-        - run: nix build
+            installCommand: nix build
         - uses: crazy-max/ghaction-github-pages@v2
           with:
              build_dir: result
