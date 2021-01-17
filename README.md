@@ -17,6 +17,11 @@ It is possible to build the project with nix flakes without needing to clone the
 nix build github:guilhermehas/crypto-agda
 ```
 
+To build using binary cache:
+```bash
+nix build github:guilhermehas/crypto-agda --substituters 'https://cache.nixos.org https://guilherme.cachix.org' --trusted-public-keys 'guilherme.cachix.org-1:gCM9KYeDP7G+CaCHc8mWETo41u0XBac56D2OrTtJ2ZQ= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY='
+```
+
 # Build with docker
 Create docker image
 ```bash
