@@ -12,15 +12,9 @@
 Cryptocurrency made in agda
 
 # Build with nix
-This project works with nix channel version 18, so it is necessary to run this command before.
+It is possible to build the project with nix flakes without needing to clone the repository with this command:
 ```bash
-nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
-nix-channel --update
-```
-
-Install nix and run this command:
-```bash
-nix-build
+nix build github:guilhermehas/crypto-agda
 ```
 
 # Build with docker
