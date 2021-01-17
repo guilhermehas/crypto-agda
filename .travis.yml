@@ -1,12 +1,2 @@
 language: nix
 script: nix-build -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz -I nixos-18=https://github.com/NixOS/nixpkgs/archive/nixos-18.09.tar.gz
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  keep_history: true
-  repo: $GITHUB_REPO
-  local_dir: result
-  on:
-    branch: master
