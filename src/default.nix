@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }: with pkgs;
+{ pkgs ? import <nixos-18> {} }: with pkgs;
 
 let
   prelude =
