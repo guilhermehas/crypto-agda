@@ -18,6 +18,7 @@ docs/agda.sty
 slides/latex
 slides/agda.sty
 tex
+_build
 
 *ignoregit*
 *.#*

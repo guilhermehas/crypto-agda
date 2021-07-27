@@ -14,11 +14,13 @@
     in rec {
       packages.thesis = with pkgs;
         let agdapkg = nixos18.callPackage src/default.nix {};
+            ghcPackages = ghc.withPackages (pkgs: with pkgs; [ shake ]);
         in stdenv.mkDerivation {
             name = "master-thesis";
             src = ./.;
             buildInputs = [
               which
+              ghcPackages
               (texlive.combine {
                   inherit (texlive)
                     scheme-full
@@ -28,6 +30,8 @@
                   };
                 })
             ];
+            buildPhase = ''shake'';
+            installPhase = ''cp -r _build $out'';
           };
       defaultPackage = packages.thesis;
     });
